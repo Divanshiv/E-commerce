@@ -1,27 +1,25 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 // Import routes
-import productRoutes from './routes/product.routes.js';
-import brandRoutes from './routes/brand.routes.js';
-import cartRoutes from './routes/cart.routes.js';
-import wishlistRoutes from './routes/wishlist.routes.js';
-import orderRoutes from './routes/order.routes.js';
-import couponRoutes from './routes/coupon.routes.js';
-import authRoutes from './routes/auth.routes.js';
-import userRoutes from './routes/user.routes.js';
-import paymentRoutes from './routes/payment.routes.js';
-import adminRoutes from './routes/admin.routes.js';
+import productRoutes from './src/routes/product.routes.js';
+import brandRoutes from './src/routes/brand.routes.js';
+import cartRoutes from './src/routes/cart.routes.js';
+import wishlistRoutes from './src/routes/wishlist.routes.js';
+import orderRoutes from './src/routes/order.routes.js';
+import couponRoutes from './src/routes/coupon.routes.js';
+import authRoutes from './src/routes/auth.routes.js';
+import userRoutes from './src/routes/user.routes.js';
+import paymentRoutes from './src/routes/payment.routes.js';
+import adminRoutes from './src/routes/admin.routes.js';
 
 // Import middleware
-import { errorHandler } from './middleware/errorHandler.js';
+import { errorHandler } from './src/middleware/errorHandler.js';
 
 const app = express();
 
@@ -35,7 +33,7 @@ app.use(cors({
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  max: 1000 // limit each IP to 1000 requests per windowMs
 });
 app.use('/api/', limiter);
 

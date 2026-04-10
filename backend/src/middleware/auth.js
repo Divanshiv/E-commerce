@@ -2,16 +2,19 @@ import { supabaseAdmin } from '../config/supabase.js';
 import User from '../models/User.js';
 import { AppError } from './errorHandler.js';
 
-// Verify Supabase JWT token
 export const verifyToken = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
     
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return next(); // No token, continue as guest
+      return next();
     }
 
     const token = authHeader.split(' ')[1];
+    
+    if (!supabaseAdmin) {
+      return next();
+    }
     
     const { data: { user }, error } = await supabaseAdmin.auth.getUser(token);
     

@@ -3,7 +3,8 @@ import {
   signup,
   login,
   logout,
-  getMe
+  getMe,
+  googleCallback
 } from '../controllers/auth.controller.js';
 import { verifyToken } from '../middleware/auth.js';
 
@@ -13,5 +14,6 @@ router.post('/signup', signup);
 router.post('/login', login);
 router.post('/logout', logout);
 router.get('/me', verifyToken, getMe);
+router.post('/google-callback', googleCallback);
 
 export default router;

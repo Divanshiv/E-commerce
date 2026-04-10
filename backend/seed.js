@@ -242,9 +242,10 @@ async function seed() {
     const createdBrands = await Brand.insertMany(brands);
     console.log(`Created ${createdBrands.length} brands`);
 
-    // Add brand references to products
+    // Add brand references and slugs to products
     const productsWithBrands = products.map((product, index) => ({
       ...product,
+      slug: product.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
       brand: createdBrands[index % createdBrands.length]._id
     }));
 

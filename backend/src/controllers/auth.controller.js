@@ -109,6 +109,41 @@ export const getMe = async (req, res, next) => {
   }
 };
 
+// Google OAuth callback
+export const googleCallback = async (req, res, next) => {
+  try {
+    const { supabase_token } = req.body;
+
+    // Verify the token with Supabase
+    const { data: { user }, error } = await supabaseAdmin.auth.getUser(supabase_token);
+
+    if (error || !user) {
+      return res.status(401).json({ success: false, message: 'Invalid token' });
+    }
+
+    // Find or create MongoDB user
+    let mongoUser = await User.findOne({ supabaseId: user.id });
+
+    if (!mongoUser) {
+      mongoUser = await User.create({
+        supabaseId: user.id,
+        email: user.email,
+        name: user.user_metadata?.full_name || user.user_metadata?.name || user.email.split('@')[0],
+        role: 'user'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        user: mongoUser
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Update profile
 export const updateProfile = async (req, res, next) => {
   try {
