@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import User from './src/models/User.js';
 import Product from './src/models/Product.js';
 import Brand from './src/models/Brand.js';
 import Coupon from './src/models/Coupon.js';
@@ -15,177 +14,312 @@ const brands = [
   { name: 'Minimalist', slug: 'minimalist', description: 'Less is more', isActive: true }
 ];
 
-const products = [
+const allProducts = [
+  // ── MEN'S T-SHIRTS ──
   {
     name: 'Classic White T-Shirt',
-    description: 'Premium cotton white t-shirt perfect for everyday wear. Soft, comfortable, and stylish.',
-    price: 499,
-    salePrice: 399,
-    category: 'men-tshirts',
-    sizes: [
-      { name: 'S', stock: 15 },
-      { name: 'M', stock: 25 },
-      { name: 'L', stock: 20 },
-      { name: 'XL', stock: 10 }
-    ],
-    images: [{ url: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500' }],
-    isFeatured: true,
-    tags: ['basic', 'white', 'essential']
+    description: 'Premium 100% cotton white t-shirt perfect for everyday wear. Soft, breathable, and effortlessly stylish.',
+    price: 499, salePrice: 399, category: 'men-tshirts', isFeatured: true,
+    sizes: [{ name: 'S', stock: 15 }, { name: 'M', stock: 25 }, { name: 'L', stock: 20 }, { name: 'XL', stock: 10 }],
+    colors: [{ name: 'White', hex: '#FFFFFF' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80' }],
+    rating: { average: 4.5, count: 128 }, tags: ['basic', 'white', 'essential'], brandIndex: 1
   },
   {
     name: 'Graphic Print Tee',
     description: 'Bold graphic print t-shirt with unique artwork. Make a statement wherever you go.',
-    price: 799,
-    salePrice: 599,
-    category: 'men-tshirts',
-    sizes: [
-      { name: 'S', stock: 12 },
-      { name: 'M', stock: 18 },
-      { name: 'L', stock: 15 }
-    ],
-    images: [{ url: 'https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=500' }],
-    isFeatured: true,
-    tags: ['graphic', 'print', 'bold']
+    price: 799, salePrice: 599, category: 'men-tshirts', isFeatured: true,
+    sizes: [{ name: 'S', stock: 12 }, { name: 'M', stock: 18 }, { name: 'L', stock: 15 }],
+    colors: [{ name: 'Black', hex: '#000000' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=600&q=80' }],
+    rating: { average: 4.3, count: 85 }, tags: ['graphic', 'print', 'bold'], brandIndex: 0
   },
   {
     name: 'Striped Polo Shirt',
-    description: 'Classic striped polo shirt for a refined casual look. Perfect for office or weekend.',
-    price: 999,
-    salePrice: 799,
-    category: 'men-tshirts',
-    sizes: [
-      { name: 'M', stock: 10 },
-      { name: 'L', stock: 12 },
-      { name: 'XL', stock: 8 }
-    ],
-    images: [{ url: 'https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=500' }],
-    isFeatured: false,
-    tags: ['polo', 'striped', 'formal']
+    description: 'Classic striped polo shirt for a refined casual look. Perfect for office or weekend outings.',
+    price: 999, salePrice: 799, category: 'men-tshirts', isFeatured: false,
+    sizes: [{ name: 'M', stock: 10 }, { name: 'L', stock: 12 }, { name: 'XL', stock: 8 }],
+    colors: [{ name: 'Navy', hex: '#1B2A6B' }, { name: 'White', hex: '#FFFFFF' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=600&q=80' }],
+    rating: { average: 4.1, count: 60 }, tags: ['polo', 'striped', 'formal'], brandIndex: 1
   },
   {
-    name: 'Oversized Hoodie',
-    description: 'Super comfortable oversized hoodie for ultimate relaxation. Premium fleece interior.',
-    price: 1499,
-    salePrice: 1199,
-    category: 'hoodies',
-    sizes: [
-      { name: 'S', stock: 8 },
-      { name: 'M', stock: 15 },
-      { name: 'L', stock: 12 },
-      { name: 'XL', stock: 10 }
-    ],
-    images: [{ url: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500' }],
-    isFeatured: true,
-    tags: ['oversized', 'hoodie', 'cozy']
+    name: 'Oversized Drop Shoulder Tee',
+    description: 'Trendy oversized drop-shoulder tee. Relaxed silhouette with premium heavy jersey fabric.',
+    price: 699, salePrice: 549, category: 'men-tshirts', isFeatured: true,
+    sizes: [{ name: 'M', stock: 20 }, { name: 'L', stock: 18 }, { name: 'XL', stock: 12 }],
+    colors: [{ name: 'Olive', hex: '#6B6B2B' }, { name: 'Cream', hex: '#F5F5DC' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1554568218-0f1715e72254?w=600&q=80' }],
+    rating: { average: 4.6, count: 210 }, tags: ['oversized', 'drop-shoulder', 'trendy'], brandIndex: 0
   },
   {
-    name: 'Zip-Up Hoodie',
-    description: 'Full zip hoodie with kangaroo pocket. Great for layering in any season.',
-    price: 1699,
-    salePrice: 1399,
-    category: 'hoodies',
-    sizes: [
-      { name: 'M', stock: 10 },
-      { name: 'L', stock: 8 },
-      { name: 'XL', stock: 6 }
-    ],
-    images: [{ url: 'https://images.unsplash.com/photo-1578681994506-b8f463449011?w=500' }],
-    isFeatured: false,
-    tags: ['zip-up', 'hoodie', 'layering']
+    name: 'Vintage Washed Tee',
+    description: 'Retro-inspired washed tee with a lived-in feel. Soft, pre-washed fabric for instant comfort.',
+    price: 649, salePrice: 499, category: 'men-tshirts', isFeatured: false,
+    sizes: [{ name: 'S', stock: 10 }, { name: 'M', stock: 15 }, { name: 'L', stock: 10 }],
+    colors: [{ name: 'Washed Blue', hex: '#6CA0DC' }, { name: 'Washed Grey', hex: '#A8A8A8' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80' }],
+    rating: { average: 4.4, count: 95 }, tags: ['vintage', 'washed', 'retro'], brandIndex: 0
   },
   {
-    name: 'Comfort Joggers',
-    description: 'Ultra-soft joggers with elastic waistband. Perfect for workout or lounging.',
-    price: 999,
-    salePrice: 799,
-    category: 'joggers',
-    sizes: [
-      { name: 'S', stock: 10 },
-      { name: 'M', stock: 15 },
-      { name: 'L', stock: 12 },
-      { name: 'XL', stock: 8 }
-    ],
-    images: [{ url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500' }],
-    isFeatured: true,
-    tags: ['joggers', 'comfort', 'athletic']
+    name: 'Henley Neck T-Shirt',
+    description: 'Sophisticated henley neck design with buttoned placket. Elevated take on the casual tee.',
+    price: 849, salePrice: 699, category: 'men-tshirts', isFeatured: false,
+    sizes: [{ name: 'S', stock: 8 }, { name: 'M', stock: 14 }, { name: 'L', stock: 12 }, { name: 'XL', stock: 6 }],
+    colors: [{ name: 'Burgundy', hex: '#800020' }, { name: 'Forest Green', hex: '#228B22' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=600&q=80' }],
+    rating: { average: 4.2, count: 73 }, tags: ['henley', 'casual', 'smart'], brandIndex: 1
   },
   {
-    name: 'Slim Fit Joggers',
-    description: 'Stylish slim fit joggers for the modern look. Tapered design with cuffs.',
-    price: 1199,
-    salePrice: 999,
-    category: 'joggers',
-    sizes: [
-      { name: 'M', stock: 8 },
-      { name: 'L', stock: 10 },
-      { name: 'XL', stock: 6 }
-    ],
-    images: [{ url: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=500' }],
-    isFeatured: false,
-    tags: ['slim-fit', 'joggers', 'modern']
+    name: 'Slim Fit V-Neck Tee',
+    description: 'Clean slim-fit V-neck tee in premium cotton stretch. Perfect layering piece or standalone.',
+    price: 549, salePrice: null, category: 'men-tshirts', isFeatured: false,
+    sizes: [{ name: 'S', stock: 20 }, { name: 'M', stock: 25 }, { name: 'L', stock: 18 }],
+    colors: [{ name: 'Black', hex: '#000000' }, { name: 'Charcoal', hex: '#36454F' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600&q=80' }],
+    rating: { average: 4.0, count: 52 }, tags: ['slim-fit', 'v-neck', 'essential'], brandIndex: 2
   },
   {
-    name: 'Classic Cap',
-    description: 'Adjustable classic cap with embroidered logo. One size fits all.',
-    price: 399,
-    salePrice: 299,
-    category: 'accessories',
-    sizes: [{ name: 'M', stock: 30 }],
-    images: [{ url: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500' }],
-    isFeatured: false,
-    tags: ['cap', 'hat', 'accessory']
+    name: 'Athletic Performance Tee',
+    description: 'Moisture-wicking performance tee for active lifestyles. Lightweight, breathable, anti-odour.',
+    price: 999, salePrice: 799, category: 'men-tshirts', isFeatured: false,
+    sizes: [{ name: 'S', stock: 15 }, { name: 'M', stock: 20 }, { name: 'L', stock: 15 }, { name: 'XL', stock: 10 }],
+    colors: [{ name: 'Electric Blue', hex: '#0066FF' }, { name: 'Neon Green', hex: '#00FF41' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=600&q=80' }],
+    rating: { average: 4.5, count: 140 }, tags: ['athletic', 'performance', 'sport'], brandIndex: 2
   },
-  {
-    name: 'Minimalist Backpack',
-    description: 'Sleek minimalist backpack with laptop compartment. 25L capacity.',
-    price: 1999,
-    salePrice: 1599,
-    category: 'accessories',
-    sizes: [{ name: 'M', stock: 15 }],
-    images: [{ url: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500' }],
-    isFeatured: true,
-    tags: ['backpack', 'bag', 'laptop']
-  },
-  {
-    name: 'Cotton Socks Pack',
-    description: 'Pack of 6 premium cotton socks. Comfortable for all-day wear.',
-    price: 299,
-    salePrice: 199,
-    category: 'accessories',
-    sizes: [{ name: 'M', stock: 50 }],
-    images: [{ url: 'https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=500' }],
-    isFeatured: false,
-    tags: ['socks', 'cotton', 'pack']
-  },
+
+  // ── WOMEN'S T-SHIRTS ──
   {
     name: 'Women Floral Tee',
-    description: 'Beautiful floral print t-shirt for women. Relaxed fit with soft fabric.',
-    price: 599,
-    salePrice: 449,
-    category: 'women-tshirts',
-    sizes: [
-      { name: 'S', stock: 12 },
-      { name: 'M', stock: 18 },
-      { name: 'L', stock: 10 }
-    ],
-    images: [{ url: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500' }],
-    isFeatured: true,
-    tags: ['women', 'floral', 'summer']
+    description: 'Beautiful floral print t-shirt for women. Relaxed fit with ultra-soft breathable fabric.',
+    price: 599, salePrice: 449, category: 'women-tshirts', isFeatured: true,
+    sizes: [{ name: 'XS', stock: 8 }, { name: 'S', stock: 12 }, { name: 'M', stock: 18 }, { name: 'L', stock: 10 }],
+    colors: [{ name: 'Pink', hex: '#FFB6C1' }, { name: 'White', hex: '#FFFFFF' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80' }],
+    rating: { average: 4.6, count: 175 }, tags: ['women', 'floral', 'summer'], brandIndex: 1
   },
   {
     name: 'Women Basic Tee',
-    description: 'Essential women t-shirt in soft pastel colors. Perfect everyday basic.',
-    price: 449,
-    salePrice: 349,
-    category: 'women-tshirts',
-    sizes: [
-      { name: 'XS', stock: 10 },
-      { name: 'S', stock: 15 },
-      { name: 'M', stock: 20 }
-    ],
-    images: [{ url: 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=500' }],
-    isFeatured: false,
-    tags: ['women', 'basic', 'essential']
+    description: 'Essential women t-shirt in soft pastel colors. The perfect everyday basic you need in your wardrobe.',
+    price: 449, salePrice: 349, category: 'women-tshirts', isFeatured: false,
+    sizes: [{ name: 'XS', stock: 10 }, { name: 'S', stock: 15 }, { name: 'M', stock: 20 }],
+    colors: [{ name: 'Lavender', hex: '#E6E6FA' }, { name: 'Mint', hex: '#98FF98' }, { name: 'Peach', hex: '#FFCBA4' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=600&q=80' }],
+    rating: { average: 4.3, count: 112 }, tags: ['women', 'basic', 'pastel'], brandIndex: 1
+  },
+  {
+    name: 'Cropped Logo Tee',
+    description: 'Trendy cropped tee with minimalist chest logo. Pair with high-waist jeans or skirts.',
+    price: 549, salePrice: 429, category: 'women-tshirts', isFeatured: true,
+    sizes: [{ name: 'XS', stock: 12 }, { name: 'S', stock: 16 }, { name: 'M', stock: 10 }],
+    colors: [{ name: 'White', hex: '#FFFFFF' }, { name: 'Black', hex: '#000000' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1590330297626-d7aff25a0431?w=600&q=80' }],
+    rating: { average: 4.7, count: 198 }, tags: ['cropped', 'logo', 'trendy'], brandIndex: 0
+  },
+  {
+    name: 'Women Oversized Tee',
+    description: 'Effortlessly chic oversized tee for women. Boyfriend-fit silhouette with dropped shoulders.',
+    price: 649, salePrice: 499, category: 'women-tshirts', isFeatured: false,
+    sizes: [{ name: 'S', stock: 14 }, { name: 'M', stock: 18 }, { name: 'L', stock: 12 }],
+    colors: [{ name: 'Sage Green', hex: '#B2AC88' }, { name: 'Dusty Rose', hex: '#DCAE96' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&q=80' }],
+    rating: { average: 4.4, count: 143 }, tags: ['women', 'oversized', 'chic'], brandIndex: 0
+  },
+  {
+    name: 'Women Striped Top',
+    description: 'Classic French-inspired striped top. Timeless nautical style that never goes out of fashion.',
+    price: 699, salePrice: null, category: 'women-tshirts', isFeatured: false,
+    sizes: [{ name: 'XS', stock: 10 }, { name: 'S', stock: 14 }, { name: 'M', stock: 12 }],
+    colors: [{ name: 'Navy & White', hex: '#1B2A6B' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=600&q=80' }],
+    rating: { average: 4.2, count: 67 }, tags: ['women', 'striped', 'nautical'], brandIndex: 1
+  },
+  {
+    name: 'Tie-Dye Festival Tee',
+    description: 'Vibrant tie-dye tee for a festival-ready look. Each piece is uniquely patterned — one of a kind!',
+    price: 799, salePrice: 599, category: 'women-tshirts', isFeatured: true,
+    sizes: [{ name: 'XS', stock: 8 }, { name: 'S', stock: 12 }, { name: 'M', stock: 10 }, { name: 'L', stock: 6 }],
+    colors: [{ name: 'Multicolor', hex: '#FF6B6B' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1565084888279-aca607ecce0c?w=600&q=80' }],
+    rating: { average: 4.8, count: 225 }, tags: ['tie-dye', 'festival', 'colorful'], brandIndex: 0
+  },
+
+  // ── HOODIES ──
+  {
+    name: 'Oversized Hoodie',
+    description: 'Super comfortable oversized hoodie for ultimate relaxation. Premium fleece interior, drawstring hood.',
+    price: 1499, salePrice: 1199, category: 'hoodies', isFeatured: true,
+    sizes: [{ name: 'S', stock: 8 }, { name: 'M', stock: 15 }, { name: 'L', stock: 12 }, { name: 'XL', stock: 10 }],
+    colors: [{ name: 'Grey Marl', hex: '#B0B0B0' }, { name: 'Black', hex: '#000000' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&q=80' }],
+    rating: { average: 4.7, count: 310 }, tags: ['oversized', 'hoodie', 'cozy'], brandIndex: 0
+  },
+  {
+    name: 'Zip-Up Hoodie',
+    description: 'Full zip hoodie with kangaroo pocket. Versatile layering piece for any season.',
+    price: 1699, salePrice: 1399, category: 'hoodies', isFeatured: false,
+    sizes: [{ name: 'M', stock: 10 }, { name: 'L', stock: 8 }, { name: 'XL', stock: 6 }],
+    colors: [{ name: 'Navy', hex: '#1B2A6B' }, { name: 'Charcoal', hex: '#36454F' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1578681994506-b8f463449011?w=600&q=80' }],
+    rating: { average: 4.5, count: 187 }, tags: ['zip-up', 'hoodie', 'layering'], brandIndex: 2
+  },
+  {
+    name: 'Pullover Fleece Hoodie',
+    description: 'Ultra-warm pullover hoodie with thick fleece lining. Your best companion for cold days.',
+    price: 1899, salePrice: 1499, category: 'hoodies', isFeatured: true,
+    sizes: [{ name: 'S', stock: 10 }, { name: 'M', stock: 14 }, { name: 'L', stock: 12 }, { name: 'XL', stock: 8 }, { name: 'XXL', stock: 4 }],
+    colors: [{ name: 'Rust Orange', hex: '#B7410E' }, { name: 'Forest Green', hex: '#228B22' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600&q=80' }],
+    rating: { average: 4.8, count: 275 }, tags: ['fleece', 'pullover', 'warm'], brandIndex: 0
+  },
+  {
+    name: 'Graphic Hoodie',
+    description: 'Statement graphic hoodie with bold chest print. Street style ready every day.',
+    price: 1599, salePrice: 1299, category: 'hoodies', isFeatured: false,
+    sizes: [{ name: 'M', stock: 12 }, { name: 'L', stock: 15 }, { name: 'XL', stock: 10 }],
+    colors: [{ name: 'Black', hex: '#000000' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=600&q=80' }],
+    rating: { average: 4.4, count: 145 }, tags: ['graphic', 'hoodie', 'streetwear'], brandIndex: 0
+  },
+  {
+    name: 'Quarter Zip Sweatshirt',
+    description: 'Classic quarter-zip sweatshirt for a smart-casual look. Ribbed cuffs & waistband for comfort.',
+    price: 1399, salePrice: null, category: 'hoodies', isFeatured: false,
+    sizes: [{ name: 'S', stock: 10 }, { name: 'M', stock: 14 }, { name: 'L', stock: 10 }],
+    colors: [{ name: 'Burgundy', hex: '#800020' }, { name: 'Camel', hex: '#C19A6B' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80' }],
+    rating: { average: 4.3, count: 98 }, tags: ['quarter-zip', 'sweatshirt', 'smart-casual'], brandIndex: 1
+  },
+  {
+    name: 'Cropped Hoodie',
+    description: 'Trendy cropped hoodie for women. Pairs perfectly with high-waist joggers or leggings.',
+    price: 1299, salePrice: 999, category: 'hoodies', isFeatured: false,
+    sizes: [{ name: 'XS', stock: 10 }, { name: 'S', stock: 14 }, { name: 'M', stock: 12 }],
+    colors: [{ name: 'Lilac', hex: '#C8A2C8' }, { name: 'Baby Pink', hex: '#F4C2C2' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80' }],
+    rating: { average: 4.6, count: 230 }, tags: ['cropped', 'hoodie', 'women'], brandIndex: 0
+  },
+
+  // ── JOGGERS ──
+  {
+    name: 'Comfort Joggers',
+    description: 'Ultra-soft joggers with elastic waistband and tapered fit. Perfect for workout or lounging.',
+    price: 999, salePrice: 799, category: 'joggers', isFeatured: true,
+    sizes: [{ name: 'S', stock: 10 }, { name: 'M', stock: 15 }, { name: 'L', stock: 12 }, { name: 'XL', stock: 8 }],
+    colors: [{ name: 'Dark Grey', hex: '#555555' }, { name: 'Black', hex: '#000000' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=600&q=80' }],
+    rating: { average: 4.5, count: 265 }, tags: ['joggers', 'comfort', 'athletic'], brandIndex: 2
+  },
+  {
+    name: 'Slim Fit Joggers',
+    description: 'Stylish slim fit joggers for the modern look. Tapered design with ribbed cuffs.',
+    price: 1199, salePrice: 999, category: 'joggers', isFeatured: false,
+    sizes: [{ name: 'M', stock: 8 }, { name: 'L', stock: 10 }, { name: 'XL', stock: 6 }],
+    colors: [{ name: 'Charcoal', hex: '#36454F' }, { name: 'Navy', hex: '#1B2A6B' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1519058082700-08a0b56da9b4?w=600&q=80' }],
+    rating: { average: 4.3, count: 121 }, tags: ['slim-fit', 'joggers', 'modern'], brandIndex: 3
+  },
+  {
+    name: 'Cargo Joggers',
+    description: 'Functional cargo joggers with multiple pockets and adjustable waistband. Style meets utility.',
+    price: 1499, salePrice: 1199, category: 'joggers', isFeatured: true,
+    sizes: [{ name: 'S', stock: 8 }, { name: 'M', stock: 12 }, { name: 'L', stock: 10 }, { name: 'XL', stock: 6 }],
+    colors: [{ name: 'Olive', hex: '#6B6B2B' }, { name: 'Black', hex: '#000000' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80' }],
+    rating: { average: 4.6, count: 189 }, tags: ['cargo', 'joggers', 'utility'], brandIndex: 0
+  },
+  {
+    name: 'Track Pants',
+    description: 'Classic track pants with contrast side stripes. Lightweight and perfect for sport or casual wear.',
+    price: 1099, salePrice: 899, category: 'joggers', isFeatured: false,
+    sizes: [{ name: 'S', stock: 10 }, { name: 'M', stock: 14 }, { name: 'L', stock: 12 }],
+    colors: [{ name: 'Black & White', hex: '#000000' }, { name: 'Navy & Red', hex: '#1B2A6B' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&q=80' }],
+    rating: { average: 4.2, count: 97 }, tags: ['track-pants', 'sport', 'classic'], brandIndex: 2
+  },
+  {
+    name: 'Fleece Sweatpants',
+    description: 'Thick fleece sweatpants for maximum warmth and comfort. Lounge in ultimate cozy style.',
+    price: 1299, salePrice: 999, category: 'joggers', isFeatured: false,
+    sizes: [{ name: 'M', stock: 12 }, { name: 'L', stock: 10 }, { name: 'XL', stock: 8 }, { name: 'XXL', stock: 4 }],
+    colors: [{ name: 'Heather Grey', hex: '#B0B0B0' }, { name: 'Brown', hex: '#8B4513' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=600&q=80' }],
+    rating: { average: 4.4, count: 156 }, tags: ['fleece', 'sweatpants', 'warm'], brandIndex: 0
+  },
+
+  // ── ACCESSORIES ──
+  {
+    name: 'Classic Snapback Cap',
+    description: 'Adjustable snapback cap with embroidered logo. One size fits all with structured front panels.',
+    price: 499, salePrice: 399, category: 'accessories', isFeatured: false,
+    sizes: [{ name: 'M', stock: 40 }],
+    colors: [{ name: 'Black', hex: '#000000' }, { name: 'White', hex: '#FFFFFF' }, { name: 'Navy', hex: '#1B2A6B' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80' }],
+    rating: { average: 4.3, count: 152 }, tags: ['cap', 'snapback', 'accessory'], brandIndex: 0
+  },
+  {
+    name: 'Minimalist Backpack',
+    description: 'Sleek minimalist backpack with dedicated laptop compartment. Premium water-resistant fabric. 25L capacity.',
+    price: 1999, salePrice: 1599, category: 'accessories', isFeatured: true,
+    sizes: [{ name: 'M', stock: 20 }],
+    colors: [{ name: 'Black', hex: '#000000' }, { name: 'Stone Grey', hex: '#928E85' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80' }],
+    rating: { average: 4.7, count: 215 }, tags: ['backpack', 'bag', 'laptop'], brandIndex: 3
+  },
+  {
+    name: 'Cotton Socks Pack (6 pairs)',
+    description: 'Pack of 6 premium cotton socks in assorted colors. Comfortable cushioned sole for all-day wear.',
+    price: 299, salePrice: 199, category: 'accessories', isFeatured: false,
+    sizes: [{ name: 'M', stock: 80 }],
+    colors: [{ name: 'Assorted', hex: '#FF6B6B' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=600&q=80' }],
+    rating: { average: 4.4, count: 320 }, tags: ['socks', 'cotton', 'essentials'], brandIndex: 1
+  },
+  {
+    name: 'Canvas Tote Bag',
+    description: 'Eco-friendly heavy canvas tote bag with internal pocket. Carry your essentials sustainably.',
+    price: 599, salePrice: 449, category: 'accessories', isFeatured: false,
+    sizes: [{ name: 'M', stock: 35 }],
+    colors: [{ name: 'Natural', hex: '#F5F5DC' }, { name: 'Black', hex: '#000000' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80' }],
+    rating: { average: 4.5, count: 187 }, tags: ['tote', 'canvas', 'eco-friendly'], brandIndex: 3
+  },
+  {
+    name: 'Sports Duffel Bag',
+    description: 'Spacious sports duffel bag with wet-dry compartment. Perfect for gym, travel, or weekend trips.',
+    price: 1799, salePrice: 1399, category: 'accessories', isFeatured: true,
+    sizes: [{ name: 'M', stock: 15 }],
+    colors: [{ name: 'Black & Red', hex: '#000000' }, { name: 'Grey', hex: '#808080' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80' }],
+    rating: { average: 4.6, count: 132 }, tags: ['duffel', 'gym', 'sports'], brandIndex: 2
+  },
+  {
+    name: 'Woven Belt',
+    description: 'Stylish woven belt with brushed metal buckle. Fits waist sizes 28–38 inches.',
+    price: 399, salePrice: 299, category: 'accessories', isFeatured: false,
+    sizes: [{ name: 'M', stock: 30 }],
+    colors: [{ name: 'Brown', hex: '#8B4513' }, { name: 'Black', hex: '#000000' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1624222247344-550fb60fe8ff?w=600&q=80' }],
+    rating: { average: 4.1, count: 86 }, tags: ['belt', 'woven', 'accessory'], brandIndex: 1
+  },
+  {
+    name: 'Beanie Hat',
+    description: 'Soft ribbed knit beanie that keeps you warm all winter. One size fits most. Unisex design.',
+    price: 349, salePrice: 249, category: 'accessories', isFeatured: false,
+    sizes: [{ name: 'M', stock: 50 }],
+    colors: [{ name: 'Charcoal', hex: '#36454F' }, { name: 'Burgundy', hex: '#800020' }, { name: 'Cream', hex: '#F5F5DC' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1510598155619-9501e96ae39e?w=600&q=80' }],
+    rating: { average: 4.5, count: 204 }, tags: ['beanie', 'hat', 'winter'], brandIndex: 1
+  },
+  {
+    name: 'Wireless Earphone Pouch',
+    description: 'Premium leather earphone pouch to protect your earphones and accessories. Compact & stylish.',
+    price: 499, salePrice: null, category: 'accessories', isFeatured: false,
+    sizes: [{ name: 'M', stock: 25 }],
+    colors: [{ name: 'Black', hex: '#000000' }, { name: 'Tan', hex: '#D2B48C' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=600&q=80' }],
+    rating: { average: 4.0, count: 64 }, tags: ['pouch', 'accessory', 'leather'], brandIndex: 3
   }
 ];
 
@@ -213,7 +347,7 @@ const coupons = [
   },
   {
     code: 'SAVE20',
-    description: '20% off up to ₹500',
+    description: '20% off on orders above ₹499 (max ₹500)',
     discountType: 'percentage',
     discountValue: 20,
     minOrderValue: 499,
@@ -226,59 +360,57 @@ const coupons = [
 
 async function seed() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('Connected to MongoDB');
+    const uri = process.env.MONGODB_URI;
+    if (!uri) { console.error('❌ No MONGODB_URI found in .env'); process.exit(1); }
+
+    await mongoose.connect(uri);
+    console.log('✅ Connected to MongoDB');
 
     // Clear existing data
     await Promise.all([
-      User.deleteMany({}),
       Product.deleteMany({}),
       Brand.deleteMany({}),
-      Coupon.deleteMany({})
+      Coupon.deleteMany({}),
+      ShipmentConfig.deleteMany({})
     ]);
-    console.log('Cleared existing data');
+    console.log('🗑️  Cleared existing data');
 
     // Create brands
     const createdBrands = await Brand.insertMany(brands);
-    console.log(`Created ${createdBrands.length} brands`);
+    console.log(`✅ Created ${createdBrands.length} brands`);
 
-    // Add brand references and slugs to products
-    const productsWithBrands = products.map((product, index) => ({
-      ...product,
-      slug: product.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
-      brand: createdBrands[index % createdBrands.length]._id
+    // Attach brand + slug to products
+    const productsWithMeta = allProducts.map((p) => ({
+      ...p,
+      slug: p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Math.floor(Math.random() * 9000 + 1000),
+      brand: createdBrands[p.brandIndex]._id,
+      brandIndex: undefined
     }));
 
-    // Create products
-    const createdProducts = await Product.insertMany(productsWithBrands);
-    console.log(`Created ${createdProducts.length} products`);
+    const createdProducts = await Product.insertMany(productsWithMeta);
+    console.log(`✅ Created ${createdProducts.length} products`);
 
     // Create coupons
     const createdCoupons = await Coupon.insertMany(coupons);
-    console.log(`Created ${createdCoupons.length} coupons`);
+    console.log(`✅ Created ${createdCoupons.length} coupons`);
 
-    // Create default shipment config
-    await ShipmentConfig.findOneAndUpdate(
-      {},
-      {
-        freeShippingThreshold: 999,
-        standardRate: 49,
-        expressRate: 99,
-        codCharges: 30
-      },
-      { upsert: true }
-    );
-    console.log('Created shipment config');
+    // Create shipment config
+    await ShipmentConfig.create({
+      freeShippingThreshold: 999,
+      standardRate: 49,
+      expressRate: 99,
+      codCharges: 30
+    });
+    console.log('✅ Created shipment config');
 
-    // Create admin user (manual - needs Supabase account)
-    console.log('\n📝 Admin user setup:');
-    console.log('Create admin user manually in MongoDB or via Supabase dashboard');
-    console.log('Set role: "admin" for admin users');
-
-    console.log('\n✅ Seed completed successfully!');
+    console.log('\n🎉 Seed completed! Summary:');
+    console.log(`   • ${createdBrands.length} Brands`);
+    console.log(`   • ${createdProducts.length} Products across 5 categories`);
+    console.log(`   • ${createdCoupons.length} Coupons: WELCOME10, FLAT200, SAVE20`);
+    console.log('   • Shipment config: Free shipping above ₹999');
     process.exit(0);
   } catch (error) {
-    console.error('Seed error:', error);
+    console.error('❌ Seed error:', error);
     process.exit(1);
   }
 }
