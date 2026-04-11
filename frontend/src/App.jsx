@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
@@ -24,7 +24,9 @@ import AuthCallback from './pages/AuthCallback';
 // Pages - Admin
 import AdminLayout from './pages/admin/Layout';
 import AdminDashboard from './pages/admin/Dashboard';
+import AdminCategories from './pages/admin/Categories';
 import AdminProducts from './pages/admin/Products';
+import AdminInventory from './pages/admin/Inventory';
 import AdminOrders from './pages/admin/Orders';
 import AdminCustomers from './pages/admin/Customers';
 import AdminCoupons from './pages/admin/Coupons';
@@ -34,13 +36,16 @@ import AdminShipment from './pages/admin/Shipment';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   return (
     <AuthProvider>
       <CartProvider>
         <WishlistProvider>
-          <div className="min-h-screen flex flex-col bg-white">
-            <Navbar />
-            <main className="flex-1">
+          <div className={`min-h-screen flex flex-col ${isAdminRoute ? 'bg-admin' : 'bg-white'}`}>
+            {!isAdminRoute && <Navbar />}
+            <main className={isAdminRoute ? 'admin-main-wrapper' : 'flex-1'}>
               <Routes>
                 {/* Public Buyer Routes */}
                 <Route path="/" element={<Home />} />
@@ -66,7 +71,9 @@ function App() {
                   </ProtectedRoute>
                 }>
                   <Route index element={<AdminDashboard />} />
+                  <Route path="categories" element={<AdminCategories />} />
                   <Route path="products" element={<AdminProducts />} />
+                  <Route path="inventory" element={<AdminInventory />} />
                   <Route path="orders" element={<AdminOrders />} />
                   <Route path="customers" element={<AdminCustomers />} />
                   <Route path="coupons" element={<AdminCoupons />} />
@@ -74,8 +81,8 @@ function App() {
                 </Route>
               </Routes>
             </main>
-            <Footer />
-            <CartDrawer />
+            {!isAdminRoute && <Footer />}
+            {!isAdminRoute && <CartDrawer />}
           </div>
         </WishlistProvider>
       </CartProvider>

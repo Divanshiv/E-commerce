@@ -17,6 +17,7 @@ import authRoutes from './src/routes/auth.routes.js';
 import userRoutes from './src/routes/user.routes.js';
 import paymentRoutes from './src/routes/payment.routes.js';
 import adminRoutes from './src/routes/admin.routes.js';
+import categoryRoutes from './src/routes/category.routes.js';
 
 // Import middleware
 import { errorHandler } from './src/middleware/errorHandler.js';
@@ -63,6 +64,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/categories', categoryRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
