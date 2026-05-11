@@ -1,6 +1,7 @@
 import Order from '../models/Order.js';
 import Cart from '../models/Cart.js';
 import Product from '../models/Product.js';
+import User from '../models/User.js';
 
 // Get user orders
 export const getOrders = async (req, res, next) => {
@@ -77,7 +78,8 @@ export const createOrder = async (req, res, next) => {
       couponApplied: cart.couponApplied?.code,
       address,
       payment: {
-        method: paymentMethod || 'razorpay',
+        method: paymentMethod === 'cod' ? 'cod' : 'razorpay',
+        paymentMethod: paymentMethod === 'cod' ? null : (paymentMethod || 'card'),
         status: 'pending'
       }
     });
@@ -98,10 +100,11 @@ export const createOrder = async (req, res, next) => {
 // Admin: Get all orders
 export const getAdminOrders = async (req, res, next) => {
   try {
-    const { status, page = 1, limit = 20 } = req.query;
+    const { status, userId, page = 1, limit = 20 } = req.query;
     const query = {};
     
     if (status) query.status = status;
+    if (userId) query.user = userId;
 
     const skip = (Number(page) - 1) * Number(limit);
 

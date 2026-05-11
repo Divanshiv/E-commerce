@@ -12,7 +12,7 @@ const navItems = [
   { path: '/admin/customers', icon: Users, label: 'Customers' },
   { path: '/admin/coupons', icon: Ticket, label: 'Coupons' },
   { path: '/admin/shipment', icon: Truck, label: 'Shipment' },
-  { path: '/admin/settings', icon: Settings, label: 'Settings' },
+  { path: '/admin/settings', icon: Settings, label: 'Payment Setting' },
 ];
 
 export default function AdminLayout() {
@@ -32,7 +32,9 @@ export default function AdminLayout() {
       {/* Sidebar Component */}
       <aside className={`sk-admin-sidebar ${isSidebarOpen ? 'is-open' : ''}`}>
         <div className="sk-admin-sidebar-header">
-          <Link to="/" className="sk-admin-logo">KALAAH STUDIO</Link>
+          <Link to="/" className="block">
+            <img src="/logo-icon.svg" alt="Kalaah Studio" className="w-8 h-8" />
+          </Link>
           <p className="sk-admin-brand-tag">Terminal v1.0</p>
         </div>
 

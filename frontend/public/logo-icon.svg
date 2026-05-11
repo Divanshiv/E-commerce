@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Tag-shaped background -->
+  <rect x="10" y="10" width="100" height="100" rx="22" fill="#dc2626"/>
+  
+  <!-- Stylized K monogram -->
+  <g stroke="white" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Vertical stem -->
+    <line x1="42" y1="30" x2="42" y2="90" stroke-width="10"/>
+    
+    <!-- Upper arm - graceful upward sweep -->
+    <path d="M 44 55 C 56 48 66 38 78 34" stroke-width="8"/>
+    
+    <!-- Lower arm - clean downward angle -->
+    <path d="M 44 65 C 56 70 66 78 78 86" stroke-width="8"/>
+  </g>
+  
+  <!-- Diamond accent at junction -->
+  <rect x="40" y="57" width="8" height="8" rx="1.5" fill="#fcd34d" transform="rotate(45 44 61)"/>
+</svg>

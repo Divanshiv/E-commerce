@@ -78,20 +78,18 @@ function App() {
                 </Route>
 
                 {/* Admin Routes */}
-                <Route path="/admin" element={
-                  <ProtectedRoute adminOnly>
-                    <AdminLayout />
-                  </ProtectedRoute>
-                }>
-                  <Route index element={<AdminDashboard />} />
-                  <Route path="categories" element={<AdminCategories />} />
-                  <Route path="products" element={<AdminProducts />} />
-                  <Route path="inventory" element={<AdminInventory />} />
-                  <Route path="orders" element={<AdminOrders />} />
-                  <Route path="customers" element={<AdminCustomers />} />
-                  <Route path="coupons" element={<AdminCoupons />} />
-                  <Route path="shipment" element={<AdminShipment />} />
-                  <Route path="settings" element={<AdminSettings />} />
+                <Route element={<ProtectedRoute adminOnly />}>
+                  <Route path="/admin" element={<AdminLayout />}>
+                    <Route index element={<AdminDashboard />} />
+                    <Route path="categories" element={<AdminCategories />} />
+                    <Route path="products" element={<AdminProducts />} />
+                    <Route path="inventory" element={<AdminInventory />} />
+                    <Route path="orders" element={<AdminOrders />} />
+                    <Route path="customers" element={<AdminCustomers />} />
+                    <Route path="coupons" element={<AdminCoupons />} />
+                    <Route path="shipment" element={<AdminShipment />} />
+                    <Route path="settings" element={<AdminSettings />} />
+                  </Route>
                 </Route>
               </Routes>
               </Suspense>

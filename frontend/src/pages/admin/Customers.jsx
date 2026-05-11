@@ -1,19 +1,33 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Eye, Search, MapPin, Mail, Phone, Calendar } from 'lucide-react';
+import { Eye, Search, MapPin, Mail, Phone, Calendar, ShoppingBag, X } from 'lucide-react';
 import api from '../../lib/api';
 
 export default function AdminCustomers() {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [customerOrders, setCustomerOrders] = useState([]);
+  const [fetchingOrders, setFetchingOrders] = useState(false);
   
   // Filters
   const [searchTerm, setSearchTerm] = useState('');
-  
-
 
   useEffect(() => {
     fetchCustomers();
   }, []);
+
+  const fetchCustomerOrders = async (customerId) => {
+    setFetchingOrders(true);
+    try {
+      const { data } = await api.get(`/admin/orders?userId=${customerId}`);
+      setCustomerOrders(data.data.orders || []);
+    } catch (error) {
+      console.error('Error fetching customer orders:', error);
+      setCustomerOrders([]);
+    } finally {
+      setFetchingOrders(false);
+    }
+  };
 
   const fetchCustomers = async () => {
     try {
@@ -84,7 +98,10 @@ export default function AdminCustomers() {
                 </td>
                 <td className="p-4 text-right">
                   <button
-                    onClick={() => setSelectedCustomer(customer)}
+                    onClick={() => {
+                      setSelectedCustomer(customer);
+                      fetchCustomerOrders(customer._id);
+                    }}
                     className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded"
                     title="View Full Profile"
                   >
@@ -116,8 +133,8 @@ export default function AdminCustomers() {
                   <p className="text-sm text-gray-500">Customer ID: {selectedCustomer._id.slice(-6).toUpperCase()}</p>
                 </div>
               </div>
-              <button onClick={() => setSelectedCustomer(null)} className="p-2 hover:bg-gray-100 rounded text-gray-500">
-                ×
+              <button onClick={() => { setSelectedCustomer(null); setCustomerOrders([]); }} className="p-2 hover:bg-gray-100 rounded text-gray-500">
+                <X size={20} />
               </button>
             </div>
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Eye, Search, Filter } from 'lucide-react';
+import { Eye, Search, Filter, X, Users, Mail, Phone, MapPin, Package } from 'lucide-react';
 import api from '../../lib/api';
 import toast from 'react-hot-toast';
 

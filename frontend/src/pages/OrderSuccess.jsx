@@ -1,8 +1,10 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useLocation, Link } from 'react-router-dom';
 import { CheckCircle } from 'lucide-react';
 
 export default function OrderSuccess() {
   const { orderId } = useParams();
+  const location = useLocation();
+  const orderNumber = location.state?.orderNumber || null;
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -17,9 +19,19 @@ export default function OrderSuccess() {
             Thank you for your purchase. Your order has been confirmed.
           </p>
           
-          <div className="bg-gray-50 rounded-lg p-4 mb-6">
-            <p className="text-sm text-gray-500">Order ID</p>
-            <p className="font-mono font-bold">{orderId}</p>
+          <div className="bg-gray-50 rounded-lg p-4 mb-6 space-y-2">
+            {orderNumber && (
+              <>
+                <div>
+                  <p className="text-sm text-gray-500">Order Number</p>
+                  <p className="font-mono font-bold text-lg">{orderNumber}</p>
+                </div>
+              </>
+            )}
+            <div>
+              <p className="text-sm text-gray-500">Order ID</p>
+              <p className="font-mono text-gray-700 text-sm break-all">{orderId}</p>
+            </div>
           </div>
 
           <div className="space-y-3">

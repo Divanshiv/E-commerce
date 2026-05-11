@@ -1,0 +1,145 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e6]:
+      - link "Kalaah Studio" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - img "Kalaah Studio" [ref=e8]
+      - generic [ref=e10]:
+        - textbox "Search products..." [ref=e11]
+        - button [ref=e12] [cursor=pointer]:
+          - img [ref=e13]
+      - generic [ref=e16]:
+        - link [ref=e17] [cursor=pointer]:
+          - /url: /wishlist
+          - img [ref=e18]
+        - link [ref=e20] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e21]
+        - button [ref=e26] [cursor=pointer]:
+          - img [ref=e27]
+  - main [ref=e30]:
+    - generic [ref=e31]:
+      - generic [ref=e32]:
+        - img "Hero" [ref=e34]
+        - generic [ref=e37]:
+          - heading "Discover High-End Minimalism" [level=1] [ref=e38]
+          - paragraph [ref=e39]: Elevated essentials and timeless pieces designed for the modern aesthetic. Simplicity is the ultimate sophistication.
+          - link "Explore Collection" [ref=e40] [cursor=pointer]:
+            - /url: /products
+            - text: Explore Collection
+            - img [ref=e41]
+      - generic [ref=e44]:
+        - heading "Shop by Category" [level=2] [ref=e46]: Shop by Category
+        - generic [ref=e47]:
+          - link "Men's Tees" [ref=e48] [cursor=pointer]:
+            - /url: /products?category=men-tshirts
+            - img [ref=e50]
+            - heading "Men's Tees" [level=3] [ref=e52]
+          - link "Women's Tees" [ref=e53] [cursor=pointer]:
+            - /url: /products?category=women-tshirts
+            - img [ref=e55]
+            - heading "Women's Tees" [level=3] [ref=e59]
+          - link "Hoodies" [ref=e60] [cursor=pointer]:
+            - /url: /products?category=hoodies
+            - img [ref=e62]
+            - heading "Hoodies" [level=3] [ref=e66]
+          - link "Joggers" [ref=e67] [cursor=pointer]:
+            - /url: /products?category=joggers
+            - img [ref=e69]
+            - heading "Joggers" [level=3] [ref=e73]
+          - link "Accessories" [ref=e74] [cursor=pointer]:
+            - /url: /products?category=accessories
+            - img [ref=e76]
+            - heading "Accessories" [level=3] [ref=e82]
+      - generic [ref=e85]:
+        - heading "Featured Products" [level=2] [ref=e86]: Featured Products
+        - link "View All" [ref=e87] [cursor=pointer]:
+          - /url: /products
+          - text: View All
+          - img [ref=e88]
+      - generic [ref=e101]:
+        - generic [ref=e102]:
+          - img [ref=e104]
+          - heading "Free Worldwide Shipping" [level=3] [ref=e109]
+          - paragraph [ref=e110]: On elite orders above ₹999
+        - generic [ref=e111]:
+          - img [ref=e113]
+          - heading "Secure Payment" [level=3] [ref=e115]
+          - paragraph [ref=e116]: 100% encrypted checkout
+        - generic [ref=e117]:
+          - img [ref=e119]
+          - heading "Easy Returns" [level=3] [ref=e122]
+          - paragraph [ref=e123]: 7 day hassle-free return policy
+  - contentinfo [ref=e124]:
+    - generic [ref=e125]:
+      - generic [ref=e126]:
+        - generic [ref=e127]:
+          - img "Kalaah Studio" [ref=e128]
+          - paragraph [ref=e129]: Your destination for premium fashion and lifestyle products. Quality meets affordability in the modern era.
+          - generic [ref=e130]:
+            - link [ref=e131] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e132]
+            - link [ref=e135] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e136]
+            - link [ref=e138] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e139]
+        - generic [ref=e141]:
+          - heading "Shop" [level=4] [ref=e142]
+          - list [ref=e143]:
+            - listitem [ref=e144]:
+              - link "Men's Tees" [ref=e145] [cursor=pointer]:
+                - /url: /products?category=men-tshirts
+            - listitem [ref=e146]:
+              - link "Women's Tees" [ref=e147] [cursor=pointer]:
+                - /url: /products?category=women-tshirts
+            - listitem [ref=e148]:
+              - link "Hoodies" [ref=e149] [cursor=pointer]:
+                - /url: /products?category=hoodies
+            - listitem [ref=e150]:
+              - link "Joggers" [ref=e151] [cursor=pointer]:
+                - /url: /products?category=joggers
+            - listitem [ref=e152]:
+              - link "Accessories" [ref=e153] [cursor=pointer]:
+                - /url: /products?category=accessories
+        - generic [ref=e154]:
+          - heading "Help" [level=4] [ref=e155]
+          - list [ref=e156]:
+            - listitem [ref=e157]:
+              - link "Track Order" [ref=e158] [cursor=pointer]:
+                - /url: /orders
+            - listitem [ref=e159]:
+              - link "Returns & Exchanges" [ref=e160] [cursor=pointer]:
+                - /url: /orders
+            - listitem [ref=e161]:
+              - link "Shipping Info" [ref=e162] [cursor=pointer]:
+                - /url: /orders
+            - listitem [ref=e163]:
+              - link "FAQs" [ref=e164] [cursor=pointer]:
+                - /url: /orders
+            - listitem [ref=e165]:
+              - link "Contact Us" [ref=e166] [cursor=pointer]:
+                - /url: /orders
+        - generic [ref=e167]:
+          - heading "Contact" [level=4] [ref=e168]
+          - list [ref=e169]:
+            - listitem [ref=e170]:
+              - img [ref=e171]
+              - generic [ref=e174]: 123 Fashion Street, Mumbai, MH 400001
+            - listitem [ref=e175]:
+              - img [ref=e176]
+              - generic [ref=e178]: +91 98765 43210
+            - listitem [ref=e179]:
+              - img [ref=e180]
+              - generic [ref=e183]: support@kalaahstudio.in
+      - generic [ref=e184]:
+        - paragraph [ref=e185]: © 2026 Kalaah Studio. All rights reserved.
+        - generic [ref=e186]:
+          - link "Privacy Policy" [ref=e187] [cursor=pointer]:
+            - /url: "#"
+          - link "Terms of Service" [ref=e188] [cursor=pointer]:
+            - /url: "#"
+          - link "Refund Policy" [ref=e189] [cursor=pointer]:
+            - /url: "#"

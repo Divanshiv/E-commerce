@@ -86,7 +86,7 @@ productSchema.virtual('discountPercentage').get(function() {
 
 // Virtual for total stock
 productSchema.virtual('totalStock').get(function() {
-  return this.sizes.reduce((sum, size) => sum + size.stock, 0);
+  return (this.sizes || []).reduce((sum, size) => sum + (size.stock || 0), 0);
 });
 
 productSchema.set('toJSON', { virtuals: true });

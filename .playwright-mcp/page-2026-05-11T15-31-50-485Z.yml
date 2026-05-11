@@ -1,0 +1,356 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - navigation [ref=e4]:
+      - generic [ref=e6]:
+        - link "KALAAH STUDIO" [ref=e7] [cursor=pointer]:
+          - /url: /
+        - generic [ref=e9]:
+          - textbox "Search products..." [ref=e10]
+          - button [ref=e11] [cursor=pointer]:
+            - img [ref=e12]
+        - generic [ref=e15]:
+          - link [ref=e16] [cursor=pointer]:
+            - /url: /wishlist
+            - img [ref=e17]
+          - link [ref=e19] [cursor=pointer]:
+            - /url: /cart
+            - img [ref=e20]
+          - button [ref=e120] [cursor=pointer]:
+            - img [ref=e121]
+    - main [ref=e25]:
+      - generic [ref=e124]:
+        - generic [ref=e125]:
+          - img "Hero" [ref=e127]
+          - generic [ref=e130]:
+            - heading "Discover High-End Minimalism" [level=1] [ref=e131]
+            - paragraph [ref=e132]: Elevated essentials and timeless pieces designed for the modern aesthetic. Simplicity is the ultimate sophistication.
+            - link "Explore Collection" [ref=e133] [cursor=pointer]:
+              - /url: /products
+              - text: Explore Collection
+              - img [ref=e134]
+        - generic [ref=e137]:
+          - heading "Shop by Category" [level=2] [ref=e139]: Shop by Category
+          - generic [ref=e140]:
+            - link "Men's Tees" [ref=e141] [cursor=pointer]:
+              - /url: /products?category=men-tshirts
+              - img [ref=e143]
+              - heading "Men's Tees" [level=3] [ref=e145]
+            - link "Women's Tees" [ref=e146] [cursor=pointer]:
+              - /url: /products?category=women-tshirts
+              - img [ref=e148]
+              - heading "Women's Tees" [level=3] [ref=e152]
+            - link "Hoodies" [ref=e153] [cursor=pointer]:
+              - /url: /products?category=hoodies
+              - img [ref=e155]
+              - heading "Hoodies" [level=3] [ref=e159]
+            - link "Joggers" [ref=e160] [cursor=pointer]:
+              - /url: /products?category=joggers
+              - img [ref=e162]
+              - heading "Joggers" [level=3] [ref=e166]
+            - link "Accessories" [ref=e167] [cursor=pointer]:
+              - /url: /products?category=accessories
+              - img [ref=e169]
+              - heading "Accessories" [level=3] [ref=e175]
+        - generic [ref=e177]:
+          - generic [ref=e178]:
+            - heading "Featured Products" [level=2] [ref=e179]: Featured Products
+            - link "View All" [ref=e180] [cursor=pointer]:
+              - /url: /products
+              - text: View All
+              - img [ref=e181]
+          - generic [ref=e183]:
+            - link "Sports Duffel Bag 22% OFF Sport Elite Sports Duffel Bag ₹1399 ₹1799 (132) In Stock Add" [ref=e184] [cursor=pointer]:
+              - /url: /product/sports-duffel-bag-3598
+              - generic [ref=e185]:
+                - generic [ref=e186]:
+                  - img "Sports Duffel Bag" [ref=e187]
+                  - generic [ref=e188]: 22% OFF
+                  - button [ref=e189]:
+                    - img [ref=e190]
+                - generic [ref=e192]:
+                  - paragraph [ref=e193]: Sport Elite
+                  - heading "Sports Duffel Bag" [level=3] [ref=e194]
+                  - generic [ref=e195]:
+                    - generic [ref=e196]: ₹1399
+                    - generic [ref=e197]: ₹1799
+                  - generic [ref=e198]:
+                    - generic [ref=e199]:
+                      - img [ref=e200]
+                      - img [ref=e202]
+                      - img [ref=e204]
+                      - img [ref=e206]
+                      - img [ref=e208]
+                    - generic [ref=e210]: (132)
+                  - generic [ref=e213]: In Stock
+                  - button "Add" [ref=e214]:
+                    - img [ref=e215]
+                    - text: Add
+            - link "Cargo Joggers 20% OFF Urban Style Cargo Joggers ₹1199 ₹1499 (189) In Stock Add" [ref=e219] [cursor=pointer]:
+              - /url: /product/cargo-joggers-9309
+              - generic [ref=e220]:
+                - generic [ref=e221]:
+                  - img "Cargo Joggers" [ref=e222]
+                  - generic [ref=e223]: 20% OFF
+                  - button [ref=e224]:
+                    - img [ref=e225]
+                - generic [ref=e227]:
+                  - paragraph [ref=e228]: Urban Style
+                  - heading "Cargo Joggers" [level=3] [ref=e229]
+                  - generic [ref=e230]:
+                    - generic [ref=e231]: ₹1199
+                    - generic [ref=e232]: ₹1499
+                  - generic [ref=e233]:
+                    - generic [ref=e234]:
+                      - img [ref=e235]
+                      - img [ref=e237]
+                      - img [ref=e239]
+                      - img [ref=e241]
+                      - img [ref=e243]
+                    - generic [ref=e245]: (189)
+                  - generic [ref=e248]: In Stock
+                  - button "Add" [ref=e249]:
+                    - img [ref=e250]
+                    - text: Add
+            - link "Minimalist Backpack 20% OFF Minimalist Minimalist Backpack ₹1599 ₹1999 (215) In Stock Add" [ref=e254] [cursor=pointer]:
+              - /url: /product/minimalist-backpack-1531
+              - generic [ref=e255]:
+                - generic [ref=e256]:
+                  - img "Minimalist Backpack" [ref=e257]
+                  - generic [ref=e258]: 20% OFF
+                  - button [ref=e259]:
+                    - img [ref=e260]
+                - generic [ref=e262]:
+                  - paragraph [ref=e263]: Minimalist
+                  - heading "Minimalist Backpack" [level=3] [ref=e264]
+                  - generic [ref=e265]:
+                    - generic [ref=e266]: ₹1599
+                    - generic [ref=e267]: ₹1999
+                  - generic [ref=e268]:
+                    - generic [ref=e269]:
+                      - img [ref=e270]
+                      - img [ref=e272]
+                      - img [ref=e274]
+                      - img [ref=e276]
+                      - img [ref=e278]
+                    - generic [ref=e280]: (215)
+                  - generic [ref=e283]: In Stock
+                  - button "Add" [ref=e284]:
+                    - img [ref=e285]
+                    - text: Add
+            - link "Comfort Joggers 20% OFF Sport Elite Comfort Joggers ₹799 ₹999 (265) In Stock Add" [ref=e289] [cursor=pointer]:
+              - /url: /product/comfort-joggers-2335
+              - generic [ref=e290]:
+                - generic [ref=e291]:
+                  - img "Comfort Joggers" [ref=e292]
+                  - generic [ref=e293]: 20% OFF
+                  - button [ref=e294]:
+                    - img [ref=e295]
+                - generic [ref=e297]:
+                  - paragraph [ref=e298]: Sport Elite
+                  - heading "Comfort Joggers" [level=3] [ref=e299]
+                  - generic [ref=e300]:
+                    - generic [ref=e301]: ₹799
+                    - generic [ref=e302]: ₹999
+                  - generic [ref=e303]:
+                    - generic [ref=e304]:
+                      - img [ref=e305]
+                      - img [ref=e307]
+                      - img [ref=e309]
+                      - img [ref=e311]
+                      - img [ref=e313]
+                    - generic [ref=e315]: (265)
+                  - generic [ref=e318]: In Stock
+                  - button "Add" [ref=e319]:
+                    - img [ref=e320]
+                    - text: Add
+            - link "Pullover Fleece Hoodie 21% OFF Urban Style Pullover Fleece Hoodie ₹1499 ₹1899 (275) In Stock Add" [ref=e324] [cursor=pointer]:
+              - /url: /product/pullover-fleece-hoodie-9597
+              - generic [ref=e325]:
+                - generic [ref=e326]:
+                  - img "Pullover Fleece Hoodie" [ref=e327]
+                  - generic [ref=e328]: 21% OFF
+                  - button [ref=e329]:
+                    - img [ref=e330]
+                - generic [ref=e332]:
+                  - paragraph [ref=e333]: Urban Style
+                  - heading "Pullover Fleece Hoodie" [level=3] [ref=e334]
+                  - generic [ref=e335]:
+                    - generic [ref=e336]: ₹1499
+                    - generic [ref=e337]: ₹1899
+                  - generic [ref=e338]:
+                    - generic [ref=e339]:
+                      - img [ref=e340]
+                      - img [ref=e342]
+                      - img [ref=e344]
+                      - img [ref=e346]
+                      - img [ref=e348]
+                    - generic [ref=e350]: (275)
+                  - generic [ref=e353]: In Stock
+                  - button "Add" [ref=e354]:
+                    - img [ref=e355]
+                    - text: Add
+            - link "Graphic Print Tee 25% OFF Urban Style Graphic Print Tee ₹599 ₹799 (85) In Stock Add" [ref=e359] [cursor=pointer]:
+              - /url: /product/graphic-print-tee-9395
+              - generic [ref=e360]:
+                - generic [ref=e361]:
+                  - img "Graphic Print Tee" [ref=e362]
+                  - generic [ref=e363]: 25% OFF
+                  - button [ref=e364]:
+                    - img [ref=e365]
+                - generic [ref=e367]:
+                  - paragraph [ref=e368]: Urban Style
+                  - heading "Graphic Print Tee" [level=3] [ref=e369]
+                  - generic [ref=e370]:
+                    - generic [ref=e371]: ₹599
+                    - generic [ref=e372]: ₹799
+                  - generic [ref=e373]:
+                    - generic [ref=e374]:
+                      - img [ref=e375]
+                      - img [ref=e377]
+                      - img [ref=e379]
+                      - img [ref=e381]
+                      - img [ref=e383]
+                    - generic [ref=e385]: (85)
+                  - generic [ref=e388]: In Stock
+                  - button "Add" [ref=e389]:
+                    - img [ref=e390]
+                    - text: Add
+            - link "Cropped Logo Tee 22% OFF Urban Style Cropped Logo Tee ₹429 ₹549 (198) In Stock Add" [ref=e394] [cursor=pointer]:
+              - /url: /product/cropped-logo-tee-1189
+              - generic [ref=e395]:
+                - generic [ref=e396]:
+                  - img "Cropped Logo Tee" [ref=e397]
+                  - generic [ref=e398]: 22% OFF
+                  - button [ref=e399]:
+                    - img [ref=e400]
+                - generic [ref=e402]:
+                  - paragraph [ref=e403]: Urban Style
+                  - heading "Cropped Logo Tee" [level=3] [ref=e404]
+                  - generic [ref=e405]:
+                    - generic [ref=e406]: ₹429
+                    - generic [ref=e407]: ₹549
+                  - generic [ref=e408]:
+                    - generic [ref=e409]:
+                      - img [ref=e410]
+                      - img [ref=e412]
+                      - img [ref=e414]
+                      - img [ref=e416]
+                      - img [ref=e418]
+                    - generic [ref=e420]: (198)
+                  - generic [ref=e423]: In Stock
+                  - button "Add" [ref=e424]:
+                    - img [ref=e425]
+                    - text: Add
+            - link "Tie-Dye Festival Tee 25% OFF Urban Style Tie-Dye Festival Tee ₹599 ₹799 (225) In Stock Add" [ref=e429] [cursor=pointer]:
+              - /url: /product/tie-dye-festival-tee-5104
+              - generic [ref=e430]:
+                - generic [ref=e431]:
+                  - img "Tie-Dye Festival Tee" [ref=e432]
+                  - generic [ref=e433]: 25% OFF
+                  - button [ref=e434]:
+                    - img [ref=e435]
+                - generic [ref=e437]:
+                  - paragraph [ref=e438]: Urban Style
+                  - heading "Tie-Dye Festival Tee" [level=3] [ref=e439]
+                  - generic [ref=e440]:
+                    - generic [ref=e441]: ₹599
+                    - generic [ref=e442]: ₹799
+                  - generic [ref=e443]:
+                    - generic [ref=e444]:
+                      - img [ref=e445]
+                      - img [ref=e447]
+                      - img [ref=e449]
+                      - img [ref=e451]
+                      - img [ref=e453]
+                    - generic [ref=e455]: (225)
+                  - generic [ref=e458]: In Stock
+                  - button "Add" [ref=e459]:
+                    - img [ref=e460]
+                    - text: Add
+        - generic [ref=e466]:
+          - generic [ref=e467]:
+            - img [ref=e469]
+            - heading "Free Worldwide Shipping" [level=3] [ref=e474]
+            - paragraph [ref=e475]: On elite orders above ₹999
+          - generic [ref=e476]:
+            - img [ref=e478]
+            - heading "Secure Payment" [level=3] [ref=e480]
+            - paragraph [ref=e481]: 100% encrypted checkout
+          - generic [ref=e482]:
+            - img [ref=e484]
+            - heading "Easy Returns" [level=3] [ref=e487]
+            - paragraph [ref=e488]: 7 day hassle-free return policy
+    - contentinfo [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e55]:
+          - generic [ref=e56]:
+            - heading "KALAAH STUDIO" [level=3] [ref=e57]
+            - paragraph [ref=e58]: Your destination for premium fashion and lifestyle products. Quality meets affordability in the modern era.
+            - generic [ref=e59]:
+              - link [ref=e60] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e61]
+              - link [ref=e64] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e65]
+              - link [ref=e67] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e68]
+          - generic [ref=e70]:
+            - heading "Shop" [level=4] [ref=e71]
+            - list [ref=e72]:
+              - listitem [ref=e73]:
+                - link "Men's Tees" [ref=e74] [cursor=pointer]:
+                  - /url: /products?category=men-tshirts
+              - listitem [ref=e75]:
+                - link "Women's Tees" [ref=e76] [cursor=pointer]:
+                  - /url: /products?category=women-tshirts
+              - listitem [ref=e77]:
+                - link "Hoodies" [ref=e78] [cursor=pointer]:
+                  - /url: /products?category=hoodies
+              - listitem [ref=e79]:
+                - link "Joggers" [ref=e80] [cursor=pointer]:
+                  - /url: /products?category=joggers
+              - listitem [ref=e81]:
+                - link "Accessories" [ref=e82] [cursor=pointer]:
+                  - /url: /products?category=accessories
+          - generic [ref=e83]:
+            - heading "Help" [level=4] [ref=e84]
+            - list [ref=e85]:
+              - listitem [ref=e86]:
+                - link "Track Order" [ref=e87] [cursor=pointer]:
+                  - /url: /orders
+              - listitem [ref=e88]:
+                - link "Returns & Exchanges" [ref=e89] [cursor=pointer]:
+                  - /url: /orders
+              - listitem [ref=e90]:
+                - link "Shipping Info" [ref=e91] [cursor=pointer]:
+                  - /url: /orders
+              - listitem [ref=e92]:
+                - link "FAQs" [ref=e93] [cursor=pointer]:
+                  - /url: /orders
+              - listitem [ref=e94]:
+                - link "Contact Us" [ref=e95] [cursor=pointer]:
+                  - /url: /orders
+          - generic [ref=e96]:
+            - heading "Contact" [level=4] [ref=e97]
+            - list [ref=e98]:
+              - listitem [ref=e99]:
+                - img [ref=e100]
+                - generic [ref=e103]: 123 Fashion Street, Mumbai, MH 400001
+              - listitem [ref=e104]:
+                - img [ref=e105]
+                - generic [ref=e107]: +91 98765 43210
+              - listitem [ref=e108]:
+                - img [ref=e109]
+                - generic [ref=e112]: support@kalaahstudio.in
+        - generic [ref=e113]:
+          - paragraph [ref=e114]: © 2026 Kalaah Studio. All rights reserved.
+          - generic [ref=e115]:
+            - link "Privacy Policy" [ref=e116] [cursor=pointer]:
+              - /url: "#"
+            - link "Terms of Service" [ref=e117] [cursor=pointer]:
+              - /url: "#"
+            - link "Refund Policy" [ref=e118] [cursor=pointer]:
+              - /url: "#"
+  - status [ref=e494]: Welcome back!

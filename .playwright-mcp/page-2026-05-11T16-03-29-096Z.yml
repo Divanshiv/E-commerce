@@ -1,0 +1,93 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e6]:
+      - link "Kalaah Studio" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - img "Kalaah Studio" [ref=e8]
+      - generic [ref=e10]:
+        - textbox "Search products..." [ref=e11]
+        - button [ref=e12] [cursor=pointer]:
+          - img [ref=e13]
+      - generic [ref=e16]:
+        - link [ref=e17] [cursor=pointer]:
+          - /url: /wishlist
+          - img [ref=e18]
+        - link [ref=e20] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e21]
+        - button [ref=e26] [cursor=pointer]:
+          - img [ref=e27]
+  - main [ref=e30]
+  - contentinfo [ref=e33]:
+    - generic [ref=e34]:
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - img "Kalaah Studio" [ref=e37]
+          - paragraph [ref=e38]: Your destination for premium fashion and lifestyle products. Quality meets affordability in the modern era.
+          - generic [ref=e39]:
+            - link [ref=e40] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e41]
+            - link [ref=e44] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e45]
+            - link [ref=e47] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e48]
+        - generic [ref=e50]:
+          - heading "Shop" [level=4] [ref=e51]
+          - list [ref=e52]:
+            - listitem [ref=e53]:
+              - link "Men's Tees" [ref=e54] [cursor=pointer]:
+                - /url: /products?category=men-tshirts
+            - listitem [ref=e55]:
+              - link "Women's Tees" [ref=e56] [cursor=pointer]:
+                - /url: /products?category=women-tshirts
+            - listitem [ref=e57]:
+              - link "Hoodies" [ref=e58] [cursor=pointer]:
+                - /url: /products?category=hoodies
+            - listitem [ref=e59]:
+              - link "Joggers" [ref=e60] [cursor=pointer]:
+                - /url: /products?category=joggers
+            - listitem [ref=e61]:
+              - link "Accessories" [ref=e62] [cursor=pointer]:
+                - /url: /products?category=accessories
+        - generic [ref=e63]:
+          - heading "Help" [level=4] [ref=e64]
+          - list [ref=e65]:
+            - listitem [ref=e66]:
+              - link "Track Order" [ref=e67] [cursor=pointer]:
+                - /url: /orders
+            - listitem [ref=e68]:
+              - link "Returns & Exchanges" [ref=e69] [cursor=pointer]:
+                - /url: /orders
+            - listitem [ref=e70]:
+              - link "Shipping Info" [ref=e71] [cursor=pointer]:
+                - /url: /orders
+            - listitem [ref=e72]:
+              - link "FAQs" [ref=e73] [cursor=pointer]:
+                - /url: /orders
+            - listitem [ref=e74]:
+              - link "Contact Us" [ref=e75] [cursor=pointer]:
+                - /url: /orders
+        - generic [ref=e76]:
+          - heading "Contact" [level=4] [ref=e77]
+          - list [ref=e78]:
+            - listitem [ref=e79]:
+              - img [ref=e80]
+              - generic [ref=e83]: 123 Fashion Street, Mumbai, MH 400001
+            - listitem [ref=e84]:
+              - img [ref=e85]
+              - generic [ref=e87]: +91 98765 43210
+            - listitem [ref=e88]:
+              - img [ref=e89]
+              - generic [ref=e92]: support@kalaahstudio.in
+      - generic [ref=e93]:
+        - paragraph [ref=e94]: © 2026 Kalaah Studio. All rights reserved.
+        - generic [ref=e95]:
+          - link "Privacy Policy" [ref=e96] [cursor=pointer]:
+            - /url: "#"
+          - link "Terms of Service" [ref=e97] [cursor=pointer]:
+            - /url: "#"
+          - link "Refund Policy" [ref=e98] [cursor=pointer]:
+            - /url: "#"

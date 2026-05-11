@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div>
-            <h3 className="text-2xl font-bold text-white tracking-wider mb-4 glow-text">KALAAH STUDIO</h3>
+            <img src="/logo-light.svg" alt="Kalaah Studio" className="h-12 mb-4" />
             <p className="text-gray-400 mb-4 text-sm leading-relaxed">
               Your destination for premium fashion and lifestyle products. Quality meets affordability in the modern era.
             </p>

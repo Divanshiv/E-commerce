@@ -1,4 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="20" fill="#dc2626"/>
-  <text x="50" y="68" font-family="Outfit, sans-serif" font-size="48" font-weight="800" fill="white" text-anchor="middle">S</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <rect x="8" y="8" width="84" height="84" rx="18" fill="#dc2626"/>
+  <g stroke="white" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="36" y1="24" x2="36" y2="76" stroke-width="9"/>
+    <path d="M 38 48 C 48 42 56 34 66 30" stroke-width="7"/>
+    <path d="M 38 55 C 48 60 56 66 66 72" stroke-width="7"/>
+  </g>
+  <rect x="35" y="48" width="6" height="6" rx="1" fill="#fcd34d" transform="rotate(45 38 51)"/>
 </svg>

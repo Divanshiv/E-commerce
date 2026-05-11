@@ -1,9 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import api from '../lib/api';
 import toast from 'react-hot-toast';
+import { CreditCard, Smartphone, Wallet, IndianRupee, ShieldCheck } from 'lucide-react';
+
+const METHOD_CONFIG = {
+  card:     { icon: CreditCard,     gradient: 'from-blue-500 to-purple-600', label: 'Credit / Debit Card',     desc: 'Visa, Mastercard, Rupay & more' },
+  upi:      { icon: Smartphone,     gradient: 'from-green-400 to-teal-600',  label: 'UPI',                      desc: 'Google Pay, PhonePe & more' },
+  paytm_wallet: { icon: Wallet,    gradient: 'from-blue-400 to-blue-600',   label: 'Paytm Wallet',             desc: 'Pay using Paytm balance, UPI & cards' },
+  cod:      { icon: IndianRupee,    gradient: 'from-amber-400 to-orange-600',label: 'Cash on Delivery',         desc: 'Pay when you receive your order' }
+};
+
+// Map our method names to Razorpay's method parameter
+// https://razorpay.com/docs/payments/payment-gateway/web-integration/standard/checkout-fields/
+const RAZORPAY_METHOD_MAP = {
+  card: 'card',
+  upi: 'upi',
+  paytm_wallet: 'wallet'
+};
 
 export default function Checkout() {
   const { cart, subtotal, discount, clearCart } = useCart();
@@ -18,8 +34,30 @@ export default function Checkout() {
     pincode: '',
     phone: ''
   });
-  const [paymentMethod, setPaymentMethod] = useState('razorpay');
+  const [paymentMethod, setPaymentMethod] = useState('card');
   const [loading, setLoading] = useState(false);
+  const [paymentError, setPaymentError] = useState(null);
+  const [paymentConfig, setPaymentConfig] = useState(null);
+
+  // Fetch which payment methods are enabled from the backend
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await api.get('/payments/config');
+        setPaymentConfig(data.data);
+        // Default to the first enabled non-COD method, or cod
+        const methods = data.data.allowedMethods || [];
+        const first = methods.includes('card') ? 'card'
+                   : methods.includes('upi') ? 'upi'
+                   : methods.includes('paytm_wallet') ? 'paytm_wallet'
+                   : methods.includes('cod') ? 'cod'
+                   : 'card';
+        setPaymentMethod(first);
+      } catch {
+        setPaymentConfig({ allowedMethods: ['card', 'upi', 'paytm_wallet', 'cod'], codEnabled: true, codCharges: 30 });
+      }
+    })();
+  }, []);
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-IN', {
@@ -45,34 +83,46 @@ export default function Checkout() {
 
     try {
       setLoading(true);
+      setPaymentError(null);
 
-      if (paymentMethod === 'razorpay') {
-        // Create Razorpay order
+      if (paymentMethod !== 'cod') {
         const { data: orderData } = await api.post('/payments/razorpay/order', {
           address,
-          couponCode: cart.couponApplied?.code
+          couponCode: cart.couponApplied?.code,
+          paymentMethod
         });
 
-        // Open Razorpay
+        const order = orderData.data.order;
+
+        const razorpayMethod = RAZORPAY_METHOD_MAP[paymentMethod];
         const options = {
           key: import.meta.env.VITE_RAZORPAY_KEY_ID,
           amount: orderData.data.amount,
           currency: 'INR',
           name: 'Kalaah Studio',
-          description: `Order ${orderData.data.orderId}`,
-          order_id: orderData.data.orderId,
+          description: `Order ${order.orderNumber || order._id}`,
+          order_id: orderData.data.razorpayOrderId,
+          ...(razorpayMethod ? { method: razorpayMethod } : {}),
           handler: async (response) => {
             try {
-              // Verify payment
               await api.post('/payments/razorpay/verify', {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature
               });
               clearCart();
-              navigate(`/order-success/${orderData.data.order._id}`);
+              navigate(`/order-success/${order._id}`, {
+                state: { orderNumber: order.orderNumber }
+              });
             } catch (error) {
+              setPaymentError('Payment verification failed. Please contact support with your order number.');
               toast.error('Payment verification failed');
+            }
+          },
+          modal: {
+            ondismiss: () => {
+              setLoading(false);
+              setPaymentError('Payment cancelled. You can retry or choose a different method.');
             }
           },
           prefill: {
@@ -86,18 +136,25 @@ export default function Checkout() {
         };
 
         const rzp = new window.Razorpay(options);
-        rzp.on('payment.failed', () => {
-          toast.error('Payment failed');
+        rzp.on('payment.failed', (response) => {
+          const reason = response.error?.description || 'Payment failed';
+          setPaymentError(`${reason}. You can retry or choose a different method.`);
+          toast.error(reason);
+          setLoading(false);
         });
         rzp.open();
       } else {
-        // COD
         const { data } = await api.post('/payments/cod', { address });
+        const order = data.data.order;
         clearCart();
-        navigate(`/order-success/${data.data.order._id}`);
+        navigate(`/order-success/${order._id}`, {
+          state: { orderNumber: order.orderNumber }
+        });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to place order');
+      const msg = error.response?.data?.message || 'Failed to place order';
+      setPaymentError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -221,51 +278,80 @@ export default function Checkout() {
             {step === 2 && (
               <div className="bg-white rounded-xl p-6">
                 <h2 className="font-bold text-lg mb-4">Payment Method</h2>
-                <div className="space-y-3">
-                  <label className={`flex items-center gap-4 p-4 border rounded-lg cursor-pointer ${
-                    paymentMethod === 'razorpay' ? 'border-red-600 bg-red-50' : 'border-gray-200'
-                  }`}>
-                    <input
-                      type="radio"
-                      name="payment"
-                      value="razorpay"
-                      checked={paymentMethod === 'razorpay'}
-                      onChange={() => setPaymentMethod('razorpay')}
-                      className="text-red-600"
-                    />
-                    <div>
-                      <p className="font-medium">Credit/Debit Card, UPI, Net Banking</p>
-                      <p className="text-sm text-gray-500">Pay securely with Razorpay</p>
-                    </div>
-                  </label>
-                  <label className={`flex items-center gap-4 p-4 border rounded-lg cursor-pointer ${
-                    paymentMethod === 'cod' ? 'border-red-600 bg-red-50' : 'border-gray-200'
-                  }`}>
-                    <input
-                      type="radio"
-                      name="payment"
-                      value="cod"
-                      checked={paymentMethod === 'cod'}
-                      onChange={() => setPaymentMethod('cod')}
-                      className="text-red-600"
-                    />
-                    <div>
-                      <p className="font-medium">Cash on Delivery</p>
-                      <p className="text-sm text-gray-500">Pay when you receive your order</p>
-                    </div>
-                  </label>
+                <p className="text-sm text-gray-500 mb-4">Choose how you'd like to pay</p>
+                
+                <div className="grid gap-3">
+                  {(paymentConfig?.allowedMethods || []).map(methodKey => {
+                    if (methodKey === 'cod') {
+                      if (!paymentConfig?.codEnabled) return null;
+                      return (
+                        <label key="cod" className={`relative flex items-start gap-4 p-4 border-2 rounded-xl cursor-pointer transition ${
+                          paymentMethod === 'cod' ? 'border-red-600 bg-red-50 shadow-sm' : 'border-gray-200 hover:border-gray-300'
+                        }`}>
+                          <input type="radio" name="payment" value="cod"
+                            checked={paymentMethod === 'cod'}
+                            onChange={() => setPaymentMethod('cod')}
+                            className="mt-1 text-red-600 accent-red-600" />
+                          <div className="flex items-center gap-3 flex-1">
+                            <div className={`w-12 h-12 bg-gradient-to-br ${METHOD_CONFIG.cod.gradient} rounded-lg flex items-center justify-center shrink-0`}>
+                              <IndianRupee className="text-white" size={22} />
+                            </div>
+                            <div className="flex-1">
+                              <p className="font-semibold text-gray-800">{METHOD_CONFIG.cod.label}</p>
+                              <p className="text-sm text-gray-500">{METHOD_CONFIG.cod.desc}</p>
+                            </div>
+                          </div>
+                        </label>
+                      );
+                    }
+
+                    const cfg = METHOD_CONFIG[methodKey];
+                    if (!cfg) return null;
+                    const Icon = cfg.icon;
+                    return (
+                      <label key={methodKey} className={`relative flex items-start gap-4 p-4 border-2 rounded-xl cursor-pointer transition ${
+                        paymentMethod === methodKey ? 'border-red-600 bg-red-50 shadow-sm' : 'border-gray-200 hover:border-gray-300'
+                      }`}>
+                        <input type="radio" name="payment" value={methodKey}
+                          checked={paymentMethod === methodKey}
+                          onChange={() => setPaymentMethod(methodKey)}
+                          className="mt-1 text-red-600 accent-red-600" />
+                        <div className="flex items-center gap-3 flex-1">
+                          <div className={`w-12 h-12 bg-gradient-to-br ${cfg.gradient} rounded-lg flex items-center justify-center shrink-0`}>
+                            <Icon className="text-white" size={22} />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-semibold text-gray-800">{cfg.label}</p>
+                            <p className="text-sm text-gray-500">{cfg.desc}</p>
+                          </div>
+                          <ShieldCheck className="text-green-500 shrink-0" size={18} />
+                        </div>
+                      </label>
+                    );
+                  })}
                 </div>
-                <div className="flex gap-4 mt-6">
+
+                {paymentError && (
+                  <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-sm text-red-700">{paymentError}</p>
+                  </div>
+                )}
+                <div className="flex items-center justify-center gap-2 mt-4 text-xs text-gray-400">
+                  <ShieldCheck size={14} />
+                  <span>All online payments are securely processed by Razorpay</span>
+                </div>
+
+                <div className="flex gap-4 mt-4">
                   <button
                     onClick={() => setStep(1)}
-                    className="flex-1 border border-gray-300 py-3 rounded-lg font-medium hover:bg-gray-50"
+                    className="flex-1 border border-gray-300 py-3 rounded-lg font-medium hover:bg-gray-50 transition"
                   >
                     Back
                   </button>
                   <button
                     onClick={handlePlaceOrder}
                     disabled={loading}
-                    className="flex-1 bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 disabled:opacity-50"
+                    className="flex-1 bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition disabled:opacity-50"
                   >
                     {loading ? 'Processing...' : `Pay ${formatPrice(total)}`}
                   </button>
