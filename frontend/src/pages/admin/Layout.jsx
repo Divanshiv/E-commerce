@@ -32,7 +32,7 @@ export default function AdminLayout() {
       {/* Sidebar Component */}
       <aside className={`sk-admin-sidebar ${isSidebarOpen ? 'is-open' : ''}`}>
         <div className="sk-admin-sidebar-header">
-          <Link to="/" className="sk-admin-logo">SHOPKART</Link>
+          <Link to="/" className="sk-admin-logo">KALAAH STUDIO</Link>
           <p className="sk-admin-brand-tag">Terminal v1.0</p>
         </div>
 

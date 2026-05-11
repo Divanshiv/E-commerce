@@ -58,7 +58,7 @@ export default function Checkout() {
           key: import.meta.env.VITE_RAZORPAY_KEY_ID,
           amount: orderData.data.amount,
           currency: 'INR',
-          name: 'ShopKart',
+          name: 'Kalaah Studio',
           description: `Order ${orderData.data.orderId}`,
           order_id: orderData.data.orderId,
           handler: async (response) => {

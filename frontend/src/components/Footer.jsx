@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div>
-            <h3 className="text-2xl font-bold text-white tracking-wider mb-4 glow-text">SHOPKART</h3>
+            <h3 className="text-2xl font-bold text-white tracking-wider mb-4 glow-text">KALAAH STUDIO</h3>
             <p className="text-gray-400 mb-4 text-sm leading-relaxed">
               Your destination for premium fashion and lifestyle products. Quality meets affordability in the modern era.
             </p>
@@ -66,7 +66,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={16} className="text-red-500 flex-shrink-0" />
-                <span>support@shopkart.in</span>
+                <span>support@kalaahstudio.in</span>
               </li>
             </ul>
           </div>
@@ -74,7 +74,7 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="border-t border-white/10 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-500">&copy; 2026 ShopKart. All rights reserved.</p>
+          <p className="text-sm text-gray-500">&copy; 2026 Kalaah Studio. All rights reserved.</p>
           <div className="flex gap-6 text-sm text-gray-500">
             <a href="#" className="hover:text-red-500 transition">Privacy Policy</a>
             <a href="#" className="hover:text-red-500 transition">Terms of Service</a>

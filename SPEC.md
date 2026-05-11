@@ -2,7 +2,7 @@
 
 ## 1. Project Overview
 
-**Project Name:** ShopKart  
+**Project Name:** Kalaah Studio  
 **Type:** Full-stack E-Commerce Platform (MERN)  
 **Target Users:** Indian fashion consumers + Admin operators  
 **Design Reference:** bewakoof.com style (bold, youthful, mobile-first)

@@ -1,0 +1,457 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e6]:
+      - link "SHOPKART" [ref=e7] [cursor=pointer]:
+        - /url: /
+      - generic [ref=e9]:
+        - textbox "Search products..." [ref=e10]
+        - button [ref=e11] [cursor=pointer]:
+          - img [ref=e12]
+      - generic [ref=e15]:
+        - link [ref=e16] [cursor=pointer]:
+          - /url: /wishlist
+          - img [ref=e17]
+        - link [ref=e19] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e20]
+        - link "Login" [ref=e24] [cursor=pointer]:
+          - /url: /login
+  - main [ref=e25]:
+    - generic [ref=e458]:
+      - generic [ref=e459]:
+        - heading "All Products" [level=1] [ref=e461]
+        - combobox [ref=e463]:
+          - option "Newest" [selected]
+          - 'option "Price: Low to High"'
+          - 'option "Price: High to Low"'
+          - option "Popularity"
+      - generic [ref=e464]:
+        - complementary [ref=e465]:
+          - generic [ref=e466]:
+            - heading "Filters" [level=3] [ref=e468]
+            - generic [ref=e469]:
+              - heading "Category" [level=4] [ref=e470]
+              - generic [ref=e471]:
+                - button "All Products" [ref=e472] [cursor=pointer]
+                - button "Men's Tees" [ref=e473] [cursor=pointer]
+                - button "Women's Tees" [ref=e474] [cursor=pointer]
+                - button "Hoodies" [ref=e475] [cursor=pointer]
+                - button "Joggers" [ref=e476] [cursor=pointer]
+                - button "Accessories" [ref=e477] [cursor=pointer]
+            - generic [ref=e478]:
+              - heading "Price Range" [level=4] [ref=e479]
+              - generic [ref=e480]:
+                - spinbutton [ref=e481]
+                - generic [ref=e482]: "-"
+                - spinbutton [ref=e483]
+            - generic [ref=e484]:
+              - heading "Size" [level=4] [ref=e485]
+              - generic [ref=e486]:
+                - button "S" [ref=e487] [cursor=pointer]
+                - button "M" [ref=e488] [cursor=pointer]
+                - button "L" [ref=e489] [cursor=pointer]
+                - button "XL" [ref=e490] [cursor=pointer]
+                - button "XXL" [ref=e491] [cursor=pointer]
+            - generic [ref=e492]:
+              - heading "Brand" [level=4] [ref=e493]
+              - generic [ref=e494]:
+                - generic [ref=e495] [cursor=pointer]:
+                  - checkbox "Classic Wear" [ref=e496]
+                  - generic [ref=e497]: Classic Wear
+                - generic [ref=e498] [cursor=pointer]:
+                  - checkbox "Minimalist" [ref=e499]
+                  - generic [ref=e500]: Minimalist
+                - generic [ref=e501] [cursor=pointer]:
+                  - checkbox "Sport Elite" [ref=e502]
+                  - generic [ref=e503]: Sport Elite
+                - generic [ref=e504] [cursor=pointer]:
+                  - checkbox "Urban Style" [ref=e505]
+                  - generic [ref=e506]: Urban Style
+        - generic [ref=e507]:
+          - generic [ref=e508]:
+            - link "Beanie Hat 29% OFF Classic Wear Beanie Hat ₹249 ₹349 (204) In Stock Add" [ref=e509] [cursor=pointer]:
+              - /url: /product/beanie-hat-2165
+              - generic [ref=e510]:
+                - generic [ref=e511]:
+                  - img "Beanie Hat" [ref=e512]
+                  - generic [ref=e513]: 29% OFF
+                  - button [ref=e514]:
+                    - img [ref=e515]
+                - generic [ref=e517]:
+                  - paragraph [ref=e518]: Classic Wear
+                  - heading "Beanie Hat" [level=3] [ref=e519]
+                  - generic [ref=e520]:
+                    - generic [ref=e521]: ₹249
+                    - generic [ref=e522]: ₹349
+                  - generic [ref=e523]:
+                    - generic [ref=e524]:
+                      - img [ref=e525]
+                      - img [ref=e527]
+                      - img [ref=e529]
+                      - img [ref=e531]
+                      - img [ref=e533]
+                    - generic [ref=e535]: (204)
+                  - generic [ref=e538]: In Stock
+                  - button "Add" [ref=e539]:
+                    - img [ref=e540]
+                    - text: Add
+            - link "Wireless Earphone Pouch Minimalist Wireless Earphone Pouch ₹499 (64) In Stock Add" [ref=e544] [cursor=pointer]:
+              - /url: /product/wireless-earphone-pouch-6915
+              - generic [ref=e545]:
+                - generic [ref=e546]:
+                  - img "Wireless Earphone Pouch" [ref=e547]
+                  - button [ref=e548]:
+                    - img [ref=e549]
+                - generic [ref=e551]:
+                  - paragraph [ref=e552]: Minimalist
+                  - heading "Wireless Earphone Pouch" [level=3] [ref=e553]
+                  - generic [ref=e555]: ₹499
+                  - generic [ref=e556]:
+                    - generic [ref=e557]:
+                      - img [ref=e558]
+                      - img [ref=e560]
+                      - img [ref=e562]
+                      - img [ref=e564]
+                      - img [ref=e566]
+                    - generic [ref=e568]: (64)
+                  - generic [ref=e571]: In Stock
+                  - button "Add" [ref=e572]:
+                    - img [ref=e573]
+                    - text: Add
+            - link "Woven Belt 25% OFF Classic Wear Woven Belt ₹299 ₹399 (86) In Stock Add" [ref=e577] [cursor=pointer]:
+              - /url: /product/woven-belt-5453
+              - generic [ref=e578]:
+                - generic [ref=e579]:
+                  - img "Woven Belt" [ref=e580]
+                  - generic [ref=e581]: 25% OFF
+                  - button [ref=e582]:
+                    - img [ref=e583]
+                - generic [ref=e585]:
+                  - paragraph [ref=e586]: Classic Wear
+                  - heading "Woven Belt" [level=3] [ref=e587]
+                  - generic [ref=e588]:
+                    - generic [ref=e589]: ₹299
+                    - generic [ref=e590]: ₹399
+                  - generic [ref=e591]:
+                    - generic [ref=e592]:
+                      - img [ref=e593]
+                      - img [ref=e595]
+                      - img [ref=e597]
+                      - img [ref=e599]
+                      - img [ref=e601]
+                    - generic [ref=e603]: (86)
+                  - generic [ref=e606]: In Stock
+                  - button "Add" [ref=e607]:
+                    - img [ref=e608]
+                    - text: Add
+            - link "Sports Duffel Bag 22% OFF Sport Elite Sports Duffel Bag ₹1399 ₹1799 (132) In Stock Add" [ref=e612] [cursor=pointer]:
+              - /url: /product/sports-duffel-bag-3598
+              - generic [ref=e613]:
+                - generic [ref=e614]:
+                  - img "Sports Duffel Bag" [ref=e615]
+                  - generic [ref=e616]: 22% OFF
+                  - button [ref=e617]:
+                    - img [ref=e618]
+                - generic [ref=e620]:
+                  - paragraph [ref=e621]: Sport Elite
+                  - heading "Sports Duffel Bag" [level=3] [ref=e622]
+                  - generic [ref=e623]:
+                    - generic [ref=e624]: ₹1399
+                    - generic [ref=e625]: ₹1799
+                  - generic [ref=e626]:
+                    - generic [ref=e627]:
+                      - img [ref=e628]
+                      - img [ref=e630]
+                      - img [ref=e632]
+                      - img [ref=e634]
+                      - img [ref=e636]
+                    - generic [ref=e638]: (132)
+                  - generic [ref=e641]: In Stock
+                  - button "Add" [ref=e642]:
+                    - img [ref=e643]
+                    - text: Add
+            - link "Canvas Tote Bag 25% OFF Minimalist Canvas Tote Bag ₹449 ₹599 (187) In Stock Add" [ref=e647] [cursor=pointer]:
+              - /url: /product/canvas-tote-bag-2695
+              - generic [ref=e648]:
+                - generic [ref=e649]:
+                  - img "Canvas Tote Bag" [ref=e650]
+                  - generic [ref=e651]: 25% OFF
+                  - button [ref=e652]:
+                    - img [ref=e653]
+                - generic [ref=e655]:
+                  - paragraph [ref=e656]: Minimalist
+                  - heading "Canvas Tote Bag" [level=3] [ref=e657]
+                  - generic [ref=e658]:
+                    - generic [ref=e659]: ₹449
+                    - generic [ref=e660]: ₹599
+                  - generic [ref=e661]:
+                    - generic [ref=e662]:
+                      - img [ref=e663]
+                      - img [ref=e665]
+                      - img [ref=e667]
+                      - img [ref=e669]
+                      - img [ref=e671]
+                    - generic [ref=e673]: (187)
+                  - generic [ref=e676]: In Stock
+                  - button "Add" [ref=e677]:
+                    - img [ref=e678]
+                    - text: Add
+            - link "Fleece Sweatpants 23% OFF Urban Style Fleece Sweatpants ₹999 ₹1299 (156) In Stock Add" [ref=e682] [cursor=pointer]:
+              - /url: /product/fleece-sweatpants-1513
+              - generic [ref=e683]:
+                - generic [ref=e684]:
+                  - img "Fleece Sweatpants" [ref=e685]
+                  - generic [ref=e686]: 23% OFF
+                  - button [ref=e687]:
+                    - img [ref=e688]
+                - generic [ref=e690]:
+                  - paragraph [ref=e691]: Urban Style
+                  - heading "Fleece Sweatpants" [level=3] [ref=e692]
+                  - generic [ref=e693]:
+                    - generic [ref=e694]: ₹999
+                    - generic [ref=e695]: ₹1299
+                  - generic [ref=e696]:
+                    - generic [ref=e697]:
+                      - img [ref=e698]
+                      - img [ref=e700]
+                      - img [ref=e702]
+                      - img [ref=e704]
+                      - img [ref=e706]
+                    - generic [ref=e708]: (156)
+                  - generic [ref=e711]: In Stock
+                  - button "Add" [ref=e712]:
+                    - img [ref=e713]
+                    - text: Add
+            - link "Classic Snapback Cap 20% OFF Urban Style Classic Snapback Cap ₹399 ₹499 (152) In Stock Add" [ref=e717] [cursor=pointer]:
+              - /url: /product/classic-snapback-cap-7245
+              - generic [ref=e718]:
+                - generic [ref=e719]:
+                  - img "Classic Snapback Cap" [ref=e720]
+                  - generic [ref=e721]: 20% OFF
+                  - button [ref=e722]:
+                    - img [ref=e723]
+                - generic [ref=e725]:
+                  - paragraph [ref=e726]: Urban Style
+                  - heading "Classic Snapback Cap" [level=3] [ref=e727]
+                  - generic [ref=e728]:
+                    - generic [ref=e729]: ₹399
+                    - generic [ref=e730]: ₹499
+                  - generic [ref=e731]:
+                    - generic [ref=e732]:
+                      - img [ref=e733]
+                      - img [ref=e735]
+                      - img [ref=e737]
+                      - img [ref=e739]
+                      - img [ref=e741]
+                    - generic [ref=e743]: (152)
+                  - generic [ref=e746]: In Stock
+                  - button "Add" [ref=e747]:
+                    - img [ref=e748]
+                    - text: Add
+            - link "Track Pants 18% OFF Sport Elite Track Pants ₹899 ₹1099 (97) In Stock Add" [ref=e752] [cursor=pointer]:
+              - /url: /product/track-pants-6127
+              - generic [ref=e753]:
+                - generic [ref=e754]:
+                  - img "Track Pants" [ref=e755]
+                  - generic [ref=e756]: 18% OFF
+                  - button [ref=e757]:
+                    - img [ref=e758]
+                - generic [ref=e760]:
+                  - paragraph [ref=e761]: Sport Elite
+                  - heading "Track Pants" [level=3] [ref=e762]
+                  - generic [ref=e763]:
+                    - generic [ref=e764]: ₹899
+                    - generic [ref=e765]: ₹1099
+                  - generic [ref=e766]:
+                    - generic [ref=e767]:
+                      - img [ref=e768]
+                      - img [ref=e770]
+                      - img [ref=e772]
+                      - img [ref=e774]
+                      - img [ref=e776]
+                    - generic [ref=e778]: (97)
+                  - generic [ref=e781]: In Stock
+                  - button "Add" [ref=e782]:
+                    - img [ref=e783]
+                    - text: Add
+            - link "Slim Fit Joggers 17% OFF Minimalist Slim Fit Joggers ₹999 ₹1199 (121) In Stock Add" [ref=e787] [cursor=pointer]:
+              - /url: /product/slim-fit-joggers-9568
+              - generic [ref=e788]:
+                - generic [ref=e789]:
+                  - img "Slim Fit Joggers" [ref=e790]
+                  - generic [ref=e791]: 17% OFF
+                  - button [ref=e792]:
+                    - img [ref=e793]
+                - generic [ref=e795]:
+                  - paragraph [ref=e796]: Minimalist
+                  - heading "Slim Fit Joggers" [level=3] [ref=e797]
+                  - generic [ref=e798]:
+                    - generic [ref=e799]: ₹999
+                    - generic [ref=e800]: ₹1199
+                  - generic [ref=e801]:
+                    - generic [ref=e802]:
+                      - img [ref=e803]
+                      - img [ref=e805]
+                      - img [ref=e807]
+                      - img [ref=e809]
+                      - img [ref=e811]
+                    - generic [ref=e813]: (121)
+                  - generic [ref=e816]: In Stock
+                  - button "Add" [ref=e817]:
+                    - img [ref=e818]
+                    - text: Add
+            - link "Minimalist Backpack 20% OFF Minimalist Minimalist Backpack ₹1599 ₹1999 (215) In Stock Add" [ref=e822] [cursor=pointer]:
+              - /url: /product/minimalist-backpack-1531
+              - generic [ref=e823]:
+                - generic [ref=e824]:
+                  - img "Minimalist Backpack" [ref=e825]
+                  - generic [ref=e826]: 20% OFF
+                  - button [ref=e827]:
+                    - img [ref=e828]
+                - generic [ref=e830]:
+                  - paragraph [ref=e831]: Minimalist
+                  - heading "Minimalist Backpack" [level=3] [ref=e832]
+                  - generic [ref=e833]:
+                    - generic [ref=e834]: ₹1599
+                    - generic [ref=e835]: ₹1999
+                  - generic [ref=e836]:
+                    - generic [ref=e837]:
+                      - img [ref=e838]
+                      - img [ref=e840]
+                      - img [ref=e842]
+                      - img [ref=e844]
+                      - img [ref=e846]
+                    - generic [ref=e848]: (215)
+                  - generic [ref=e851]: In Stock
+                  - button "Add" [ref=e852]:
+                    - img [ref=e853]
+                    - text: Add
+            - link "Cargo Joggers 20% OFF Urban Style Cargo Joggers ₹1199 ₹1499 (189) In Stock Add" [ref=e857] [cursor=pointer]:
+              - /url: /product/cargo-joggers-9309
+              - generic [ref=e858]:
+                - generic [ref=e859]:
+                  - img "Cargo Joggers" [ref=e860]
+                  - generic [ref=e861]: 20% OFF
+                  - button [ref=e862]:
+                    - img [ref=e863]
+                - generic [ref=e865]:
+                  - paragraph [ref=e866]: Urban Style
+                  - heading "Cargo Joggers" [level=3] [ref=e867]
+                  - generic [ref=e868]:
+                    - generic [ref=e869]: ₹1199
+                    - generic [ref=e870]: ₹1499
+                  - generic [ref=e871]:
+                    - generic [ref=e872]:
+                      - img [ref=e873]
+                      - img [ref=e875]
+                      - img [ref=e877]
+                      - img [ref=e879]
+                      - img [ref=e881]
+                    - generic [ref=e883]: (189)
+                  - generic [ref=e886]: In Stock
+                  - button "Add" [ref=e887]:
+                    - img [ref=e888]
+                    - text: Add
+            - link "Comfort Joggers 20% OFF Sport Elite Comfort Joggers ₹799 ₹999 (265) In Stock Add" [ref=e892] [cursor=pointer]:
+              - /url: /product/comfort-joggers-2335
+              - generic [ref=e893]:
+                - generic [ref=e894]:
+                  - img "Comfort Joggers" [ref=e895]
+                  - generic [ref=e896]: 20% OFF
+                  - button [ref=e897]:
+                    - img [ref=e898]
+                - generic [ref=e900]:
+                  - paragraph [ref=e901]: Sport Elite
+                  - heading "Comfort Joggers" [level=3] [ref=e902]
+                  - generic [ref=e903]:
+                    - generic [ref=e904]: ₹799
+                    - generic [ref=e905]: ₹999
+                  - generic [ref=e906]:
+                    - generic [ref=e907]:
+                      - img [ref=e908]
+                      - img [ref=e910]
+                      - img [ref=e912]
+                      - img [ref=e914]
+                      - img [ref=e916]
+                    - generic [ref=e918]: (265)
+                  - generic [ref=e921]: In Stock
+                  - button "Add" [ref=e922]:
+                    - img [ref=e923]
+                    - text: Add
+          - generic [ref=e927]:
+            - button "1" [ref=e928] [cursor=pointer]
+            - button "2" [ref=e929] [cursor=pointer]
+            - button "3" [ref=e930] [cursor=pointer]
+  - contentinfo [ref=e391]:
+    - generic [ref=e392]:
+      - generic [ref=e393]:
+        - generic [ref=e394]:
+          - heading "SHOPKART" [level=3] [ref=e395]
+          - paragraph [ref=e396]: Your destination for premium fashion and lifestyle products. Quality meets affordability in the modern era.
+          - generic [ref=e397]:
+            - link [ref=e398] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e399]
+            - link [ref=e402] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e403]
+            - link [ref=e405] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e406]
+        - generic [ref=e408]:
+          - heading "Shop" [level=4] [ref=e409]
+          - list [ref=e410]:
+            - listitem [ref=e411]:
+              - link "Men's Tees" [ref=e412] [cursor=pointer]:
+                - /url: /products?category=men-tshirts
+            - listitem [ref=e413]:
+              - link "Women's Tees" [ref=e414] [cursor=pointer]:
+                - /url: /products?category=women-tshirts
+            - listitem [ref=e415]:
+              - link "Hoodies" [ref=e416] [cursor=pointer]:
+                - /url: /products?category=hoodies
+            - listitem [ref=e417]:
+              - link "Joggers" [ref=e418] [cursor=pointer]:
+                - /url: /products?category=joggers
+            - listitem [ref=e419]:
+              - link "Accessories" [ref=e420] [cursor=pointer]:
+                - /url: /products?category=accessories
+        - generic [ref=e421]:
+          - heading "Help" [level=4] [ref=e422]
+          - list [ref=e423]:
+            - listitem [ref=e424]:
+              - link "Track Order" [ref=e425] [cursor=pointer]:
+                - /url: /orders
+            - listitem [ref=e426]:
+              - link "Returns & Exchanges" [ref=e427] [cursor=pointer]:
+                - /url: /orders
+            - listitem [ref=e428]:
+              - link "Shipping Info" [ref=e429] [cursor=pointer]:
+                - /url: /orders
+            - listitem [ref=e430]:
+              - link "FAQs" [ref=e431] [cursor=pointer]:
+                - /url: /orders
+            - listitem [ref=e432]:
+              - link "Contact Us" [ref=e433] [cursor=pointer]:
+                - /url: /orders
+        - generic [ref=e434]:
+          - heading "Contact" [level=4] [ref=e435]
+          - list [ref=e436]:
+            - listitem [ref=e437]:
+              - img [ref=e438]
+              - generic [ref=e441]: 123 Fashion Street, Mumbai, MH 400001
+            - listitem [ref=e442]:
+              - img [ref=e443]
+              - generic [ref=e445]: +91 98765 43210
+            - listitem [ref=e446]:
+              - img [ref=e447]
+              - generic [ref=e450]: support@shopkart.in
+      - generic [ref=e451]:
+        - paragraph [ref=e452]: © 2026 ShopKart. All rights reserved.
+        - generic [ref=e453]:
+          - link "Privacy Policy" [ref=e454] [cursor=pointer]:
+            - /url: "#"
+          - link "Terms of Service" [ref=e455] [cursor=pointer]:
+            - /url: "#"
+          - link "Refund Policy" [ref=e456] [cursor=pointer]:
+            - /url: "#"

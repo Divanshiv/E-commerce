@@ -9,7 +9,7 @@ async function createAdmin() {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('✅ Connected to MongoDB');
 
-    const email = 'admin@shopkart.com';
+    const email = 'admin@kalaahstudio.com';
     const password = 'Password@123';
 
     console.log('Creating admin user...');
@@ -29,7 +29,7 @@ async function createAdmin() {
       email,
       password,
       email_confirm: true, // This bypasses email confirmation!
-      user_metadata: { full_name: 'Shopkart Admin' }
+      user_metadata: { full_name: 'Kalaah Studio Admin' }
     });
 
     if (error) {
@@ -42,7 +42,7 @@ async function createAdmin() {
     const mongoUser = await User.create({
       supabaseId: data.user.id,
       email,
-      name: 'Shopkart Admin',
+      name: 'Kalaah Studio Admin',
       role: 'admin' // Ensure role is admin
     });
 

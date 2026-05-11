@@ -1,7 +1,7 @@
 {
-  "name": "shopkart-backend",
+  "name": "kalaah-studio-backend",
   "version": "1.0.0",
-  "description": "ShopKart E-Commerce Backend API",
+  "description": "Kalaah Studio E-Commerce Backend API",
   "main": "server.js",
   "type": "module",
   "scripts": {

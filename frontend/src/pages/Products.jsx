@@ -166,6 +166,18 @@ export default function Products() {
                 </div>
               </div>
 
+              {/* Keyword Search */}
+              <div className="mb-6">
+                <h4 className="text-sm font-medium mb-3">Keyword</h4>
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={filters.search}
+                  onChange={(e) => updateFilter('search', e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                />
+              </div>
+
               {/* Category */}
               <div className="mb-6">
                 <h4 className="text-sm font-medium mb-3">Category</h4>

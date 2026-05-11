@@ -27,7 +27,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex-shrink-0">
-            <span className="text-2xl font-bold text-red-600 tracking-wider">SHOPKART</span>
+            <span className="text-2xl font-bold text-red-600 tracking-wider">KALAAH STUDIO</span>
           </Link>
 
           {/* Search - Desktop */}
