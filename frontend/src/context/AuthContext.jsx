@@ -5,6 +5,37 @@ import toast from 'react-hot-toast';
 
 const AuthContext = createContext();
 
+function mergeGuestCart() {
+  const guestCart = localStorage.getItem('guestCart');
+  if (!guestCart) return;
+  const { items } = JSON.parse(guestCart);
+  if (!items || items.length === 0) return;
+
+  items.forEach(item => {
+    api.post('/cart/items', {
+      productId: item.product?._id || item.product,
+      quantity: item.quantity,
+      size: item.size,
+      price: item.price
+    }).catch(() => {});
+  });
+  localStorage.removeItem('guestCart');
+}
+
+function mergeGuestWishlist() {
+  const wishlistData = localStorage.getItem('wishlist');
+  if (wishlistData) {
+    const items = JSON.parse(wishlistData);
+    if (items && items.length > 0) {
+      items.forEach(item => {
+        const productId = item._id || item;
+        api.post(`/wishlist/${productId}`).catch(() => {});
+      });
+    }
+    localStorage.removeItem('wishlist');
+  }
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,6 +57,8 @@ export function AuthProvider({ children }) {
           setUser(data.data.user);
           localStorage.setItem('user', JSON.stringify(data.data.user));
           localStorage.setItem('token', token);
+          mergeGuestCart();
+          mergeGuestWishlist();
         } catch (err) {
           console.error('Session restore failed:', err);
         }
@@ -37,12 +70,15 @@ export function AuthProvider({ children }) {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session?.user) {
-        // Fetch or create MongoDB user
         try {
           const { data } = await api.get('/auth/me');
           setUser(data.data.user);
           localStorage.setItem('user', JSON.stringify(data.data.user));
           localStorage.setItem('token', session.access_token);
+          if (event === 'SIGNED_IN') {
+            mergeGuestCart();
+            mergeGuestWishlist();
+          }
         } catch (error) {
           console.error('Error fetching user:', error);
         }

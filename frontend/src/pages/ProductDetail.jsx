@@ -5,6 +5,7 @@ import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import ProductCard from '../components/ProductCard';
 import api from '../lib/api';
+import toast from 'react-hot-toast';
 
 export default function ProductDetail() {
   const { slug } = useParams();
@@ -48,7 +49,7 @@ export default function ProductDetail() {
 
   const handleAddToCart = () => {
     if (!selectedSize) {
-      alert('Please select a size');
+      toast.error('Please select a size');
       return;
     }
     addToCart(product, quantity, selectedSize);

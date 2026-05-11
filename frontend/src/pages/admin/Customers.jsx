@@ -9,8 +9,7 @@ export default function AdminCustomers() {
   // Filters
   const [searchTerm, setSearchTerm] = useState('');
   
-  // Modal Data
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
+
 
   useEffect(() => {
     fetchCustomers();
@@ -141,27 +140,57 @@ export default function AdminCustomers() {
                 </div>
               </div>
 
-              {/* Saved Addresses */}
-              <div>
-                <h3 className="font-semibold text-slate-800 flex items-center gap-2 mb-4 border-b border-gray-100 pb-2">
-                  <MapPin size={18} className="text-gray-400" /> Saved Addresses ({selectedCustomer.addresses?.length || 0})
-                </h3>
-                {selectedCustomer.addresses?.length > 0 ? (
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {selectedCustomer.addresses.map((addr, idx) => (
-                      <div key={idx} className="border border-gray-200 rounded-lg p-4 relative bg-white shadow-sm">
-                        {addr.isDefault && (
-                          <span className="absolute top-4 right-4 bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded">DEFAULT</span>
-                        )}
-                        <p className="font-medium text-slate-800 mb-1">{addr.street}</p>
-                        <p className="text-sm text-gray-600">{addr.city}, {addr.state}</p>
-                        <p className="text-sm text-gray-600 font-mono mt-1">PIN: {addr.pincode}</p>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg text-center">No addresses saved yet.</p>
-                )}
+              {/* Saved Addresses & Order History */}
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="font-semibold text-slate-800 flex items-center gap-2 mb-4 border-b border-gray-100 pb-2">
+                    <MapPin size={18} className="text-gray-400" /> Saved Addresses ({selectedCustomer.addresses?.length || 0})
+                  </h3>
+                  {selectedCustomer.addresses?.length > 0 ? (
+                    <div className="space-y-3">
+                      {selectedCustomer.addresses.map((addr, idx) => (
+                        <div key={idx} className="border border-gray-200 rounded-lg p-3 relative bg-white shadow-sm text-sm">
+                          {addr.isDefault && (
+                            <span className="absolute top-3 right-3 bg-green-100 text-green-700 text-[9px] font-bold px-1.5 py-0.5 rounded">DEFAULT</span>
+                          )}
+                          <p className="font-medium text-slate-800">{addr.street}</p>
+                          <p className="text-gray-500">{addr.city}, {addr.state} - {addr.pincode}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-400 bg-gray-50 p-4 rounded-lg text-center italic">No addresses saved.</p>
+                  )}
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-slate-800 flex items-center gap-2 mb-4 border-b border-gray-100 pb-2">
+                    <ShoppingBag size={18} className="text-gray-400" /> Recent Orders ({customerOrders.length})
+                  </h3>
+                  {fetchingOrders ? (
+                    <div className="space-y-2">
+                      <div className="h-12 bg-gray-50 animate-pulse rounded-lg"></div>
+                      <div className="h-12 bg-gray-50 animate-pulse rounded-lg"></div>
+                    </div>
+                  ) : customerOrders.length > 0 ? (
+                    <div className="space-y-3">
+                      {customerOrders.slice(0, 4).map((order) => (
+                        <div key={order._id} className="border border-gray-200 rounded-lg p-3 bg-white shadow-sm flex items-center justify-between">
+                          <div>
+                            <p className="text-xs font-bold text-slate-800">#{order._id.slice(-6).toUpperCase()}</p>
+                            <p className="text-[10px] text-gray-400">{new Date(order.createdAt).toLocaleDateString()}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xs font-bold text-slate-800">₹{order.total}</p>
+                            <p className="text-[10px] font-semibold uppercase text-red-500">{order.status}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-400 bg-gray-50 p-4 rounded-lg text-center italic">No order history found.</p>
+                  )}
+                </div>
               </div>
 
               {/* Meta */}

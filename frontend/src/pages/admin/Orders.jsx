@@ -227,65 +227,88 @@ export default function AdminOrders() {
 
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-semibold text-slate-800 mb-2">Customer</h3>
-                  <div className="text-sm text-gray-600">
-                    <p className="font-medium text-gray-900">{selectedOrder.user?.name}</p>
-                    <p>{selectedOrder.user?.email}</p>
+                  <h3 className="font-semibold text-slate-800 mb-2 flex items-center gap-2">
+                    <Users size={16} className="text-gray-400" /> Customer Information
+                  </h3>
+                  <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                    <p className="font-bold text-gray-900">{selectedOrder.user?.name}</p>
+                    <p className="flex items-center gap-1"><Mail size={12} /> {selectedOrder.user?.email}</p>
+                    <p className="flex items-center gap-1 mt-1"><Phone size={12} /> {selectedOrder.user?.phone || 'No phone provided'}</p>
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-slate-800 mb-2">Shipping Address</h3>
-                  <div className="text-sm text-gray-600">
-                    <p>{selectedOrder.address?.street}</p>
+                  <h3 className="font-semibold text-slate-800 mb-2 flex items-center gap-2">
+                    <MapPin size={16} className="text-gray-400" /> Shipping Address
+                  </h3>
+                  <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                    <p className="font-medium text-gray-900">{selectedOrder.address?.street}</p>
                     <p>{selectedOrder.address?.city}, {selectedOrder.address?.state} - {selectedOrder.address?.pincode}</p>
-                    <p className="mt-1">Phone: <span className="font-medium">{selectedOrder.address?.phone}</span></p>
+                    <p className="mt-1 text-xs font-bold text-slate-500">Contact: {selectedOrder.address?.phone}</p>
                   </div>
                 </div>
               </div>
 
               <div>
-                <h3 className="font-semibold text-slate-800 mb-3">Order Items ({selectedOrder.items.length})</h3>
-                <div className="space-y-3">
+                <h3 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
+                  <Package size={16} className="text-gray-400" /> Order Items ({selectedOrder.items.length})
+                </h3>
+                <div className="space-y-2">
                   {selectedOrder.items.map((item, i) => (
-                    <div key={i} className="flex items-center gap-4 bg-white border border-gray-100 rounded-lg p-3 shadow-sm">
-                      <img src={item.image} alt="" className="w-16 h-16 object-cover rounded bg-gray-50" />
-                      <div className="flex-1">
-                        <p className="font-medium text-slate-800">{item.name}</p>
-                        <p className="text-xs text-gray-500 mt-1">Size: <span className="font-medium text-gray-700">{item.size}</span> | Qty: {item.quantity}</p>
+                    <div key={i} className="flex items-center gap-4 bg-white border border-gray-100 rounded-xl p-3 shadow-sm hover:shadow-md transition-shadow">
+                      <div className="w-16 h-16 rounded-lg overflow-hidden bg-slate-50 border border-slate-100">
+                        <img src={item.image} alt="" className="w-full h-full object-cover" />
                       </div>
-                      <p className="font-bold text-slate-800">{formatPrice(item.price * item.quantity)}</p>
+                      <div className="flex-1">
+                        <p className="font-bold text-slate-800 text-sm">{item.name}</p>
+                        <p className="text-[11px] text-gray-400 mt-0.5">
+                          SIZE: <span className="font-bold text-slate-600">{item.size}</span> | 
+                          QTY: <span className="font-bold text-slate-600">{item.quantity}</span> | 
+                          UNIT: <span className="font-bold text-slate-600">₹{item.price}</span>
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-black text-slate-900">₹{item.price * item.quantity}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="border-t pt-4 space-y-2">
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>Subtotal</span>
-                  <span className="font-medium">{formatPrice(selectedOrder.subtotal)}</span>
-                </div>
-                {selectedOrder.discount > 0 && (
-                  <div className="flex justify-between text-sm text-green-600">
-                    <span>Discount</span>
-                    <span className="font-medium">-{formatPrice(selectedOrder.discount)}</span>
+              <div className="bg-slate-900 rounded-2xl p-6 text-white shadow-xl shadow-slate-200">
+                <div className="space-y-3 mb-6">
+                  <div className="flex justify-between text-sm text-slate-400">
+                    <span>Subtotal</span>
+                    <span className="font-bold text-white">{formatPrice(selectedOrder.subtotal)}</span>
                   </div>
-                )}
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>Shipping</span>
-                  <span className="font-medium">{selectedOrder.shippingCharges === 0 ? 'FREE' : formatPrice(selectedOrder.shippingCharges)}</span>
+                  {selectedOrder.discount > 0 && (
+                    <div className="flex justify-between text-sm text-red-400">
+                      <span>Discount (Coupon)</span>
+                      <span className="font-bold">-{formatPrice(selectedOrder.discount)}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between text-sm text-slate-400">
+                    <span>Shipping Charges</span>
+                    <span className="font-bold text-white">{selectedOrder.shippingCharges === 0 ? 'FREE' : formatPrice(selectedOrder.shippingCharges)}</span>
+                  </div>
                 </div>
-                <div className="flex justify-between font-bold text-lg text-slate-800 pt-2 border-t mt-2">
-                  <span>Total</span>
-                  <span>{formatPrice(selectedOrder.total)}</span>
+                <div className="flex justify-between items-center pt-4 border-t border-white/10">
+                  <span className="text-sm font-bold uppercase tracking-widest text-slate-400">Total Amount</span>
+                  <span className="text-3xl font-black text-white">{formatPrice(selectedOrder.total)}</span>
                 </div>
               </div>
 
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h3 className="font-semibold text-slate-800 mb-2">Payment Details</h3>
-                <div className="flex gap-4 text-sm">
-                  <p><span className="text-gray-500">Method:</span> <span className="font-medium">{selectedOrder.payment?.method?.toUpperCase()}</span></p>
-                  <p><span className="text-gray-500">Status:</span> <span className={`font-medium ${selectedOrder.payment?.status === 'paid' ? 'text-green-600' : 'text-yellow-600'}`}>{selectedOrder.payment?.status?.toUpperCase()}</span></p>
+              <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 flex items-center justify-between">
+                <div>
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Payment Method</h3>
+                  <p className="font-bold text-slate-800 flex items-center gap-2">
+                    <span className="px-2 py-0.5 bg-white border border-gray-200 rounded text-[10px] uppercase">{selectedOrder.payment?.method}</span>
+                    {selectedOrder.payment?.status?.toUpperCase()}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Transaction ID</h3>
+                  <p className="font-mono text-xs text-slate-600">{selectedOrder.payment?.transactionId || 'OFFLINE_ORDER'}</p>
                 </div>
               </div>
             </div>

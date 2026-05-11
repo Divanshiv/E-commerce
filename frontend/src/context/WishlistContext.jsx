@@ -7,14 +7,42 @@ const WishlistContext = createContext();
 export function WishlistProvider({ children }) {
   const [wishlist, setWishlist] = useState([]);
 
+  const fetchWishlist = async () => {
+    try {
+      const { data } = await api.get('/wishlist');
+      const serverProducts = data.data.wishlist?.products || [];
+      setWishlist(serverProducts);
+      localStorage.removeItem('wishlist');
+    } catch (error) {
+      console.error('Fetch wishlist error:', error);
+    }
+  };
+
+  // Watch for token changes (login/logout)
+  const [token, setToken] = useState(localStorage.getItem('token'));
   useEffect(() => {
-    // Load from localStorage first
+    const checkToken = () => {
+      const current = localStorage.getItem('token');
+      if (current !== token) {
+        setToken(current);
+        if (current) {
+          fetchWishlist();
+        } else {
+          const stored = localStorage.getItem('wishlist');
+          setWishlist(stored ? JSON.parse(stored) : []);
+        }
+      }
+    };
+    const interval = setInterval(checkToken, 500);
+    return () => clearInterval(interval);
+  }, [token]);
+
+  useEffect(() => {
     const stored = localStorage.getItem('wishlist');
-    if (stored) {
+    if (stored && !localStorage.getItem('token')) {
       setWishlist(JSON.parse(stored));
     }
     
-    // If logged in, fetch from server
     if (localStorage.getItem('token')) {
       fetchWishlist();
     }
@@ -26,15 +54,6 @@ export function WishlistProvider({ children }) {
       localStorage.setItem('wishlist', JSON.stringify(wishlist));
     }
   }, [wishlist]);
-
-  const fetchWishlist = async () => {
-    try {
-      const { data } = await api.get('/wishlist');
-      setWishlist(data.data.wishlist?.products || []);
-    } catch (error) {
-      console.error('Fetch wishlist error:', error);
-    }
-  };
 
   const toggleWishlist = async (product) => {
     const productId = product._id;

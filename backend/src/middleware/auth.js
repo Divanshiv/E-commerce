@@ -47,7 +47,7 @@ export const verifyToken = async (req, res, next) => {
   }
 };
 
-// Require authentication
+// Require authentication (Alias for protect)
 export const requireAuth = (req, res, next) => {
   if (!req.user) {
     return res.status(401).json({
@@ -58,19 +58,35 @@ export const requireAuth = (req, res, next) => {
   next();
 };
 
-// Require admin role
+export const protect = requireAuth;
+
+// Require specific roles
+export const authorize = (...roles) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Please login to continue'
+      });
+    }
+
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({
+        success: false,
+        message: `User role ${req.user.role} is not authorized to access this route`
+      });
+    }
+    next();
+  };
+};
+
+// Require admin role (Legacy/Specific)
 export const requireAdmin = (req, res, next) => {
-  if (!req.user) {
-    return res.status(401).json({
-      success: false,
-      message: 'Please login to continue'
-    });
-  }
-  
-  if (req.user.role !== 'admin') {
+  console.log(`🔒 Admin Access Check: User=${req.user?.email}, Role=${req.user?.role}`);
+  if (!req.user || req.user.role !== 'admin') {
     return res.status(403).json({
       success: false,
-      message: 'Admin access required'
+      message: `Admin access required. Current role: ${req.user?.role || 'none'}`
     });
   }
   next();

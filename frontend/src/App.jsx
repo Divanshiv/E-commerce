@@ -1,39 +1,50 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Layout
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
 
-// Pages - Buyer
-import Home from './pages/Home';
-import Products from './pages/Products';
-import ProductDetail from './pages/ProductDetail';
-import Cart from './pages/Cart';
-import Checkout from './pages/Checkout';
-import Orders from './pages/Orders';
-import WishlistPage from './pages/Wishlist';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import OrderSuccess from './pages/OrderSuccess';
-import AuthCallback from './pages/AuthCallback';
+// Lazy-loaded pages
+const Home = lazy(() => import('./pages/Home'));
+const Products = lazy(() => import('./pages/Products'));
+const ProductDetail = lazy(() => import('./pages/ProductDetail'));
+const Cart = lazy(() => import('./pages/Cart'));
+const Checkout = lazy(() => import('./pages/Checkout'));
+const Orders = lazy(() => import('./pages/Orders'));
+const WishlistPage = lazy(() => import('./pages/Wishlist'));
+const Login = lazy(() => import('./pages/Login'));
+const Signup = lazy(() => import('./pages/Signup'));
+const OrderSuccess = lazy(() => import('./pages/OrderSuccess'));
+const AuthCallback = lazy(() => import('./pages/AuthCallback'));
 
-// Pages - Admin
-import AdminLayout from './pages/admin/Layout';
-import AdminDashboard from './pages/admin/Dashboard';
-import AdminCategories from './pages/admin/Categories';
-import AdminProducts from './pages/admin/Products';
-import AdminInventory from './pages/admin/Inventory';
-import AdminOrders from './pages/admin/Orders';
-import AdminCustomers from './pages/admin/Customers';
-import AdminCoupons from './pages/admin/Coupons';
-import AdminShipment from './pages/admin/Shipment';
+// Lazy-loaded admin pages
+const AdminLayout = lazy(() => import('./pages/admin/Layout'));
+const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
+const AdminCategories = lazy(() => import('./pages/admin/Categories'));
+const AdminProducts = lazy(() => import('./pages/admin/Products'));
+const AdminInventory = lazy(() => import('./pages/admin/Inventory'));
+const AdminOrders = lazy(() => import('./pages/admin/Orders'));
+const AdminCustomers = lazy(() => import('./pages/admin/Customers'));
+const AdminCoupons = lazy(() => import('./pages/admin/Coupons'));
+const AdminShipment = lazy(() => import('./pages/admin/Shipment'));
+const AdminSettings = lazy(() => import('./pages/admin/Settings'));
 
 // Protected Route
 import ProtectedRoute from './components/ProtectedRoute';
+
+function PageLoader() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600" />
+    </div>
+  );
+}
 
 function App() {
   const location = useLocation();
@@ -46,6 +57,8 @@ function App() {
           <div className={`min-h-screen flex flex-col ${isAdminRoute ? 'bg-admin' : 'bg-white'}`}>
             {!isAdminRoute && <Navbar />}
             <main className={isAdminRoute ? 'admin-main-wrapper' : 'flex-1'}>
+              <ErrorBoundary>
+              <Suspense fallback={<PageLoader />}>
               <Routes>
                 {/* Public Buyer Routes */}
                 <Route path="/" element={<Home />} />
@@ -78,8 +91,11 @@ function App() {
                   <Route path="customers" element={<AdminCustomers />} />
                   <Route path="coupons" element={<AdminCoupons />} />
                   <Route path="shipment" element={<AdminShipment />} />
+                  <Route path="settings" element={<AdminSettings />} />
                 </Route>
               </Routes>
+              </Suspense>
+              </ErrorBoundary>
             </main>
             {!isAdminRoute && <Footer />}
             {!isAdminRoute && <CartDrawer />}

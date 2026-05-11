@@ -26,20 +26,25 @@ export const signup = async (req, res, next) => {
       role: 'user'
     });
 
-    // Generate JWT token
-    const { data: { session }, error: sessionError } = await supabaseAdmin.auth.admin.generateLink({
-      type: 'magiclink',
-      email
+    // Sign in to get a proper session token
+    const { data: { session }, error: sessionError } = await supabaseAdmin.auth.signInWithPassword({
+      email,
+      password
     });
+
+    if (sessionError) {
+      // User created but session generation failed — still return user
+      return res.status(201).json({
+        success: true,
+        data: { user: mongoUser }
+      });
+    }
 
     res.status(201).json({
       success: true,
       data: {
         user: mongoUser,
-        session: {
-          access_token: user.id, // Using Supabase user ID as token for simplicity
-          user
-        }
+        session
       }
     });
   } catch (error) {

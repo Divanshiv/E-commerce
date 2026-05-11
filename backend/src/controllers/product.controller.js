@@ -164,6 +164,45 @@ export const deleteProduct = async (req, res, next) => {
   }
 };
 
+// Admin: Upload product images
+export const uploadProductImages = async (req, res, next) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+
+    const uploadedImages = [];
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        uploadedImages.push({
+          url: `/uploads/${file.filename}`,
+          publicId: file.filename
+        });
+      }
+    }
+
+    // If req.body.urls provided (for direct URL uploads like from Cloudinary)
+    if (req.body.urls) {
+      const urls = Array.isArray(req.body.urls) ? req.body.urls : [req.body.urls];
+      for (const url of urls) {
+        uploadedImages.push({ url, publicId: '' });
+      }
+    }
+
+    if (uploadedImages.length === 0) {
+      return res.status(400).json({ success: false, message: 'No images provided' });
+    }
+
+    product.images.push(...uploadedImages);
+    await product.save();
+
+    res.json({ success: true, data: { product } });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Get categories with counts
 export const getCategories = async (req, res, next) => {
   try {

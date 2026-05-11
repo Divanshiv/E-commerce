@@ -1,6 +1,40 @@
 import razorpay from '../config/razorpay.js';
 import Order from '../models/Order.js';
 import Cart from '../models/Cart.js';
+import Product from '../models/Product.js';
+import Coupon from '../models/Coupon.js';
+
+// Default payment config
+let paymentConfig = {
+  razorpayKeyId: process.env.RAZORPAY_KEY_ID || '',
+  currency: 'INR',
+  codEnabled: true,
+  codCharges: 30
+};
+
+// Admin: Get payment config
+export const getPaymentConfig = async (req, res, next) => {
+  try {
+    res.json({ success: true, data: { config: paymentConfig } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Admin: Update payment config
+export const updatePaymentConfig = async (req, res, next) => {
+  try {
+    const allowedFields = ['razorpayKeyId', 'currency', 'codEnabled', 'codCharges'];
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) {
+        paymentConfig[field] = req.body[field];
+      }
+    });
+    res.json({ success: true, data: { config: paymentConfig } });
+  } catch (error) {
+    next(error);
+  }
+};
 
 // Create Razorpay order
 export const createRazorpayOrder = async (req, res, next) => {
@@ -105,6 +139,22 @@ export const verifyPayment = async (req, res, next) => {
     order.status = 'confirmed';
 
     await order.save();
+
+    // Decrement stock for each item
+    for (const item of order.items) {
+      await Product.updateOne(
+        { _id: item.product, 'sizes.name': item.size },
+        { $inc: { 'sizes.$.stock': -item.quantity } }
+      );
+    }
+
+    // Increment coupon usage if coupon was applied
+    if (order.couponApplied) {
+      await Coupon.updateOne(
+        { code: order.couponApplied },
+        { $inc: { usedCount: 1 } }
+      );
+    }
 
     // Clear cart
     await Cart.findOneAndUpdate(

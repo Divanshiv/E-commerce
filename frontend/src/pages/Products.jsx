@@ -20,7 +20,8 @@ export default function Products() {
     maxPrice: '',
     size: '',
     search: searchParams.get('search') || '',
-    sort: searchParams.get('sort') || '-createdAt'
+    sort: searchParams.get('sort') || '-createdAt',
+    page: 1
   });
 
   const categories = [
@@ -48,7 +49,7 @@ export default function Products() {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const params = {};
+      const params = { page: filters.page };
       if (filters.category) params.category = filters.category;
       if (filters.brand) params.brand = filters.brand;
       if (filters.minPrice) params.minPrice = filters.minPrice;
@@ -81,7 +82,7 @@ export default function Products() {
   };
 
   const updateFilter = (key, value) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setFilters(prev => ({ ...prev, [key]: value, page: key === 'page' ? prev.page : 1 }));
   };
 
   const clearFilters = () => {
@@ -92,7 +93,8 @@ export default function Products() {
       maxPrice: '',
       size: '',
       search: '',
-      sort: '-createdAt'
+      sort: '-createdAt',
+      page: 1
     });
   };
 
@@ -277,7 +279,7 @@ export default function Products() {
                     {[...Array(pagination.pages)].map((_, i) => (
                       <button
                         key={i}
-                        onClick={() => {/* Handle pagination */}}
+                        onClick={() => updateFilter('page', i + 1)}
                         className={`w-10 h-10 rounded-lg font-medium ${
                           pagination.page === i + 1
                             ? 'bg-red-600 text-white'

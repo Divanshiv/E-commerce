@@ -222,5 +222,3 @@ export const getDashboardStats = async (req, res, next) => {
     next(error);
   }
 };
-
-import User from '../models/User.js';

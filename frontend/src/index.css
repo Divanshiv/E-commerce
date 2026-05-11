@@ -530,109 +530,165 @@ input:focus, select:focus, textarea:focus {
 .bg-admin { background-color: #f1f5f9; }
 
 /* Admin Layout & Navigation */
-.admin-layout {
-  display: flex;
+/* =========================================================================
+   ROBUST ADMIN PANEL LAYOUT (Zero-Conflict sk-admin-*)
+   ========================================================================= */
+
+.sk-admin-layout {
+  display: block;
   min-height: 100vh;
   background-color: #f8fafc;
+  position: relative;
 }
 
-.admin-sidebar {
-  width: 260px;
-  background-color: #0f172a;
-  color: #ffffff;
-  height: 100vh;
-  position: sticky;
-  top: 0;
+.sk-admin-sidebar {
+  width: 260px !important;
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  height: 100vh !important;
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  z-index: 9999 !important;
+  transition: transform 0.3s ease;
+  box-shadow: 4px 0 20px rgba(0,0,0,0.1) !important;
+}
+
+.sk-admin-sidebar.is-open {
+  transform: translateX(0) !important;
+}
+
+.sk-admin-sidebar-header {
+  padding: 24px;
+  height: 72px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
-  z-index: 1000;
+  justify-content: center;
 }
 
-.admin-sidebar-header {
-  padding: 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.admin-logo {
+.sk-admin-logo {
   font-family: var(--font-heading);
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.1em;
   color: #fff;
   text-decoration: none;
-  display: block;
 }
 
-.admin-subtitle {
-  font-size: 0.65rem;
-  color: #94a3b8;
-  margin-top: 4px;
+.sk-admin-brand-tag {
+  font-size: 0.6rem;
+  color: #64748b;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.2em;
+  font-weight: 700;
+  margin-top: 4px;
 }
 
-.admin-nav {
+.sk-admin-nav {
   flex: 1;
   padding: 20px 12px;
   overflow-y: auto;
 }
 
-.admin-nav-item {
+.sk-admin-nav-item {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
   color: #94a3b8;
   text-decoration: none;
-  border-radius: 8px;
-  margin-bottom: 4px;
+  border-radius: 12px;
+  margin-bottom: 6px;
   font-size: 0.9rem;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
 }
 
-.admin-nav-item:hover {
+.sk-admin-nav-item:hover {
   background-color: rgba(255, 255, 255, 0.05);
   color: #fff;
 }
 
-.admin-nav-item.active {
-  background-color: var(--primary);
-  color: #fff;
+.sk-admin-nav-item.is-active {
+  background-color: #ef4444 !important; /* Bold Red for Admin */
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }
 
-.admin-user-profile {
-  padding: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(0, 0, 0, 0.2);
-}
-
-.admin-user-details {
+.sk-admin-status-badge {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 8px 12px;
+  background-color: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.7rem;
+  font-weight: 700;
 }
 
-.admin-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background-color: var(--primary);
+.sk-admin-status-badge.is-verified {
+  color: #22c55e;
+}
+
+.sk-admin-status-badge.is-verified .sk-admin-pulse-dot {
+  background-color: #22c55e;
+}
+
+.sk-admin-status-badge.is-warning {
+  color: #f59e0b;
+}
+
+.sk-admin-status-badge.is-warning .sk-admin-pulse-dot {
+  background-color: #f59e0b;
+  animation: sk-pulse-warning 2s infinite;
+}
+
+@keyframes sk-pulse-warning {
+  0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+
+.sk-admin-sidebar-footer {
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sk-admin-profile-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.sk-admin-avatar {
+  width: 32px;
+  height: 32px;
+  background-color: #ef4444;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
 }
 
-.admin-user-info {
+.sk-admin-user-meta {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.admin-user-name {
-  font-size: 0.875rem;
+.sk-admin-user-name {
+  font-size: 0.8rem;
   font-weight: 600;
   color: #fff;
   white-space: nowrap;
@@ -640,40 +696,40 @@ input:focus, select:focus, textarea:focus {
   text-overflow: ellipsis;
 }
 
-.admin-user-email {
-  font-size: 0.75rem;
+.sk-admin-user-role {
+  font-size: 0.65rem;
   color: #64748b;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
-.admin-logout-btn {
+.sk-admin-logout-trigger {
   color: #64748b;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px;
+  padding: 6px;
   border-radius: 6px;
   transition: all 0.2s;
 }
 
-.admin-logout-btn:hover {
-  color: #f87171;
-  background-color: rgba(248, 113, 113, 0.1);
+.sk-admin-logout-trigger:hover {
+  color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
 }
 
-/* Header & Main Content */
-.admin-main {
-  flex: 1;
+/* Main Panel Struct */
+.sk-admin-main {
+  margin-left: 260px !important;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-width: 0;
+  transition: all 0.3s ease;
 }
 
-.admin-header {
+.sk-admin-header {
   height: 72px;
-  background-color: #fff;
+  background-color: #ffffff;
   border-bottom: 1px solid #e2e8f0;
   display: flex;
   align-items: center;
@@ -681,49 +737,71 @@ input:focus, select:focus, textarea:focus {
   padding: 0 32px;
   position: sticky;
   top: 0;
-  z-index: 900;
+  z-index: 1000;
 }
 
-.admin-header-left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.admin-breadcrumb {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin: 0;
-  text-transform: capitalize;
-}
-
-.admin-header-right {
+.sk-admin-header-start {
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
-.admin-notification-btn {
-  position: relative;
+.sk-admin-menu-toggle {
+  display: none;
+}
+
+.sk-admin-current-page {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #1e293b;
+  text-transform: capitalize;
+}
+
+.sk-admin-header-end {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.sk-admin-stat-dot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f1f5f9;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
   color: #64748b;
+}
+
+.sk-admin-pulse-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #22c55e;
+  border-radius: 50%;
+  animation: sk-pulse 2s infinite;
+}
+
+@keyframes sk-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+.sk-admin-notif-bell {
+  position: relative;
   background: none;
   border: none;
+  color: #64748b;
   cursor: pointer;
-  padding: 8px;
-  border-radius: 50%;
-  transition: all 0.2s;
+  padding: 4px;
 }
 
-.admin-notification-btn:hover {
-  background-color: #f1f5f9;
-  color: #1e293b;
-}
-
-.admin-notification-badge {
+.sk-admin-notif-indicator {
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: 0;
+  right: 0;
   width: 8px;
   height: 8px;
   background-color: #ef4444;
@@ -731,30 +809,24 @@ input:focus, select:focus, textarea:focus {
   border: 2px solid #fff;
 }
 
-.admin-content {
-  flex: 1;
+.sk-admin-content-area {
   padding: 32px;
-  overflow-y: auto;
+  flex: 1;
 }
 
-.admin-mobile-toggle {
-  display: none;
-}
-
+/* Mobile Responsiveness */
 @media (max-width: 1024px) {
-  .admin-sidebar {
-    position: fixed;
+  .sk-admin-sidebar {
     transform: translateX(-100%);
   }
-  .admin-sidebar.open {
-    transform: translateX(0);
+  .sk-admin-main {
+    margin-left: 0 !important;
   }
-  .admin-mobile-toggle {
-    display: block;
+  .sk-admin-menu-toggle {
+    display: flex;
     background: none;
     border: none;
     color: #64748b;
-    cursor: pointer;
   }
 }
 
@@ -763,6 +835,7 @@ input:focus, select:focus, textarea:focus {
   flex-direction: column;
   flex: 1;
 }
+
 
 .admin-page-title {
   font-family: var(--font-heading);
