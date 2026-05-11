@@ -22,12 +22,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      // Only redirect if not already on login page
-      if (!window.location.pathname.includes('/login')) {
-        window.location.href = '/login';
-      }
+      // Don't hard redirect — let the calling code handle auth failures.
+      // The AuthContext will properly clear state and navigate via React Router.
     }
     return Promise.reject(error);
   }

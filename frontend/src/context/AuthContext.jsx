@@ -70,12 +70,13 @@ export function AuthProvider({ children }) {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session?.user) {
+        // Store token FIRST so axios interceptor picks it up for the API call
+        localStorage.setItem('token', session.access_token);
         try {
           const { data } = await api.get('/auth/me');
           setUser(data.data.user);
           localStorage.setItem('user', JSON.stringify(data.data.user));
-          localStorage.setItem('token', session.access_token);
-          if (event === 'SIGNED_IN') {
+          if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
             mergeGuestCart();
             mergeGuestWishlist();
           }
