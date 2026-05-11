@@ -81,3 +81,5 @@ coverage/
 # Backend/Database Specific
 backend/uploads/
 *.sqlite
+.playwright-mcp/
+frontend/dist/
