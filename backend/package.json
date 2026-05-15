@@ -4,12 +4,6 @@
   "description": "Kalaah Studio E-Commerce Backend API",
   "main": "server.js",
   "type": "module",
-  "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js",
-    "seed": "node seed.js",
-    "create-admin": "node create-admin.js"
-  },
   "dependencies": {
     "express": "^4.18.2",
     "mongoose": "^8.0.3",
@@ -24,7 +18,19 @@
     "express-rate-limit": "^7.1.5",
     "slugify": "^1.6.6"
   },
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "seed": "node seed.js",
+    "create-admin": "node create-admin.js",
+    "lint": "eslint src/ server.js",
+    "lint:fix": "eslint --fix src/ server.js",
+    "format": "prettier --write \"src/**/*.js\" \"server.js\"",
+    "format:check": "prettier --check \"src/**/*.js\" \"server.js\""
+  },
   "devDependencies": {
-    "nodemon": "^3.0.2"
+    "eslint": "^8.56.0",
+    "nodemon": "^3.0.2",
+    "prettier": "^3.2.0"
   }
 }
