@@ -29,4 +29,11 @@ api.interceptors.response.use(
   }
 );
 
+// ── Search Suggestions ───────────────────────────────────────────
+export const getSearchSuggestions = async (q) => {
+  if (!q || q.length < 2) return [];
+  const { data } = await api.get('/products/suggestions', { params: { q } });
+  return data?.data?.suggestions || [];
+};
+
 export default api;

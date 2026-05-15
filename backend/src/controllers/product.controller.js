@@ -203,6 +203,42 @@ export const uploadProductImages = async (req, res, next) => {
   }
 };
 
+// Get search suggestions (lightweight - names + slugs only)
+export const getSearchSuggestions = async (req, res, next) => {
+  try {
+    const { q } = req.query;
+    if (!q || q.length < 2) {
+      return res.json({ success: true, data: { suggestions: [] } });
+    }
+
+    const regex = new RegExp(q, 'i');
+    const products = await Product.find(
+      {
+        isActive: true,
+        $or: [
+          { name: { $regex: regex } },
+          { tags: { $in: [regex] } }
+        ]
+      },
+      { name: 1, slug: 1, images: { $slice: 1 }, salePrice: 1, price: 1 }
+    )
+      .sort({ rating: -1 })
+      .limit(8);
+
+    const suggestions = products.map(p => ({
+      id: p._id,
+      name: p.name,
+      slug: p.slug,
+      image: p.images?.[0]?.url || null,
+      price: p.salePrice || p.price
+    }));
+
+    res.json({ success: true, data: { suggestions } });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Get categories with counts
 export const getCategories = async (req, res, next) => {
   try {

@@ -1,25 +1,17 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Heart, ShoppingCart, User, Menu, X } from 'lucide-react';
+import { Heart, ShoppingCart, User, Menu, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
+import SearchAutocomplete from './SearchAutocomplete';
 
 export default function Navbar() {
   const { user, logout, isAdmin } = useAuth();
   const { itemCount } = useCart();
   const { count } = useWishlist();
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
-      setSearchQuery('');
-    }
-  };
 
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -31,23 +23,9 @@ export default function Navbar() {
           </Link>
 
           {/* Search - Desktop */}
-          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-xl mx-8">
-            <div className="relative w-full">
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-gray-100 border-0 rounded-full py-2.5 pl-5 pr-12 text-sm focus:ring-2 focus:ring-red-500 focus:bg-white transition"
-              />
-              <button 
-                type="submit"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-red-600"
-              >
-                <Search size={20} />
-              </button>
-            </div>
-          </form>
+          <div className="hidden md:flex flex-1 max-w-xl mx-8">
+            <SearchAutocomplete />
+          </div>
 
           {/* Right Icons */}
           <div className="flex items-center gap-2 md:gap-4">
@@ -116,23 +94,9 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Search */}
-        <form onSubmit={handleSearch} className="md:hidden pb-3">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-gray-100 border-0 rounded-full py-2 pl-5 pr-12 text-sm"
-            />
-            <button 
-              type="submit"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-            >
-              <Search size={20} />
-            </button>
-          </div>
-        </form>
+        <div className="md:hidden pb-3">
+          <SearchAutocomplete />
+        </div>
       </div>
 
       {/* Mobile Menu */}
