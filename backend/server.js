@@ -67,8 +67,19 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/categories', categoryRoutes);
 
 // Health check
+const startTime = Date.now();
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+  const dbState = mongoose.connection.readyState;
+  const dbStatus = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
+  res.json({
+    status: dbState === 1 ? 'healthy' : 'degraded',
+    timestamp: new Date().toISOString(),
+    uptime: Math.floor((Date.now() - startTime) / 1000),
+    database: dbStatus[dbState] || 'unknown',
+    memory: process.memoryUsage(),
+    node: process.version,
+    environment: process.env.NODE_ENV || 'development'
+  });
 });
 
 // Error handler
