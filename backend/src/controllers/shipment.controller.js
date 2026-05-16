@@ -1,7 +1,7 @@
 import ShipmentConfig from '../models/ShipmentConfig.js';
 
 // Get shipment config
-export const getShipmentConfig = async (req, res, next) => {
+export const getShipmentConfig = async (_req, res, next) => {
   try {
     let config = await ShipmentConfig.findOne();
     
@@ -10,7 +10,9 @@ export const getShipmentConfig = async (req, res, next) => {
         freeShippingThreshold: 999,
         standardRate: 49,
         expressRate: 99,
-        codCharges: 30
+        codCharges: 30,
+        standardDeliveryDays: 5,
+        expressDeliveryDays: 2
       });
     }
 

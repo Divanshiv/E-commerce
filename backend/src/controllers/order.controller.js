@@ -2,6 +2,7 @@ import Order from '../models/Order.js';
 import Cart from '../models/Cart.js';
 import Product from '../models/Product.js';
 import User from '../models/User.js';
+import { createNewOrderNotification, createOrderStatusNotification } from './notification.controller.js';
 
 // Get user orders
 export const getOrders = async (req, res, next) => {
@@ -86,6 +87,10 @@ export const createOrder = async (req, res, next) => {
 
     await order.save();
 
+    // Trigger notification (non-blocking)
+    const orderUser = await User.findById(req.user._id);
+    createNewOrderNotification(order, orderUser);
+
     // Clear cart
     cart.items = [];
     cart.couponApplied = null;
@@ -140,12 +145,94 @@ export const updateOrderStatus = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Order not found' });
     }
 
+    const previousStatus = order.status;
+    const location = req.body.location || '';
+
     order.status = status;
     if (trackingNumber) order.trackingNumber = trackingNumber;
 
+    // Auto-add tracking update on status change
+    if (status !== previousStatus) {
+      order.trackingUpdates.push({
+        status,
+        location,
+        note: getStatusNote(status),
+        timestamp: new Date()
+      });
+    }
+
     await order.save();
 
+    createOrderStatusNotification(order, previousStatus);
+
     res.json({ success: true, data: { order } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+function getStatusNote(status) {
+  const notes = {
+    pending: 'Order placed and awaiting confirmation',
+    confirmed: 'Order has been confirmed',
+    processing: 'Order is being prepared',
+    shipped: 'Package has been shipped',
+    out_for_delivery: 'Out for delivery',
+    delivered: 'Package delivered successfully',
+    cancelled: 'Order has been cancelled'
+  };
+  return notes[status] || `Status updated to ${status}`;
+}
+
+// Admin: Add manual tracking update
+export const addTrackingUpdate = async (req, res, next) => {
+  try {
+    const { status, location, note } = req.body;
+
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found' });
+    }
+
+    const update = {
+      status: status || order.status,
+      location: location || '',
+      note: note || '',
+      timestamp: new Date()
+    };
+
+    order.trackingUpdates.push(update);
+    if (status) order.status = status;
+    await order.save();
+
+    res.json({ success: true, data: { trackingUpdate: update, order } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Public: Get order tracking info
+export const getOrderTracking = async (req, res, next) => {
+  try {
+    const order = await Order.findById(req.params.id)
+      .select('orderNumber status trackingNumber trackingUpdates deliveryCoordinates address createdAt');
+
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found' });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        orderNumber: order.orderNumber,
+        status: order.status,
+        trackingNumber: order.trackingNumber,
+        trackingUpdates: order.trackingUpdates,
+        deliveryCoordinates: order.deliveryCoordinates,
+        address: order.address,
+        createdAt: order.createdAt
+      }
+    });
   } catch (error) {
     next(error);
   }
@@ -169,7 +256,7 @@ export const getAdminOrder = async (req, res, next) => {
 };
 
 // Admin: Get dashboard stats
-export const getDashboardStats = async (req, res, next) => {
+export const getDashboardStats = async (_req, res, next) => {
   try {
     const [totalOrders, totalProducts, totalUsers, recentOrders, lowStockProducts] = await Promise.all([
       Order.countDocuments(),

@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import Order from '../models/Order.js';
 import { supabaseAdmin } from '../config/supabase.js';
 
 // Signup with Supabase
@@ -92,12 +93,11 @@ export const login = async (req, res, next) => {
 };
 
 // Logout
-export const logout = async (req, res, next) => {
+export const logout = async (_req, res, _next) => {
   try {
-    // Clear session on client side
     res.json({ success: true, message: 'Logged out successfully' });
   } catch (error) {
-    next(error);
+    _next(error);
   }
 };
 
@@ -209,27 +209,73 @@ export const deleteAddress = async (req, res, next) => {
 // Admin: Get all customers
 export const getCustomers = async (req, res, next) => {
   try {
-    const { page = 1, limit = 20 } = req.query;
+    const { page = 1, limit = 20, search } = req.query;
     const skip = (Number(page) - 1) * Number(limit);
 
-    const [customers, total] = await Promise.all([
-      User.find({ role: 'user' })
+    const filter = { role: 'user' };
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } },
+        { phone: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    const [customers, total, orderStats] = await Promise.all([
+      User.find(filter)
         .select('-__v')
         .sort('-createdAt')
         .skip(skip)
         .limit(Number(limit)),
-      User.countDocuments({ role: 'user' })
+      User.countDocuments(filter),
+      Order.aggregate([
+        { $group: { _id: '$user', orderCount: { $sum: 1 }, totalSpent: { $sum: '$total' } } }
+      ])
     ]);
+
+    const statsMap = {};
+    orderStats.forEach(({ _id, orderCount, totalSpent }) => {
+      statsMap[_id.toString()] = { orderCount, totalSpent };
+    });
+
+    const enriched = customers.map(c => ({
+      ...c.toObject(),
+      orderCount: statsMap[c._id.toString()]?.orderCount || 0,
+      totalSpent: statsMap[c._id.toString()]?.totalSpent || 0
+    }));
 
     res.json({
       success: true,
       data: {
-        customers,
+        customers: enriched,
         pagination: { page: Number(page), limit: Number(limit), total, pages: Math.ceil(total / Number(limit)) }
       }
     });
   } catch (error) {
     next(error);
+  }
+};
+
+// Admin: Customer stats
+export const getCustomerStats = async (_req, res, _next) => {
+  try {
+    const now = new Date();
+    const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    const [total, newThisMonth, joinedToday, totalOrders] = await Promise.all([
+      User.countDocuments({ role: 'user' }),
+      User.countDocuments({ role: 'user', createdAt: { $gte: firstOfMonth } }),
+      User.countDocuments({ role: 'user', createdAt: { $gte: startOfToday } }),
+      Order.countDocuments()
+    ]);
+
+    res.json({
+      success: true,
+      data: { total, newThisMonth, joinedToday, totalOrders }
+    });
+  } catch (error) {
+    _next(error);
   }
 };
 

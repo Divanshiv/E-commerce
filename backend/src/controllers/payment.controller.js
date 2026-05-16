@@ -6,10 +6,10 @@ import Product from '../models/Product.js';
 import Coupon from '../models/Coupon.js';
 import PaymentConfig from '../models/PaymentConfig.js';
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
+// ─── Helpers ───────────────────────────────────────────────────────────────-
 
 function formatPrice(price) {
-  return Math.round(price * 100); // to paisa
+  return Math.round(price * 100); // to paisaa
 }
 
 // Loads the singleton PaymentConfig from DB, falls back to env defaults
@@ -87,7 +87,7 @@ async function clearUserCart(userId) {
  * Public endpoint — returns only non-sensitive payment config
  * (allowed methods, COD settings). Safe to call from checkout page.
  */
-export const getPublicPaymentConfig = async (req, res, next) => {
+export const getPublicPaymentConfig = async (_req, res, _next) => {
   try {
     const config = await loadPaymentConfig();
     res.json({
@@ -101,13 +101,13 @@ export const getPublicPaymentConfig = async (req, res, next) => {
       }
     });
   } catch (error) {
-    next(error);
+    _next(error);
   }
 };
 
 // ─── Admin: Payment Config ──────────────────────────────────────────────────
 
-export const getPaymentConfig = async (req, res, next) => {
+export const getPaymentConfig = async (_req, res, next) => {
   try {
     const config = await loadPaymentConfig();
     res.json({ success: true, data: { config } });
@@ -118,7 +118,7 @@ export const getPaymentConfig = async (req, res, next) => {
 
 export const updatePaymentConfig = async (req, res, next) => {
   try {
-    const allowedFields = ['razorpayKeyId', 'currency', 'codEnabled', 'codCharges', 'allowedMethods'];
+    const allowedFields = ['razorpayKeyId', 'currency', 'codEnabled', 'codCharges', 'allowedMethods', 'googlePayTestId', 'phonePeTestId', 'testCardNumber', 'testCardExpiry', 'testCardCvv', 'testCardHolder', 'testCardType'];
     let config = await PaymentConfig.findOne();
     if (!config) {
       config = new PaymentConfig();
@@ -255,6 +255,83 @@ export const verifyPayment = async (req, res, next) => {
   }
 };
 
+// ─── Google Pay (UPI Intent) Order ──────────────────────────────────────────
+
+export const createGooglePayOrder = async (req, res, next) => {
+  try {
+    const { address, couponCode } = req.body;
+
+    const cart = await Cart.findOne({ userId: req.user._id })
+      .populate('items.product');
+
+    if (!cart || cart.items.length === 0) {
+      return res.status(400).json({ success: false, message: 'Cart is empty' });
+    }
+
+    await validateStock(cart.items);
+
+    const subtotal = cart.items.reduce(
+      (sum, item) => sum + (item.price * item.quantity), 0
+    );
+    const discount = cart.couponApplied?.discountAmount || 0;
+    const shippingCharges = subtotal - discount >= 999 ? 0 : 49;
+    const total = subtotal - discount + shippingCharges;
+
+    const receipt = `gpay_${Date.now().toString(36)}`.slice(0, 40);
+
+    const razorpayOrder = await razorpay.orders.create({
+      amount: formatPrice(total),
+      currency: 'INR',
+      receipt,
+      notes: {
+        userId: req.user._id.toString(),
+        method: 'google_pay',
+        couponCode: couponCode || ''
+      }
+    });
+
+    const orderItems = cart.items.map(item => ({
+      product: item.product._id,
+      name: item.product.name,
+      image: item.product.images?.[0]?.url || '',
+      size: item.size,
+      quantity: item.quantity,
+      price: item.price
+    }));
+
+    const order = new Order({
+      user: req.user._id,
+      items: orderItems,
+      subtotal,
+      discount,
+      shippingCharges,
+      total,
+      couponApplied: cart.couponApplied?.code,
+      address,
+      payment: {
+        method: 'google_pay',
+        paymentMethod: 'upi',
+        razorpayOrderId: razorpayOrder.id,
+        status: 'pending'
+      }
+    });
+
+    await order.save();
+
+    res.json({
+      success: true,
+      data: {
+        razorpayOrderId: razorpayOrder.id,
+        amount: formatPrice(total),
+        currency: 'INR',
+        order
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // ─── COD Order ──────────────────────────────────────────────────────────────
 
 export const createCODOrder = async (req, res, next) => {
@@ -319,7 +396,7 @@ export const createCODOrder = async (req, res, next) => {
 
 // ─── Razorpay Webhook ───────────────────────────────────────────────────────
 
-export const handleWebhook = async (req, res, next) => {
+export const handleWebhook = async (req, res, _next) => {
   try {
     const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
 
