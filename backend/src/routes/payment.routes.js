@@ -5,7 +5,7 @@ import {
   createGooglePayOrder,
   createCODOrder,
   handleWebhook,
-  getPublicPaymentConfig
+  getPublicPaymentConfig,
 } from '../controllers/payment.controller.js';
 import { verifyToken, requireAuth } from '../middleware/auth.js';
 

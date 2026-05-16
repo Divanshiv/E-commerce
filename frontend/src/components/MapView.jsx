@@ -1,8 +1,6 @@
 import { MapPin, ExternalLink } from 'lucide-react';
 
 export default function MapView({ address, compact = false }) {
-
-
   const addressStr = [address?.street, address?.city, address?.state, address?.pincode]
     .filter(Boolean)
     .join(', ');
@@ -23,12 +21,7 @@ export default function MapView({ address, compact = false }) {
   if (compact) {
     return (
       <div className="map-compact">
-        <a
-          href={searchUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="map-compact-link"
-        >
+        <a href={searchUrl} target="_blank" rel="noopener noreferrer" className="map-compact-link">
           <MapPin size={14} />
           <span className="map-compact-address">{addressStr}</span>
           <ExternalLink size={12} />
@@ -53,12 +46,7 @@ export default function MapView({ address, compact = false }) {
       <div className="map-address-bar">
         <MapPin size={14} className="map-address-icon" />
         <span className="map-address-text">{addressStr}</span>
-        <a
-          href={searchUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="map-open-link"
-        >
+        <a href={searchUrl} target="_blank" rel="noopener noreferrer" className="map-open-link">
           <ExternalLink size={14} />
           Open in Maps
         </a>

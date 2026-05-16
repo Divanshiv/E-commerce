@@ -1,7 +1,15 @@
 import { useState, useEffect } from 'react';
 import {
-  Truck, Save, IndianRupee, Clock, PackageCheck, Zap,
-  MapPin, TrendingUp, ShieldCheck, Gem
+  Truck,
+  Save,
+  IndianRupee,
+  Clock,
+  PackageCheck,
+  Zap,
+  MapPin,
+  TrendingUp,
+  ShieldCheck,
+  Gem,
 } from 'lucide-react';
 import api from '../../lib/api';
 import toast from 'react-hot-toast';
@@ -15,7 +23,7 @@ export default function AdminShipment() {
     expressRate: 99,
     codCharges: 30,
     standardDeliveryDays: 5,
-    expressDeliveryDays: 2
+    expressDeliveryDays: 2,
   });
 
   useEffect(() => {
@@ -33,7 +41,7 @@ export default function AdminShipment() {
     }
   };
 
-  const handleUpdate = async (e) => {
+  const handleUpdate = async e => {
     e.preventDefault();
     setSaving(true);
     try {
@@ -46,9 +54,11 @@ export default function AdminShipment() {
     }
   };
 
-  const formatPrice = (price) => {
+  const formatPrice = price => {
     return new Intl.NumberFormat('en-IN', {
-      style: 'currency', currency: 'INR', minimumFractionDigits: 0
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
     }).format(price);
   };
 
@@ -57,29 +67,33 @@ export default function AdminShipment() {
       label: 'Free Shipping Above',
       value: `₹${config.freeShippingThreshold}`,
       icon: TrendingUp,
-      color: 'text-green-600', bg: 'bg-green-100',
-      desc: 'Orders above this ship free'
+      color: 'text-green-600',
+      bg: 'bg-green-100',
+      desc: 'Orders above this ship free',
     },
     {
       label: 'Standard Rate',
       value: formatPrice(config.standardRate),
       icon: PackageCheck,
-      color: 'text-blue-600', bg: 'bg-blue-100',
-      desc: `${config.standardDeliveryDays || 5} business days`
+      color: 'text-blue-600',
+      bg: 'bg-blue-100',
+      desc: `${config.standardDeliveryDays || 5} business days`,
     },
     {
       label: 'Express Rate',
       value: formatPrice(config.expressRate),
       icon: Zap,
-      color: 'text-purple-600', bg: 'bg-purple-100',
-      desc: `${config.expressDeliveryDays || 2} business days`
+      color: 'text-purple-600',
+      bg: 'bg-purple-100',
+      desc: `${config.expressDeliveryDays || 2} business days`,
     },
     {
       label: 'COD Fee',
       value: formatPrice(config.codCharges),
       icon: IndianRupee,
-      color: 'text-amber-600', bg: 'bg-amber-100',
-      desc: 'Cash on Delivery charge'
+      color: 'text-amber-600',
+      bg: 'bg-amber-100',
+      desc: 'Cash on Delivery charge',
     },
   ];
 
@@ -97,7 +111,9 @@ export default function AdminShipment() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="admin-page-title mb-1">Logistics & Shipment</h1>
-          <p className="text-sm text-gray-500">Configure shipping rates, delivery timelines, and free shipping rules</p>
+          <p className="text-sm text-gray-500">
+            Configure shipping rates, delivery timelines, and free shipping rules
+          </p>
         </div>
       </div>
 
@@ -108,11 +124,15 @@ export default function AdminShipment() {
           return (
             <div key={i} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
               <div className="flex items-center gap-4">
-                <div className={`w-12 h-12 ${card.bg} rounded-xl flex items-center justify-center shrink-0`}>
+                <div
+                  className={`w-12 h-12 ${card.bg} rounded-xl flex items-center justify-center shrink-0`}
+                >
                   <Icon size={22} className={card.color} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">{card.label}</p>
+                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">
+                    {card.label}
+                  </p>
                   <p className="text-2xl font-black text-gray-900 mt-0.5">{card.value}</p>
                   <p className="text-[10px] text-gray-400 mt-0.5">{card.desc}</p>
                 </div>
@@ -133,7 +153,9 @@ export default function AdminShipment() {
               </div>
               <div>
                 <h2 className="font-bold text-slate-800">Shipping Rates</h2>
-                <p className="text-xs text-gray-400">Set delivery charges for different service levels</p>
+                <p className="text-xs text-gray-400">
+                  Set delivery charges for different service levels
+                </p>
               </div>
             </div>
 
@@ -149,11 +171,14 @@ export default function AdminShipment() {
                   </span>
                 </div>
                 <div className="relative">
-                  <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-400" size={14} />
+                  <IndianRupee
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-400"
+                    size={14}
+                  />
                   <input
                     type="number"
                     value={config.standardRate}
-                    onChange={e => setConfig({...config, standardRate: Number(e.target.value)})}
+                    onChange={e => setConfig({ ...config, standardRate: Number(e.target.value) })}
                     className="w-full pl-8 pr-3 py-3 rounded-lg bg-white border border-blue-200 font-bold text-lg focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
                   />
                 </div>
@@ -171,11 +196,14 @@ export default function AdminShipment() {
                   </span>
                 </div>
                 <div className="relative">
-                  <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-400" size={14} />
+                  <IndianRupee
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-400"
+                    size={14}
+                  />
                   <input
                     type="number"
                     value={config.expressRate}
-                    onChange={e => setConfig({...config, expressRate: Number(e.target.value)})}
+                    onChange={e => setConfig({ ...config, expressRate: Number(e.target.value) })}
                     className="w-full pl-8 pr-3 py-3 rounded-lg bg-white border border-purple-200 font-bold text-lg focus:ring-2 focus:ring-purple-500/20 outline-none transition-all"
                   />
                 </div>
@@ -199,7 +227,9 @@ export default function AdminShipment() {
                     min={1}
                     max={30}
                     value={config.standardDeliveryDays}
-                    onChange={e => setConfig({...config, standardDeliveryDays: Number(e.target.value)})}
+                    onChange={e =>
+                      setConfig({ ...config, standardDeliveryDays: Number(e.target.value) })
+                    }
                     className="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-200 font-bold focus:ring-2 focus:ring-red-500/10 outline-none transition-all"
                   />
                 </div>
@@ -212,7 +242,9 @@ export default function AdminShipment() {
                     min={1}
                     max={30}
                     value={config.expressDeliveryDays}
-                    onChange={e => setConfig({...config, expressDeliveryDays: Number(e.target.value)})}
+                    onChange={e =>
+                      setConfig({ ...config, expressDeliveryDays: Number(e.target.value) })
+                    }
                     className="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-200 font-bold focus:ring-2 focus:ring-red-500/10 outline-none transition-all"
                   />
                 </div>
@@ -228,7 +260,9 @@ export default function AdminShipment() {
               </div>
               <div>
                 <h2 className="font-bold text-slate-800">Pricing Rules</h2>
-                <p className="text-xs text-gray-400">Free shipping threshold and cash on delivery fees</p>
+                <p className="text-xs text-gray-400">
+                  Free shipping threshold and cash on delivery fees
+                </p>
               </div>
             </div>
 
@@ -238,12 +272,17 @@ export default function AdminShipment() {
                   Free Shipping Threshold (₹)
                 </label>
                 <div className="relative">
-                  <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
+                  <IndianRupee
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={14}
+                  />
                   <input
                     type="number"
                     min={0}
                     value={config.freeShippingThreshold}
-                    onChange={e => setConfig({...config, freeShippingThreshold: Number(e.target.value)})}
+                    onChange={e =>
+                      setConfig({ ...config, freeShippingThreshold: Number(e.target.value) })
+                    }
                     className="w-full pl-8 pr-3 py-3 rounded-lg bg-gray-50 border border-gray-200 font-bold text-lg focus:ring-2 focus:ring-red-500/10 outline-none transition-all"
                   />
                 </div>
@@ -256,12 +295,15 @@ export default function AdminShipment() {
                   COD Convenience Fee (₹)
                 </label>
                 <div className="relative">
-                  <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
+                  <IndianRupee
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={14}
+                  />
                   <input
                     type="number"
                     min={0}
                     value={config.codCharges}
-                    onChange={e => setConfig({...config, codCharges: Number(e.target.value)})}
+                    onChange={e => setConfig({ ...config, codCharges: Number(e.target.value) })}
                     className="w-full pl-8 pr-3 py-3 rounded-lg bg-gray-50 border border-gray-200 font-bold text-lg focus:ring-2 focus:ring-red-500/10 outline-none transition-all"
                   />
                 </div>
@@ -382,7 +424,8 @@ export default function AdminShipment() {
               <div>
                 <p className="text-sm font-bold text-amber-800 mb-1">Pro Tip</p>
                 <p className="text-xs text-amber-700 leading-relaxed">
-                  Setting a free shipping threshold just above your average order value (₹999) encourages customers to add more items to qualify.
+                  Setting a free shipping threshold just above your average order value (₹999)
+                  encourages customers to add more items to qualify.
                 </p>
               </div>
             </div>

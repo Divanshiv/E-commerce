@@ -33,11 +33,10 @@ export const createBrand = async (req, res, next) => {
 // Admin: Update brand
 export const updateBrand = async (req, res, next) => {
   try {
-    const brand = await Brand.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const brand = await Brand.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!brand) {
       return res.status(404).json({ success: false, message: 'Brand not found' });

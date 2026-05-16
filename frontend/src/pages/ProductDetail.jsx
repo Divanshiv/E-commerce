@@ -11,7 +11,7 @@ export default function ProductDetail() {
   const { slug } = useParams();
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
-  
+
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState('');
@@ -28,13 +28,13 @@ export default function ProductDetail() {
       setLoading(true);
       const { data } = await api.get(`/products/slug/${slug}`);
       setProduct(data.data.product);
-      
+
       // Fetch related products
-      const related = await api.get('/products', { 
-        params: { category: data.data.product.category, limit: 4 } 
+      const related = await api.get('/products', {
+        params: { category: data.data.product.category, limit: 4 },
       });
       setRelatedProducts(related.data.data.products.filter(p => p._id !== data.data.product._id));
-      
+
       // Set default size
       if (data.data.product.sizes?.length > 0) {
         const availableSize = data.data.product.sizes.find(s => s.stock > 0);
@@ -56,7 +56,7 @@ export default function ProductDetail() {
   };
 
   const isWishlisted = product && isInWishlist(product._id);
-  const discount = product?.salePrice 
+  const discount = product?.salePrice
     ? Math.round((1 - product.salePrice / product.price) * 100)
     : 0;
 
@@ -86,9 +86,8 @@ export default function ProductDetail() {
     );
   }
 
-  const images = product.images?.length > 0 
-    ? product.images 
-    : [{ url: 'https://via.placeholder.com/600' }];
+  const images =
+    product.images?.length > 0 ? product.images : [{ url: 'https://via.placeholder.com/600' }];
 
   return (
     <div className="min-h-screen bg-white">
@@ -127,9 +126,9 @@ export default function ProductDetail() {
                 {product.brand.name}
               </p>
             )}
-            
+
             <h1 className="text-2xl md:text-3xl font-bold mb-4">{product.name}</h1>
-            
+
             {/* Rating */}
             <div className="flex items-center gap-2 mb-4">
               <div className="flex">
@@ -137,16 +136,15 @@ export default function ProductDetail() {
                   <Star
                     key={i}
                     size={18}
-                    className={i < Math.round(product.rating?.average || 0) 
-                      ? 'text-yellow-400 fill-yellow-400' 
-                      : 'text-gray-300'
+                    className={
+                      i < Math.round(product.rating?.average || 0)
+                        ? 'text-yellow-400 fill-yellow-400'
+                        : 'text-gray-300'
                     }
                   />
                 ))}
               </div>
-              <span className="text-sm text-gray-500">
-                ({product.rating?.count || 0} reviews)
-              </span>
+              <span className="text-sm text-gray-500">({product.rating?.count || 0} reviews)</span>
             </div>
 
             {/* Price */}
@@ -181,8 +179,8 @@ export default function ProductDetail() {
                       selectedSize === size.name
                         ? 'border-red-600 bg-red-50 text-red-700'
                         : size.stock === 0
-                        ? 'border-gray-200 text-gray-300 cursor-not-allowed'
-                        : 'border-gray-300 hover:border-gray-400'
+                          ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                          : 'border-gray-300 hover:border-gray-400'
                     }`}
                   >
                     {size.name}
@@ -203,10 +201,7 @@ export default function ProductDetail() {
                   <Minus size={18} />
                 </button>
                 <span className="px-4 font-medium">{quantity}</span>
-                <button
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="p-3 hover:bg-gray-100"
-                >
+                <button onClick={() => setQuantity(quantity + 1)} className="p-3 hover:bg-gray-100">
                   <Plus size={18} />
                 </button>
               </div>
@@ -223,8 +218,8 @@ export default function ProductDetail() {
               <button
                 onClick={() => toggleWishlist(product)}
                 className={`p-4 border-2 rounded-lg transition ${
-                  isWishlisted 
-                    ? 'border-red-600 bg-red-50 text-red-600' 
+                  isWishlisted
+                    ? 'border-red-600 bg-red-50 text-red-600'
                     : 'border-gray-300 hover:border-red-600'
                 }`}
               >

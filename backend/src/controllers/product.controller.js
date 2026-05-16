@@ -14,7 +14,7 @@ export const getProducts = async (req, res, next) => {
       search,
       sort = '-createdAt',
       page = 1,
-      limit = 12
+      limit = 12,
     } = req.query;
 
     const query = { isActive: true };
@@ -32,19 +32,15 @@ export const getProducts = async (req, res, next) => {
       query.$or = [
         { name: { $regex: search, $options: 'i' } },
         { description: { $regex: search, $options: 'i' } },
-        { tags: { $in: [new RegExp(search, 'i')] } }
+        { tags: { $in: [new RegExp(search, 'i')] } },
       ];
     }
 
     const skip = (Number(page) - 1) * Number(limit);
 
     const [products, total] = await Promise.all([
-      Product.find(query)
-        .populate('brand', 'name slug')
-        .sort(sort)
-        .skip(skip)
-        .limit(Number(limit)),
-      Product.countDocuments(query)
+      Product.find(query).populate('brand', 'name slug').sort(sort).skip(skip).limit(Number(limit)),
+      Product.countDocuments(query),
     ]);
 
     res.json({
@@ -55,9 +51,9 @@ export const getProducts = async (req, res, next) => {
           page: Number(page),
           limit: Number(limit),
           total,
-          pages: Math.ceil(total / Number(limit))
-        }
-      }
+          pages: Math.ceil(total / Number(limit)),
+        },
+      },
     });
   } catch (error) {
     next(error);
@@ -81,8 +77,10 @@ export const getFeaturedProducts = async (req, res, next) => {
 // Get product by slug
 export const getProductBySlug = async (req, res, next) => {
   try {
-    const product = await Product.findOne({ slug: req.params.slug, isActive: true })
-      .populate('brand', 'name slug');
+    const product = await Product.findOne({ slug: req.params.slug, isActive: true }).populate(
+      'brand',
+      'name slug',
+    );
 
     if (!product) {
       return res.status(404).json({ success: false, message: 'Product not found' });
@@ -109,7 +107,7 @@ export const getAdminProducts = async (req, res, next) => {
     if (search) {
       filter.$or = [
         { name: { $regex: search, $options: 'i' } },
-        { category: { $regex: search, $options: 'i' } }
+        { category: { $regex: search, $options: 'i' } },
       ];
     }
 
@@ -121,15 +119,20 @@ export const getAdminProducts = async (req, res, next) => {
     // But for efficiency, we add a pre-filter when possible
     let stockFilterFn = null;
     if (stockStatus && stockStatus !== 'all') {
-      stockFilterFn = (products) => products.filter(p => {
-        const totalStock = p.sizes?.reduce((sum, s) => sum + s.stock, 0) || 0;
-        switch (stockStatus) {
-          case 'in_stock': return totalStock > 5;
-          case 'low_stock': return totalStock > 0 && totalStock <= 5;
-          case 'out_of_stock': return totalStock === 0;
-          default: return true;
-        }
-      });
+      stockFilterFn = products =>
+        products.filter(p => {
+          const totalStock = p.sizes?.reduce((sum, s) => sum + s.stock, 0) || 0;
+          switch (stockStatus) {
+            case 'in_stock':
+              return totalStock > 5;
+            case 'low_stock':
+              return totalStock > 0 && totalStock <= 5;
+            case 'out_of_stock':
+              return totalStock === 0;
+            default:
+              return true;
+          }
+        });
     }
 
     let products = await Product.find(filter)
@@ -144,9 +147,7 @@ export const getAdminProducts = async (req, res, next) => {
     if (stockFilterFn) {
       products = stockFilterFn(products);
       // Recalculate total for stock-filtered results
-      const allMatching = await Product.find(filter)
-        .populate('brand', 'name')
-        .sort('-createdAt');
+      const allMatching = await Product.find(filter).populate('brand', 'name').sort('-createdAt');
       const filtered = stockFilterFn(allMatching);
       total = filtered.length;
     }
@@ -155,8 +156,8 @@ export const getAdminProducts = async (req, res, next) => {
       success: true,
       data: {
         products,
-        pagination: { page, limit, total, pages: Math.ceil(total / limit) }
-      }
+        pagination: { page, limit, total, pages: Math.ceil(total / limit) },
+      },
     });
   } catch (error) {
     next(error);
@@ -197,10 +198,13 @@ export const getInventoryStats = async (req, res, next) => {
           totalStock,
           inStock,
           lowStock,
-          outOfStock
+          outOfStock,
         },
-        categoryBreakdown: Object.entries(categoryMap).map(([category, count]) => ({ category, count }))
-      }
+        categoryBreakdown: Object.entries(categoryMap).map(([category, count]) => ({
+          category,
+          count,
+        })),
+      },
     });
   } catch (error) {
     next(error);
@@ -221,7 +225,7 @@ export const bulkUpdateStock = async (req, res, next) => {
         const product = await Product.findByIdAndUpdate(
           productId,
           { sizes },
-          { new: true, runValidators: true }
+          { new: true, runValidators: true },
         );
         if (!product) {
           throw new Error(`Product ${productId} not found`);
@@ -230,18 +234,20 @@ export const bulkUpdateStock = async (req, res, next) => {
         const lowStockSizes = product.sizes.filter(s => s.stock > 0 && s.stock < 5);
         lowStockSizes.forEach(size => createLowStockNotification(product, size));
         return { productId, name: product.name, success: true };
-      })
+      }),
     );
 
     const succeeded = results.filter(r => r.status === 'fulfilled').map(r => r.value);
-    const failed = results.filter(r => r.status === 'rejected').map(r => ({
-      productId: r.reason.message.split(' ')[0],
-      error: r.reason.message
-    }));
+    const failed = results
+      .filter(r => r.status === 'rejected')
+      .map(r => ({
+        productId: r.reason.message.split(' ')[0],
+        error: r.reason.message,
+      }));
 
     res.json({
       success: true,
-      data: { succeeded, failed }
+      data: { succeeded, failed },
     });
   } catch (error) {
     next(error);
@@ -261,11 +267,10 @@ export const createProduct = async (req, res, next) => {
 // Admin: Update product
 export const updateProduct = async (req, res, next) => {
   try {
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!product) {
       return res.status(404).json({ success: false, message: 'Product not found' });
@@ -309,7 +314,7 @@ export const uploadProductImages = async (req, res, next) => {
       for (const file of req.files) {
         uploadedImages.push({
           url: `/uploads/${file.filename}`,
-          publicId: file.filename
+          publicId: file.filename,
         });
       }
     }
@@ -347,12 +352,9 @@ export const getSearchSuggestions = async (req, res, next) => {
     const products = await Product.find(
       {
         isActive: true,
-        $or: [
-          { name: { $regex: regex } },
-          { tags: { $in: [regex] } }
-        ]
+        $or: [{ name: { $regex: regex } }, { tags: { $in: [regex] } }],
       },
-      { name: 1, slug: 1, images: { $slice: 1 }, salePrice: 1, price: 1 }
+      { name: 1, slug: 1, images: { $slice: 1 }, salePrice: 1, price: 1 },
     )
       .sort({ rating: -1 })
       .limit(8);
@@ -362,7 +364,7 @@ export const getSearchSuggestions = async (req, res, next) => {
       name: p.name,
       slug: p.slug,
       image: p.images?.[0]?.url || null,
-      price: p.salePrice || p.price
+      price: p.salePrice || p.price,
     }));
 
     res.json({ success: true, data: { suggestions } });
@@ -377,21 +379,21 @@ export const getCategories = async (req, res, next) => {
     const categories = await Product.aggregate([
       { $match: { isActive: true } },
       { $group: { _id: '$category', count: { $sum: 1 } } },
-      { $sort: { _id: 1 } }
+      { $sort: { _id: 1 } },
     ]);
 
     const categoryMap = {
       'men-tshirts': 'Men Tees',
       'women-tshirts': 'Women Tees',
-      'hoodies': 'Hoodies',
-      'joggers': 'Joggers',
-      'accessories': 'Accessories'
+      hoodies: 'Hoodies',
+      joggers: 'Joggers',
+      accessories: 'Accessories',
     };
 
     const formatted = categories.map(c => ({
       slug: c._id,
       name: categoryMap[c._id] || c._id,
-      count: c.count
+      count: c.count,
     }));
 
     res.json({ success: true, data: { categories: formatted } });

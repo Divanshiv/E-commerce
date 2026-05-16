@@ -4,7 +4,7 @@ import {
   getFeaturedProducts,
   getProductBySlug,
   getCategories,
-  getSearchSuggestions
+  getSearchSuggestions,
 } from '../controllers/product.controller.js';
 import { verifyToken } from '../middleware/auth.js';
 

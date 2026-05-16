@@ -21,7 +21,8 @@ export default class ErrorBoundary extends Component {
               </div>
               <h1 className="text-2xl font-bold mb-2">Something went wrong</h1>
               <p className="text-gray-500 mb-6">
-                {this.props.fallbackMessage || 'An unexpected error occurred. Please try refreshing the page.'}
+                {this.props.fallbackMessage ||
+                  'An unexpected error occurred. Please try refreshing the page.'}
               </p>
               <button
                 onClick={() => window.location.reload()}

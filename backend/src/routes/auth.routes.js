@@ -1,11 +1,5 @@
 import { Router } from 'express';
-import {
-  signup,
-  login,
-  logout,
-  getMe,
-  googleCallback
-} from '../controllers/auth.controller.js';
+import { signup, login, logout, getMe, googleCallback } from '../controllers/auth.controller.js';
 import { verifyToken } from '../middleware/auth.js';
 
 const router = Router();

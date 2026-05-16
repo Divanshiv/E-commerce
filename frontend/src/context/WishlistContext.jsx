@@ -42,7 +42,7 @@ export function WishlistProvider({ children }) {
     if (stored && !localStorage.getItem('token')) {
       setWishlist(JSON.parse(stored));
     }
-    
+
     if (localStorage.getItem('token')) {
       fetchWishlist();
     }
@@ -55,17 +55,15 @@ export function WishlistProvider({ children }) {
     }
   }, [wishlist]);
 
-  const toggleWishlist = async (product) => {
+  const toggleWishlist = async product => {
     const productId = product._id;
-    const isInWishlist = wishlist.some(p => 
-      (p._id || p) === productId
-    );
+    const isInWishlist = wishlist.some(p => (p._id || p) === productId);
 
     try {
       if (localStorage.getItem('token')) {
         const { data } = await api.post(`/wishlist/toggle/${productId}`);
         const newIsInWishlist = data.data.isInWishlist;
-        
+
         if (newIsInWishlist) {
           setWishlist(prev => [...prev, product]);
         } else {
@@ -82,7 +80,7 @@ export function WishlistProvider({ children }) {
         }
         localStorage.setItem('wishlist', JSON.stringify(wishlist));
       }
-      
+
       return !isInWishlist;
     } catch (error) {
       toast.error('Failed to update wishlist');
@@ -90,14 +88,19 @@ export function WishlistProvider({ children }) {
     }
   };
 
-  const isInWishlist = (productId) => {
+  const isInWishlist = productId => {
     return wishlist.some(p => (p._id || p) === productId);
   };
 
   return (
-    <WishlistContext.Provider value={{
-      wishlist, toggleWishlist, isInWishlist, count: wishlist.length
-    }}>
+    <WishlistContext.Provider
+      value={{
+        wishlist,
+        toggleWishlist,
+        isInWishlist,
+        count: wishlist.length,
+      }}
+    >
       {children}
     </WishlistContext.Provider>
   );

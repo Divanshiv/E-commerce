@@ -1,6 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Truck, Shield, RotateCcw, Shirt, Layers, Target, Glasses, Package } from 'lucide-react';
+import {
+  ArrowRight,
+  Truck,
+  Shield,
+  RotateCcw,
+  Shirt,
+  Layers,
+  Target,
+  Glasses,
+  Package,
+} from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import api from '../lib/api';
 
@@ -37,19 +47,25 @@ export default function Home() {
       <section className="relative pt-24 pb-32 flex items-center justify-center overflow-hidden">
         {/* Background Image & Overlay */}
         <div className="absolute inset-0 z-0">
-          <img src="/hero_banner.png" alt="Hero" className="w-full h-full object-cover opacity-90" />
+          <img
+            src="/hero_banner.png"
+            alt="Hero"
+            className="w-full h-full object-cover opacity-90"
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-gray-50/90 via-transparent to-transparent"></div>
         </div>
-        
+
         <div className="relative z-10 max-w-7xl mx-auto px-4 w-full">
           <div className="max-w-xl glass p-8 md:p-12 rounded-3xl animate-fade-in border border-gray-200 shadow-xl">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight text-gray-900 drop-shadow-sm">
-              Discover High-End <span className="text-gray-900 border-b-4 border-gray-900">Minimalism</span>
+              Discover High-End{' '}
+              <span className="text-gray-900 border-b-4 border-gray-900">Minimalism</span>
             </h1>
             <p className="text-lg text-gray-600 mb-8 border-l-4 border-gray-400 pl-4 py-1">
-              Elevated essentials and timeless pieces designed for the modern aesthetic. Simplicity is the ultimate sophistication.
+              Elevated essentials and timeless pieces designed for the modern aesthetic. Simplicity
+              is the ultimate sophistication.
             </p>
-            <Link 
+            <Link
               to="/products"
               className="inline-flex items-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-full font-semibold hover:bg-gray-800 transition hover:scale-105 shadow-md"
             >
@@ -69,7 +85,7 @@ export default function Home() {
             </h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-            {categories.map((cat) => {
+            {categories.map(cat => {
               const Icon = cat.icon;
               return (
                 <Link
@@ -98,20 +114,26 @@ export default function Home() {
               Featured Products
               <div className="absolute -bottom-2 left-0 w-1/2 h-1 bg-gray-900 rounded-full"></div>
             </h2>
-            <Link to="/products" className="text-gray-600 font-medium hover:text-gray-900 transition flex items-center gap-2">
+            <Link
+              to="/products"
+              className="text-gray-600 font-medium hover:text-gray-900 transition flex items-center gap-2"
+            >
               View All <ArrowRight size={18} />
             </Link>
           </div>
-          
+
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="bg-gray-50 border border-gray-100 rounded-2xl h-80 animate-pulse" />
+                <div
+                  key={i}
+                  className="bg-gray-50 border border-gray-100 rounded-2xl h-80 animate-pulse"
+                />
               ))}
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-              {featuredProducts.slice(0, 8).map((product) => (
+              {featuredProducts.slice(0, 8).map(product => (
                 <ProductCard key={product._id} product={product} />
               ))}
             </div>

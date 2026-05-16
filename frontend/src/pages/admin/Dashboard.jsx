@@ -22,12 +22,12 @@ export default function AdminDashboard() {
     }
   };
 
-  const formatPrice = (price) => {
+  const formatPrice = price => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(price);
   };
 
@@ -55,9 +55,7 @@ export default function AdminDashboard() {
           <div className="admin-stat-flex">
             <div>
               <p className="admin-stat-label">Total Revenue</p>
-              <p className="admin-stat-value">
-                {formatPrice(dashboardStats?.totalRevenue || 0)}
-              </p>
+              <p className="admin-stat-value">{formatPrice(dashboardStats?.totalRevenue || 0)}</p>
             </div>
             <div className="admin-icon-wrap bg-green-light">
               <DollarSign className="icon-green" size={24} />
@@ -124,9 +122,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
             ))}
-            {!recentOrders?.length && (
-              <p className="admin-empty-state">No orders yet</p>
-            )}
+            {!recentOrders?.length && <p className="admin-empty-state">No orders yet</p>}
           </div>
         </div>
 
@@ -152,10 +148,7 @@ export default function AdminDashboard() {
                     </p>
                   </div>
                 </div>
-                <Link 
-                  to={`/admin/products?id=${product._id}`}
-                  className="admin-link"
-                >
+                <Link to={`/admin/products?id=${product._id}`} className="admin-link">
                   Edit
                 </Link>
               </div>

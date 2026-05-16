@@ -13,28 +13,31 @@ function fetchWithTimeout(input, init) {
   return Promise.race([
     globalThis.fetch(input, init),
     new Promise((_, reject) =>
-      setTimeout(() => reject(new Error(`Supabase request timed out after ${TIMEOUT_MS}ms`)), TIMEOUT_MS)
-    )
+      setTimeout(
+        () => reject(new Error(`Supabase request timed out after ${TIMEOUT_MS}ms`)),
+        TIMEOUT_MS,
+      ),
+    ),
   ]);
 }
 
 // Only create clients if URL and keys are available
-export const supabase = supabaseUrl && supabaseAnonKey 
-  ? createClient(supabaseUrl, supabaseAnonKey) 
-  : null;
+export const supabase =
+  supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
 
-export const supabaseAdmin = supabaseUrl && supabaseServiceKey 
-  ? createClient(supabaseUrl, supabaseServiceKey, {
-      auth: {
-        // Service role client doesn't need session persistence
-        persistSession: false,
-        autoRefreshToken: false,
-        detectSessionInUrl: false
-      },
-      global: {
-        fetch: fetchWithTimeout
-      }
-    }) 
-  : null;
+export const supabaseAdmin =
+  supabaseUrl && supabaseServiceKey
+    ? createClient(supabaseUrl, supabaseServiceKey, {
+        auth: {
+          // Service role client doesn't need session persistence
+          persistSession: false,
+          autoRefreshToken: false,
+          detectSessionInUrl: false,
+        },
+        global: {
+          fetch: fetchWithTimeout,
+        },
+      })
+    : null;
 
 export default supabase;

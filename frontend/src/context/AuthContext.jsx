@@ -12,12 +12,14 @@ function mergeGuestCart() {
   if (!items || items.length === 0) return;
 
   items.forEach(item => {
-    api.post('/cart/items', {
-      productId: item.product?._id || item.product,
-      quantity: item.quantity,
-      size: item.size,
-      price: item.price
-    }).catch(() => {});
+    api
+      .post('/cart/items', {
+        productId: item.product?._id || item.product,
+        quantity: item.quantity,
+        size: item.size,
+        price: item.price,
+      })
+      .catch(() => {});
   });
   localStorage.removeItem('guestCart');
 }
@@ -46,13 +48,15 @@ export function AuthProvider({ children }) {
       if (storedUser) {
         setUser(JSON.parse(storedUser));
       }
-      
-      const { data: { session } } = await supabase.auth.getSession();
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (session) {
         const token = session.access_token;
         try {
           const { data } = await api.get('/auth/me', {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}` },
           });
           setUser(data.data.user);
           localStorage.setItem('user', JSON.stringify(data.data.user));
@@ -68,7 +72,9 @@ export function AuthProvider({ children }) {
 
     initializeAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session?.user) {
         // Store token FIRST so axios interceptor picks it up for the API call
         localStorage.setItem('token', session.access_token);
@@ -97,7 +103,7 @@ export function AuthProvider({ children }) {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
-        password
+        password,
       });
 
       if (error) throw error;
@@ -124,8 +130,8 @@ export function AuthProvider({ children }) {
         email,
         password,
         options: {
-          data: { full_name: name }
-        }
+          data: { full_name: name },
+        },
       });
 
       if (error) throw error;
@@ -155,8 +161,8 @@ export function AuthProvider({ children }) {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`
-        }
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
 
       if (error) throw error;

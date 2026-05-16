@@ -3,7 +3,7 @@ import {
   getOrders,
   getOrder,
   createOrder,
-  getOrderTracking
+  getOrderTracking,
 } from '../controllers/order.controller.js';
 import { verifyToken, requireAuth } from '../middleware/auth.js';
 

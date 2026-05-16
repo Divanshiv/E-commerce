@@ -7,7 +7,7 @@ import ShipmentConfig from '../models/ShipmentConfig.js';
 export const getCart = async (req, res, next) => {
   try {
     let cart;
-    
+
     if (req.user) {
       cart = await Cart.findOne({ userId: req.user._id });
     } else if (req.query.sessionId) {
@@ -21,11 +21,11 @@ export const getCart = async (req, res, next) => {
     // Populate product details
     await Cart.populate(cart, {
       path: 'items.product',
-      select: 'name slug images salePrice'
+      select: 'name slug images salePrice',
     });
 
     // Calculate totals
-    const subtotal = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const discount = cart.couponApplied?.discountAmount || 0;
 
     res.json({
@@ -34,8 +34,8 @@ export const getCart = async (req, res, next) => {
         cart,
         subtotal,
         discount,
-        total: subtotal - discount
-      }
+        total: subtotal - discount,
+      },
     });
   } catch (error) {
     next(error);
@@ -65,13 +65,13 @@ export const addToCart = async (req, res, next) => {
       cart = new Cart({
         userId: req.user?._id,
         sessionId: req.body.sessionId || `guest_${Date.now()}`,
-        items: []
+        items: [],
       });
     }
 
     // Check if item already in cart
     const existingItem = cart.items.find(
-      item => item.product.toString() === productId && item.size === size
+      item => item.product.toString() === productId && item.size === size,
     );
 
     if (existingItem) {
@@ -81,7 +81,7 @@ export const addToCart = async (req, res, next) => {
         product: productId,
         quantity,
         size,
-        price: price || product.salePrice || product.price
+        price: price || product.salePrice || product.price,
       });
     }
 
@@ -175,12 +175,12 @@ export const applyCoupon = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Cart is empty' });
     }
 
-    const subtotal = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     if (subtotal < coupon.minOrderValue) {
-      return res.status(400).json({ 
-        success: false, 
-        message: `Minimum order value of ₹${coupon.minOrderValue} required` 
+      return res.status(400).json({
+        success: false,
+        message: `Minimum order value of ₹${coupon.minOrderValue} required`,
       });
     }
 
@@ -199,7 +199,7 @@ export const applyCoupon = async (req, res, next) => {
       code: coupon.code,
       discountType: coupon.discountType,
       discountValue: coupon.discountValue,
-      discountAmount
+      discountAmount,
     };
 
     await cart.save();
@@ -266,13 +266,13 @@ export const guestCart = async (req, res, next) => {
     if (!cart) {
       cart = new Cart({
         sessionId,
-        items: []
+        items: [],
       });
     }
 
     if (productId) {
       const existingItem = cart.items.find(
-        item => item.product.toString() === productId && item.size === size
+        item => item.product.toString() === productId && item.size === size,
       );
 
       if (existingItem) {
@@ -283,7 +283,10 @@ export const guestCart = async (req, res, next) => {
       await cart.save();
     }
 
-    await Cart.populate(cart, { path: 'items.product', select: 'name slug images price salePrice' });
+    await Cart.populate(cart, {
+      path: 'items.product',
+      select: 'name slug images price salePrice',
+    });
 
     res.json({ success: true, data: { cart } });
   } catch (error) {

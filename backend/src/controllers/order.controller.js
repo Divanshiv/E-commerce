@@ -2,13 +2,15 @@ import Order from '../models/Order.js';
 import Cart from '../models/Cart.js';
 import Product from '../models/Product.js';
 import User from '../models/User.js';
-import { createNewOrderNotification, createOrderStatusNotification } from './notification.controller.js';
+import {
+  createNewOrderNotification,
+  createOrderStatusNotification,
+} from './notification.controller.js';
 
 // Get user orders
 export const getOrders = async (req, res, next) => {
   try {
-    const orders = await Order.find({ user: req.user._id })
-      .sort('-createdAt');
+    const orders = await Order.find({ user: req.user._id }).sort('-createdAt');
 
     res.json({ success: true, data: { orders } });
   } catch (error) {
@@ -19,9 +21,9 @@ export const getOrders = async (req, res, next) => {
 // Get single order
 export const getOrder = async (req, res, next) => {
   try {
-    const order = await Order.findOne({ 
-      _id: req.params.id, 
-      user: req.user._id 
+    const order = await Order.findOne({
+      _id: req.params.id,
+      user: req.user._id,
     }).populate('items.product', 'name slug images');
 
     if (!order) {
@@ -40,22 +42,19 @@ export const createOrder = async (req, res, next) => {
     const { address, paymentMethod } = req.body;
 
     // Get user's cart
-    const cart = await Cart.findOne({ userId: req.user._id })
-      .populate('items.product');
+    const cart = await Cart.findOne({ userId: req.user._id }).populate('items.product');
 
     if (!cart || cart.items.length === 0) {
       return res.status(400).json({ success: false, message: 'Cart is empty' });
     }
 
     // Calculate totals
-    const subtotal = cart.items.reduce(
-      (sum, item) => sum + (item.price * item.quantity), 0
-    );
+    const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const discount = cart.couponApplied?.discountAmount || 0;
-    
+
     // Shipping charges (free above ₹999)
     const shippingCharges = subtotal - discount >= 999 ? 0 : 49;
-    
+
     const total = subtotal - discount + shippingCharges;
 
     // Create order items with product details
@@ -65,7 +64,7 @@ export const createOrder = async (req, res, next) => {
       image: item.product.images?.[0]?.url || '',
       size: item.size,
       quantity: item.quantity,
-      price: item.price
+      price: item.price,
     }));
 
     // Create order
@@ -80,9 +79,9 @@ export const createOrder = async (req, res, next) => {
       address,
       payment: {
         method: paymentMethod === 'cod' ? 'cod' : 'razorpay',
-        paymentMethod: paymentMethod === 'cod' ? null : (paymentMethod || 'card'),
-        status: 'pending'
-      }
+        paymentMethod: paymentMethod === 'cod' ? null : paymentMethod || 'card',
+        status: 'pending',
+      },
     });
 
     await order.save();
@@ -107,7 +106,7 @@ export const getAdminOrders = async (req, res, next) => {
   try {
     const { status, userId, page = 1, limit = 20 } = req.query;
     const query = {};
-    
+
     if (status) query.status = status;
     if (userId) query.user = userId;
 
@@ -119,15 +118,20 @@ export const getAdminOrders = async (req, res, next) => {
         .sort('-createdAt')
         .skip(skip)
         .limit(Number(limit)),
-      Order.countDocuments(query)
+      Order.countDocuments(query),
     ]);
 
     res.json({
       success: true,
       data: {
         orders,
-        pagination: { page: Number(page), limit: Number(limit), total, pages: Math.ceil(total / Number(limit)) }
-      }
+        pagination: {
+          page: Number(page),
+          limit: Number(limit),
+          total,
+          pages: Math.ceil(total / Number(limit)),
+        },
+      },
     });
   } catch (error) {
     next(error);
@@ -157,7 +161,7 @@ export const updateOrderStatus = async (req, res, next) => {
         status,
         location,
         note: getStatusNote(status),
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
 
@@ -179,7 +183,7 @@ function getStatusNote(status) {
     shipped: 'Package has been shipped',
     out_for_delivery: 'Out for delivery',
     delivered: 'Package delivered successfully',
-    cancelled: 'Order has been cancelled'
+    cancelled: 'Order has been cancelled',
   };
   return notes[status] || `Status updated to ${status}`;
 }
@@ -198,7 +202,7 @@ export const addTrackingUpdate = async (req, res, next) => {
       status: status || order.status,
       location: location || '',
       note: note || '',
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     order.trackingUpdates.push(update);
@@ -214,8 +218,9 @@ export const addTrackingUpdate = async (req, res, next) => {
 // Public: Get order tracking info
 export const getOrderTracking = async (req, res, next) => {
   try {
-    const order = await Order.findById(req.params.id)
-      .select('orderNumber status trackingNumber trackingUpdates deliveryCoordinates address createdAt');
+    const order = await Order.findById(req.params.id).select(
+      'orderNumber status trackingNumber trackingUpdates deliveryCoordinates address createdAt',
+    );
 
     if (!order) {
       return res.status(404).json({ success: false, message: 'Order not found' });
@@ -230,8 +235,8 @@ export const getOrderTracking = async (req, res, next) => {
         trackingUpdates: order.trackingUpdates,
         deliveryCoordinates: order.deliveryCoordinates,
         address: order.address,
-        createdAt: order.createdAt
-      }
+        createdAt: order.createdAt,
+      },
     });
   } catch (error) {
     next(error);
@@ -258,26 +263,27 @@ export const getAdminOrder = async (req, res, next) => {
 // Admin: Get dashboard stats
 export const getDashboardStats = async (_req, res, next) => {
   try {
-    const [totalOrders, totalProducts, totalUsers, recentOrders, lowStockProducts] = await Promise.all([
-      Order.countDocuments(),
-      Product.countDocuments(),
-      User.countDocuments({ role: 'user' }),
-      Order.find().sort('-createdAt').limit(5).populate('user', 'name email'),
-      Product.find({ 'sizes.stock': { $lt: 5 } })
-        .select('name slug sizes stock')
-        .limit(5)
-    ]);
+    const [totalOrders, totalProducts, totalUsers, recentOrders, lowStockProducts] =
+      await Promise.all([
+        Order.countDocuments(),
+        Product.countDocuments(),
+        User.countDocuments({ role: 'user' }),
+        Order.find().sort('-createdAt').limit(5).populate('user', 'name email'),
+        Product.find({ 'sizes.stock': { $lt: 5 } })
+          .select('name slug sizes stock')
+          .limit(5),
+      ]);
 
     // Calculate total revenue
     const revenueData = await Order.aggregate([
       { $match: { 'payment.status': 'paid' } },
-      { $group: { _id: null, total: { $sum: '$total' } } }
+      { $group: { _id: null, total: { $sum: '$total' } } },
     ]);
     const totalRevenue = revenueData[0]?.total || 0;
 
     // Orders by status
     const ordersByStatus = await Order.aggregate([
-      { $group: { _id: '$status', count: { $sum: 1 } } }
+      { $group: { _id: '$status', count: { $sum: 1 } } },
     ]);
 
     // Monthly orders
@@ -286,11 +292,11 @@ export const getDashboardStats = async (_req, res, next) => {
         $group: {
           _id: { $dateToString: { format: '%Y-%m', date: '$createdAt' } },
           count: { $sum: 1 },
-          revenue: { $sum: '$total' }
-        }
+          revenue: { $sum: '$total' },
+        },
       },
       { $sort: { _id: -1 } },
-      { $limit: 6 }
+      { $limit: 6 },
     ]);
 
     res.json({
@@ -302,11 +308,11 @@ export const getDashboardStats = async (_req, res, next) => {
           totalUsers,
           totalRevenue,
           ordersByStatus,
-          monthlyOrders
+          monthlyOrders,
         },
         recentOrders,
-        lowStockProducts
-      }
+        lowStockProducts,
+      },
     });
   } catch (error) {
     next(error);

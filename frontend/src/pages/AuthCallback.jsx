@@ -12,14 +12,16 @@ export default function AuthCallback() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
         if (session?.access_token) {
           try {
             const response = await api.post('/auth/google-callback', {
-              supabase_token: session.access_token
+              supabase_token: session.access_token,
             });
-            
+
             localStorage.setItem('token', session.access_token);
             localStorage.setItem('user', JSON.stringify(response.data.data.user));
             toast.success('Signed in with Google!');

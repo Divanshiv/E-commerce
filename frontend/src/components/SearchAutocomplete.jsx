@@ -14,7 +14,7 @@ export default function SearchAutocomplete({ onSearch }) {
   const wrapperRef = useRef(null);
   const debounceRef = useRef(null);
 
-  const fetchSuggestions = useCallback(async (q) => {
+  const fetchSuggestions = useCallback(async q => {
     if (q.length < 2) {
       setSuggestions([]);
       setShowDropdown(false);
@@ -33,14 +33,14 @@ export default function SearchAutocomplete({ onSearch }) {
     }
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const value = e.target.value;
     setQuery(value);
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => fetchSuggestions(value), 250);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     if (query.trim()) {
       navigate(`/products?search=${encodeURIComponent(query.trim())}`);
@@ -49,20 +49,20 @@ export default function SearchAutocomplete({ onSearch }) {
     }
   };
 
-  const handleSelect = (suggestion) => {
+  const handleSelect = suggestion => {
     navigate(`/product/${suggestion.slug}`);
     setQuery('');
     setShowDropdown(false);
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = e => {
     if (!showDropdown || suggestions.length === 0) return;
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setActiveIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : 0));
+      setActiveIndex(prev => (prev < suggestions.length - 1 ? prev + 1 : 0));
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setActiveIndex((prev) => (prev > 0 ? prev - 1 : suggestions.length - 1));
+      setActiveIndex(prev => (prev > 0 ? prev - 1 : suggestions.length - 1));
     } else if (e.key === 'Enter' && activeIndex >= 0) {
       e.preventDefault();
       handleSelect(suggestions[activeIndex]);
@@ -70,7 +70,7 @@ export default function SearchAutocomplete({ onSearch }) {
   };
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
+    const handleClickOutside = e => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
         setShowDropdown(false);
       }

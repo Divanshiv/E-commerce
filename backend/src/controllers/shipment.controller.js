@@ -4,7 +4,7 @@ import ShipmentConfig from '../models/ShipmentConfig.js';
 export const getShipmentConfig = async (_req, res, next) => {
   try {
     let config = await ShipmentConfig.findOne();
-    
+
     if (!config) {
       config = await ShipmentConfig.create({
         freeShippingThreshold: 999,
@@ -12,7 +12,7 @@ export const getShipmentConfig = async (_req, res, next) => {
         expressRate: 99,
         codCharges: 30,
         standardDeliveryDays: 5,
-        expressDeliveryDays: 2
+        expressDeliveryDays: 2,
       });
     }
 
@@ -26,9 +26,9 @@ export const getShipmentConfig = async (_req, res, next) => {
 export const updateShipmentConfig = async (req, res, next) => {
   try {
     const updates = req.body;
-    
+
     let config = await ShipmentConfig.findOne();
-    
+
     if (!config) {
       config = new ShipmentConfig();
     }

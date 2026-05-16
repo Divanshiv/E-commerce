@@ -21,11 +21,11 @@ export default function Orders() {
     }
   };
 
-  const formatPrice = (price) => {
+  const formatPrice = price => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
-      minimumFractionDigits: 0
+      minimumFractionDigits: 0,
     }).format(price);
   };
 
@@ -35,7 +35,7 @@ export default function Orders() {
     processing: 'bg-purple-100 text-purple-700',
     shipped: 'bg-indigo-100 text-indigo-700',
     delivered: 'bg-green-100 text-green-700',
-    cancelled: 'bg-red-100 text-red-700'
+    cancelled: 'bg-red-100 text-red-700',
   };
 
   if (loading) {
@@ -69,13 +69,15 @@ export default function Orders() {
                       {new Date(order.createdAt).toLocaleDateString('en-IN', {
                         day: 'numeric',
                         month: 'short',
-                        year: 'numeric'
+                        year: 'numeric',
                       })}
                     </p>
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium capitalize ${
-                    statusColors[order.status]
-                  }`}>
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm font-medium capitalize ${
+                      statusColors[order.status]
+                    }`}
+                  >
                     {order.status}
                   </span>
                 </div>

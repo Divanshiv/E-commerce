@@ -8,7 +8,7 @@ export const getCoupons = async (req, res, next) => {
       isActive: true,
       validFrom: { $lte: now },
       validUntil: { $gte: now },
-      $expr: { $lt: ['$usedCount', '$usageLimit'] }
+      $expr: { $lt: ['$usedCount', '$usageLimit'] },
     }).select('code description discountType discountValue minOrderValue');
 
     res.json({ success: true, data: { coupons } });
@@ -34,7 +34,7 @@ export const getAdminCoupons = async (req, res, next) => {
     if (search) {
       filter.$or = [
         { code: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } }
+        { description: { $regex: search, $options: 'i' } },
       ];
     }
 
@@ -70,22 +70,22 @@ export const getAdminCoupons = async (req, res, next) => {
     // Allowed sort fields
     const sortMap = {
       '-createdAt': { createdAt: -1 },
-      'createdAt': { createdAt: 1 },
+      createdAt: { createdAt: 1 },
       '-code': { code: -1 },
-      'code': { code: 1 },
+      code: { code: 1 },
       '-discountValue': { discountValue: -1 },
-      'discountValue': { discountValue: 1 },
+      discountValue: { discountValue: 1 },
       '-validUntil': { validUntil: -1 },
-      'validUntil': { validUntil: 1 },
+      validUntil: { validUntil: 1 },
       '-usedCount': { usedCount: -1 },
-      'usedCount': { usedCount: 1 },
+      usedCount: { usedCount: 1 },
     };
     const sort = sortMap[sortBy] || { createdAt: -1 };
 
     const [coupons, total, stats] = await Promise.all([
       Coupon.find(filter).sort(sort).skip(skip).limit(limit),
       Coupon.countDocuments(filter),
-      getCouponStats()
+      getCouponStats(),
     ]);
 
     res.json({
@@ -96,10 +96,10 @@ export const getAdminCoupons = async (req, res, next) => {
           page,
           limit,
           total,
-          pages: Math.ceil(total / limit)
+          pages: Math.ceil(total / limit),
         },
-        stats
-      }
+        stats,
+      },
     });
   } catch (error) {
     next(error);
@@ -115,11 +115,15 @@ const getCouponStats = async () => {
       isActive: true,
       validFrom: { $lte: now },
       validUntil: { $gte: now },
-      $expr: { $lt: ['$usedCount', '$usageLimit'] }
+      $expr: { $lt: ['$usedCount', '$usageLimit'] },
     }),
     Coupon.countDocuments({ isActive: false }),
     Coupon.countDocuments({ validUntil: { $lt: now }, isActive: true }),
-    Coupon.countDocuments({ $expr: { $gte: ['$usedCount', '$usageLimit'] }, isActive: true, validUntil: { $gte: now } })
+    Coupon.countDocuments({
+      $expr: { $gte: ['$usedCount', '$usageLimit'] },
+      isActive: true,
+      validUntil: { $gte: now },
+    }),
   ]);
 
   return { total, active, inactive, expired, exhausted };
@@ -154,11 +158,10 @@ export const createCoupon = async (req, res, next) => {
 // Admin: Update coupon
 export const updateCoupon = async (req, res, next) => {
   try {
-    const coupon = await Coupon.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const coupon = await Coupon.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!coupon) {
       return res.status(404).json({ success: false, message: 'Coupon not found' });

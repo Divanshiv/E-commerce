@@ -1,9 +1,5 @@
 import { Router } from 'express';
-import {
-  updateProfile,
-  addAddress,
-  deleteAddress
-} from '../controllers/auth.controller.js';
+import { updateProfile, addAddress, deleteAddress } from '../controllers/auth.controller.js';
 import { verifyToken, requireAuth } from '../middleware/auth.js';
 
 const router = Router();

@@ -20,7 +20,7 @@ async function loadPaymentConfig() {
       razorpayKeyId: process.env.RAZORPAY_KEY_ID || '',
       currency: 'INR',
       codEnabled: true,
-      codCharges: 30
+      codCharges: 30,
     });
   }
   return config;
@@ -42,7 +42,9 @@ async function validateStock(cartItems) {
     if (!sizeObj) {
       errors.push(`${product.name} — size "${item.size}" not available`);
     } else if (sizeObj.stock < item.quantity) {
-      errors.push(`${product.name} (${item.size}) — only ${sizeObj.stock} left, requested ${item.quantity}`);
+      errors.push(
+        `${product.name} (${item.size}) — only ${sizeObj.stock} left, requested ${item.quantity}`,
+      );
     }
   }
   if (errors.length > 0) {
@@ -57,7 +59,7 @@ async function decrementStock(orderItems) {
   for (const item of orderItems) {
     await Product.updateOne(
       { _id: item.product, 'sizes.name': item.size },
-      { $inc: { 'sizes.$.stock': -item.quantity } }
+      { $inc: { 'sizes.$.stock': -item.quantity } },
     );
   }
 }
@@ -67,18 +69,12 @@ async function decrementStock(orderItems) {
  */
 async function incrementCouponUsage(couponCode) {
   if (couponCode) {
-    await Coupon.updateOne(
-      { code: couponCode },
-      { $inc: { usedCount: 1 } }
-    );
+    await Coupon.updateOne({ code: couponCode }, { $inc: { usedCount: 1 } });
   }
 }
 
 async function clearUserCart(userId) {
-  await Cart.findOneAndUpdate(
-    { userId },
-    { items: [], couponApplied: null }
-  );
+  await Cart.findOneAndUpdate({ userId }, { items: [], couponApplied: null });
 }
 
 // ─── Public: Payment Config ─────────────────────────────────────────────────
@@ -97,8 +93,8 @@ export const getPublicPaymentConfig = async (_req, res, _next) => {
         codEnabled: config.codEnabled,
         codCharges: config.codCharges,
         currency: config.currency,
-        razorpayKeyId: config.razorpayKeyId || ''
-      }
+        razorpayKeyId: config.razorpayKeyId || '',
+      },
     });
   } catch (error) {
     _next(error);
@@ -118,7 +114,20 @@ export const getPaymentConfig = async (_req, res, next) => {
 
 export const updatePaymentConfig = async (req, res, next) => {
   try {
-    const allowedFields = ['razorpayKeyId', 'currency', 'codEnabled', 'codCharges', 'allowedMethods', 'googlePayTestId', 'phonePeTestId', 'testCardNumber', 'testCardExpiry', 'testCardCvv', 'testCardHolder', 'testCardType'];
+    const allowedFields = [
+      'razorpayKeyId',
+      'currency',
+      'codEnabled',
+      'codCharges',
+      'allowedMethods',
+      'googlePayTestId',
+      'phonePeTestId',
+      'testCardNumber',
+      'testCardExpiry',
+      'testCardCvv',
+      'testCardHolder',
+      'testCardType',
+    ];
     let config = await PaymentConfig.findOne();
     if (!config) {
       config = new PaymentConfig();
@@ -143,8 +152,7 @@ export const createRazorpayOrder = async (req, res, next) => {
     // method = gateway ('razorpay'), paymentMethod = specific method ('card'|'upi'|'paytm_wallet')
     const specificMethod = paymentMethod || 'card';
 
-    const cart = await Cart.findOne({ userId: req.user._id })
-      .populate('items.product');
+    const cart = await Cart.findOne({ userId: req.user._id }).populate('items.product');
 
     if (!cart || cart.items.length === 0) {
       return res.status(400).json({ success: false, message: 'Cart is empty' });
@@ -153,9 +161,7 @@ export const createRazorpayOrder = async (req, res, next) => {
     // Validate stock before creating order
     await validateStock(cart.items);
 
-    const subtotal = cart.items.reduce(
-      (sum, item) => sum + (item.price * item.quantity), 0
-    );
+    const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const discount = cart.couponApplied?.discountAmount || 0;
     const shippingCharges = subtotal - discount >= 999 ? 0 : 49;
     const total = subtotal - discount + shippingCharges;
@@ -169,8 +175,8 @@ export const createRazorpayOrder = async (req, res, next) => {
       receipt,
       notes: {
         userId: req.user._id.toString(),
-        couponCode: couponCode || ''
-      }
+        couponCode: couponCode || '',
+      },
     });
 
     const orderItems = cart.items.map(item => ({
@@ -179,7 +185,7 @@ export const createRazorpayOrder = async (req, res, next) => {
       image: item.product.images?.[0]?.url || '',
       size: item.size,
       quantity: item.quantity,
-      price: item.price
+      price: item.price,
     }));
 
     const order = new Order({
@@ -195,8 +201,8 @@ export const createRazorpayOrder = async (req, res, next) => {
         method: 'razorpay',
         paymentMethod: specificMethod,
         razorpayOrderId: razorpayOrder.id,
-        status: 'pending'
-      }
+        status: 'pending',
+      },
     });
 
     await order.save();
@@ -207,8 +213,8 @@ export const createRazorpayOrder = async (req, res, next) => {
         razorpayOrderId: razorpayOrder.id,
         amount: formatPrice(total),
         currency: 'INR',
-        order
-      }
+        order,
+      },
     });
   } catch (error) {
     next(error);
@@ -261,8 +267,7 @@ export const createGooglePayOrder = async (req, res, next) => {
   try {
     const { address, couponCode } = req.body;
 
-    const cart = await Cart.findOne({ userId: req.user._id })
-      .populate('items.product');
+    const cart = await Cart.findOne({ userId: req.user._id }).populate('items.product');
 
     if (!cart || cart.items.length === 0) {
       return res.status(400).json({ success: false, message: 'Cart is empty' });
@@ -270,9 +275,7 @@ export const createGooglePayOrder = async (req, res, next) => {
 
     await validateStock(cart.items);
 
-    const subtotal = cart.items.reduce(
-      (sum, item) => sum + (item.price * item.quantity), 0
-    );
+    const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const discount = cart.couponApplied?.discountAmount || 0;
     const shippingCharges = subtotal - discount >= 999 ? 0 : 49;
     const total = subtotal - discount + shippingCharges;
@@ -286,8 +289,8 @@ export const createGooglePayOrder = async (req, res, next) => {
       notes: {
         userId: req.user._id.toString(),
         method: 'google_pay',
-        couponCode: couponCode || ''
-      }
+        couponCode: couponCode || '',
+      },
     });
 
     const orderItems = cart.items.map(item => ({
@@ -296,7 +299,7 @@ export const createGooglePayOrder = async (req, res, next) => {
       image: item.product.images?.[0]?.url || '',
       size: item.size,
       quantity: item.quantity,
-      price: item.price
+      price: item.price,
     }));
 
     const order = new Order({
@@ -312,8 +315,8 @@ export const createGooglePayOrder = async (req, res, next) => {
         method: 'google_pay',
         paymentMethod: 'upi',
         razorpayOrderId: razorpayOrder.id,
-        status: 'pending'
-      }
+        status: 'pending',
+      },
     });
 
     await order.save();
@@ -324,8 +327,8 @@ export const createGooglePayOrder = async (req, res, next) => {
         razorpayOrderId: razorpayOrder.id,
         amount: formatPrice(total),
         currency: 'INR',
-        order
-      }
+        order,
+      },
     });
   } catch (error) {
     next(error);
@@ -338,8 +341,7 @@ export const createCODOrder = async (req, res, next) => {
   try {
     const { address } = req.body;
 
-    const cart = await Cart.findOne({ userId: req.user._id })
-      .populate('items.product');
+    const cart = await Cart.findOne({ userId: req.user._id }).populate('items.product');
 
     if (!cart || cart.items.length === 0) {
       return res.status(400).json({ success: false, message: 'Cart is empty' });
@@ -348,9 +350,7 @@ export const createCODOrder = async (req, res, next) => {
     // Validate stock before creating order
     await validateStock(cart.items);
 
-    const subtotal = cart.items.reduce(
-      (sum, item) => sum + (item.price * item.quantity), 0
-    );
+    const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const discount = cart.couponApplied?.discountAmount || 0;
     const shippingCharges = subtotal - discount >= 999 ? 0 : 49;
     const total = subtotal - discount + shippingCharges;
@@ -361,7 +361,7 @@ export const createCODOrder = async (req, res, next) => {
       image: item.product.images?.[0]?.url || '',
       size: item.size,
       quantity: item.quantity,
-      price: item.price
+      price: item.price,
     }));
 
     const order = new Order({
@@ -376,9 +376,9 @@ export const createCODOrder = async (req, res, next) => {
       payment: {
         method: 'cod',
         paymentMethod: null,
-        status: 'pending'
+        status: 'pending',
       },
-      status: 'confirmed' // COD orders are confirmed immediately
+      status: 'confirmed', // COD orders are confirmed immediately
     });
 
     await order.save();
@@ -427,8 +427,8 @@ export const handleWebhook = async (req, res, _next) => {
             {
               'payment.razorpayPaymentId': paymentId,
               'payment.status': 'paid',
-              status: 'confirmed'
-            }
+              status: 'confirmed',
+            },
           );
         }
         break;
@@ -439,7 +439,7 @@ export const handleWebhook = async (req, res, _next) => {
         if (failedOrderId) {
           await Order.findOneAndUpdate(
             { 'payment.razorpayOrderId': failedOrderId },
-            { 'payment.status': 'failed' }
+            { 'payment.status': 'failed' },
           );
         }
         break;
@@ -451,7 +451,7 @@ export const handleWebhook = async (req, res, _next) => {
         if (rzpOrderId) {
           await Order.findOneAndUpdate(
             { 'payment.razorpayOrderId': rzpOrderId },
-            { 'payment.status': 'paid', status: 'confirmed' }
+            { 'payment.status': 'paid', status: 'confirmed' },
           );
         }
         break;

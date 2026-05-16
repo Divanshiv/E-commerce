@@ -1,8 +1,15 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Bell, ShoppingBag, RefreshCw, AlertTriangle, UserPlus,
-  X, CheckCheck, CreditCard, ExternalLink
+  Bell,
+  ShoppingBag,
+  RefreshCw,
+  AlertTriangle,
+  UserPlus,
+  X,
+  CheckCheck,
+  CreditCard,
+  ExternalLink,
 } from 'lucide-react';
 import api from '../lib/api';
 
@@ -11,7 +18,7 @@ const NOTIFICATION_ICONS = {
   order_status: RefreshCw,
   low_stock: AlertTriangle,
   new_customer: UserPlus,
-  payment_failed: CreditCard
+  payment_failed: CreditCard,
 };
 
 const NOTIFICATION_COLORS = {
@@ -19,7 +26,7 @@ const NOTIFICATION_COLORS = {
   order_status: 'bg-purple-50 text-purple-600',
   low_stock: 'bg-orange-50 text-orange-600',
   new_customer: 'bg-green-50 text-green-600',
-  payment_failed: 'bg-red-50 text-red-600'
+  payment_failed: 'bg-red-50 text-red-600',
 };
 
 function timeAgo(dateStr) {
@@ -74,7 +81,7 @@ export default function NotificationDropdown() {
 
   // Close on outside click
   useEffect(() => {
-    const handler = (e) => {
+    const handler = e => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setOpen(false);
       }
@@ -83,12 +90,10 @@ export default function NotificationDropdown() {
     return () => document.removeEventListener('mousedown', handler);
   }, [open]);
 
-  const markAsRead = async (id) => {
+  const markAsRead = async id => {
     try {
       await api.patch(`/admin/notifications/${id}/read`);
-      setNotifications(prev =>
-        prev.map(n => n._id === id ? { ...n, read: true } : n)
-      );
+      setNotifications(prev => prev.map(n => (n._id === id ? { ...n, read: true } : n)));
       setUnreadCount(prev => Math.max(0, prev - 1));
     } catch {
       // Silently fail
@@ -105,7 +110,7 @@ export default function NotificationDropdown() {
     }
   };
 
-  const handleNotificationClick = (notification) => {
+  const handleNotificationClick = notification => {
     if (!notification.read) markAsRead(notification._id);
     setOpen(false);
 
@@ -137,9 +142,7 @@ export default function NotificationDropdown() {
           <div className="notif-dropdown-header">
             <div>
               <span className="notif-dropdown-title">Notifications</span>
-              {unreadCount > 0 && (
-                <span className="notif-unread-label">{unreadCount} unread</span>
-              )}
+              {unreadCount > 0 && <span className="notif-unread-label">{unreadCount} unread</span>}
             </div>
             {unreadCount > 0 && (
               <button onClick={markAllAsRead} className="notif-mark-all-btn">
@@ -157,7 +160,7 @@ export default function NotificationDropdown() {
                 <p className="notif-empty-sub">New orders and alerts will appear here</p>
               </div>
             ) : (
-              notifications.map((n) => {
+              notifications.map(n => {
                 const Icon = NOTIFICATION_ICONS[n.type] || Bell;
                 const colorClass = NOTIFICATION_COLORS[n.type] || 'bg-gray-50 text-gray-600';
                 return (
@@ -180,7 +183,10 @@ export default function NotificationDropdown() {
                       {!n.read && <span className="notif-unread-dot" />}
                       <button
                         className="notif-item-mark"
-                        onClick={(e) => { e.stopPropagation(); markAsRead(n._id); }}
+                        onClick={e => {
+                          e.stopPropagation();
+                          markAsRead(n._id);
+                        }}
                         title="Mark as read"
                       >
                         <X size={12} />
@@ -194,7 +200,10 @@ export default function NotificationDropdown() {
 
           <div className="notif-dropdown-footer">
             <button
-              onClick={() => { setOpen(false); navigate('/admin/orders'); }}
+              onClick={() => {
+                setOpen(false);
+                navigate('/admin/orders');
+              }}
               className="notif-view-all-btn"
             >
               <ExternalLink size={14} />

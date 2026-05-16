@@ -1,19 +1,37 @@
 import { Package, RefreshCw, CheckCircle2, Clock, Truck, MapPin, XCircle } from 'lucide-react';
 
 const STATUS_META = {
-  pending:           { icon: Clock,     color: 'text-yellow-600', bg: 'bg-yellow-100', line: 'bg-yellow-300' },
-  confirmed:         { icon: CheckCircle2, color: 'text-blue-600', bg: 'bg-blue-100',   line: 'bg-blue-300' },
-  processing:        { icon: RefreshCw, color: 'text-purple-600', bg: 'bg-purple-100', line: 'bg-purple-300' },
-  shipped:           { icon: Package,   color: 'text-indigo-600', bg: 'bg-indigo-100', line: 'bg-indigo-300' },
-  out_for_delivery:  { icon: Truck,     color: 'text-orange-600', bg: 'bg-orange-100', line: 'bg-orange-300' },
-  delivered:         { icon: CheckCircle2, color: 'text-green-600', bg: 'bg-green-100', line: 'bg-green-300' },
-  cancelled:         { icon: XCircle,   color: 'text-red-600',   bg: 'bg-red-100',    line: 'bg-red-300' },
+  pending: { icon: Clock, color: 'text-yellow-600', bg: 'bg-yellow-100', line: 'bg-yellow-300' },
+  confirmed: { icon: CheckCircle2, color: 'text-blue-600', bg: 'bg-blue-100', line: 'bg-blue-300' },
+  processing: {
+    icon: RefreshCw,
+    color: 'text-purple-600',
+    bg: 'bg-purple-100',
+    line: 'bg-purple-300',
+  },
+  shipped: { icon: Package, color: 'text-indigo-600', bg: 'bg-indigo-100', line: 'bg-indigo-300' },
+  out_for_delivery: {
+    icon: Truck,
+    color: 'text-orange-600',
+    bg: 'bg-orange-100',
+    line: 'bg-orange-300',
+  },
+  delivered: {
+    icon: CheckCircle2,
+    color: 'text-green-600',
+    bg: 'bg-green-100',
+    line: 'bg-green-300',
+  },
+  cancelled: { icon: XCircle, color: 'text-red-600', bg: 'bg-red-100', line: 'bg-red-300' },
 };
 
 function formatDateTime(dateStr) {
   return new Date(dateStr).toLocaleString('en-IN', {
-    day: 'numeric', month: 'short', year: 'numeric',
-    hour: '2-digit', minute: '2-digit'
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
   });
 }
 
@@ -48,7 +66,9 @@ export default function TrackingTimeline({ updates = [], orderStatus, compact = 
             {!isLast && <div className={`tracking-line ${meta.line}`} />}
 
             {/* Icon circle */}
-            <div className={`tracking-dot ${meta.bg} ${meta.color} ${isFirst ? 'tracking-dot-current' : ''}`}>
+            <div
+              className={`tracking-dot ${meta.bg} ${meta.color} ${isFirst ? 'tracking-dot-current' : ''}`}
+            >
               <Icon size={compact ? 12 : 14} />
             </div>
 

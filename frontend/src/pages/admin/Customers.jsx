@@ -1,7 +1,18 @@
 import { useState, useEffect, useMemo } from 'react';
 import {
-  Eye, Search, X, Users, Mail, Phone, Calendar, ShoppingBag,
-  UserPlus, UserCheck, ArrowUpDown, ChevronLeft, ChevronRight
+  Eye,
+  Search,
+  X,
+  Users,
+  Mail,
+  Phone,
+  Calendar,
+  ShoppingBag,
+  UserPlus,
+  UserCheck,
+  ArrowUpDown,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import api from '../../lib/api';
 
@@ -64,7 +75,7 @@ export default function AdminCustomers() {
     }
   };
 
-  const fetchCustomerOrders = async (customerId) => {
+  const fetchCustomerOrders = async customerId => {
     setFetchingOrders(true);
     try {
       const { data } = await api.get(`/admin/orders?userId=${customerId}`);
@@ -77,12 +88,12 @@ export default function AdminCustomers() {
     }
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = e => {
     setSearchTerm(e.target.value);
     setPage(1);
   };
 
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit = e => {
     e.preventDefault();
     fetchCustomers();
   };
@@ -97,12 +108,18 @@ export default function AdminCustomers() {
   const sortedCustomers = useMemo(() => {
     const sorted = [...customers];
     switch (sortBy) {
-      case 'newest': return sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      case 'oldest': return sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-      case 'name': return sorted.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-      case 'orders': return sorted.sort((a, b) => (b.orderCount || 0) - (a.orderCount || 0));
-      case 'spent': return sorted.sort((a, b) => (b.totalSpent || 0) - (a.totalSpent || 0));
-      default: return sorted;
+      case 'newest':
+        return sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      case 'oldest':
+        return sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      case 'name':
+        return sorted.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      case 'orders':
+        return sorted.sort((a, b) => (b.orderCount || 0) - (a.orderCount || 0));
+      case 'spent':
+        return sorted.sort((a, b) => (b.totalSpent || 0) - (a.totalSpent || 0));
+      default:
+        return sorted;
     }
   }, [customers, sortBy]);
 
@@ -112,20 +129,46 @@ export default function AdminCustomers() {
     processing: 'bg-purple-100 text-purple-700',
     shipped: 'bg-indigo-100 text-indigo-700',
     delivered: 'bg-green-100 text-green-700',
-    cancelled: 'bg-red-100 text-red-700'
+    cancelled: 'bg-red-100 text-red-700',
   };
 
-  const formatPrice = (price) => {
+  const formatPrice = price => {
     return new Intl.NumberFormat('en-IN', {
-      style: 'currency', currency: 'INR', minimumFractionDigits: 0
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
     }).format(price);
   };
 
   const statCards = [
-    { label: 'Total Customers', value: stats.total, icon: Users, color: 'text-blue-600', bg: 'bg-blue-100' },
-    { label: 'New This Month', value: stats.newThisMonth, icon: UserPlus, color: 'text-green-600', bg: 'bg-green-100' },
-    { label: 'Joined Today', value: stats.joinedToday, icon: UserCheck, color: 'text-purple-600', bg: 'bg-purple-100' },
-    { label: 'Total Orders', value: stats.totalOrders, icon: ShoppingBag, color: 'text-amber-600', bg: 'bg-amber-100' },
+    {
+      label: 'Total Customers',
+      value: stats.total,
+      icon: Users,
+      color: 'text-blue-600',
+      bg: 'bg-blue-100',
+    },
+    {
+      label: 'New This Month',
+      value: stats.newThisMonth,
+      icon: UserPlus,
+      color: 'text-green-600',
+      bg: 'bg-green-100',
+    },
+    {
+      label: 'Joined Today',
+      value: stats.joinedToday,
+      icon: UserCheck,
+      color: 'text-purple-600',
+      bg: 'bg-purple-100',
+    },
+    {
+      label: 'Total Orders',
+      value: stats.totalOrders,
+      icon: ShoppingBag,
+      color: 'text-amber-600',
+      bg: 'bg-amber-100',
+    },
   ];
 
   return (
@@ -133,7 +176,11 @@ export default function AdminCustomers() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="admin-page-title mb-0">Customers</h1>
         <div className="text-sm text-gray-400">
-          {pagination.total > 0 && <span>{pagination.total} customer{pagination.total !== 1 ? 's' : ''}</span>}
+          {pagination.total > 0 && (
+            <span>
+              {pagination.total} customer{pagination.total !== 1 ? 's' : ''}
+            </span>
+          )}
         </div>
       </div>
 
@@ -142,12 +189,19 @@ export default function AdminCustomers() {
         {statCards.map((card, i) => {
           const Icon = card.icon;
           return (
-            <div key={i} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
-              <div className={`w-12 h-12 ${card.bg} rounded-xl flex items-center justify-center shrink-0`}>
+            <div
+              key={i}
+              className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex items-center gap-4"
+            >
+              <div
+                className={`w-12 h-12 ${card.bg} rounded-xl flex items-center justify-center shrink-0`}
+              >
                 <Icon size={22} className={card.color} />
               </div>
               <div>
-                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{card.label}</p>
+                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  {card.label}
+                </p>
                 <p className="text-2xl font-black text-gray-900 mt-0.5">{card.value}</p>
               </div>
             </div>
@@ -171,7 +225,7 @@ export default function AdminCustomers() {
           <ArrowUpDown size={14} />
           <select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
+            onChange={e => setSortBy(e.target.value)}
             className="border border-gray-200 rounded-lg px-3 py-2 bg-white outline-none focus:border-red-500 text-sm font-medium"
           >
             <option value="newest">Newest</option>
@@ -188,12 +242,24 @@ export default function AdminCustomers() {
         <table className="w-full text-left">
           <thead className="bg-gray-50 border-b border-gray-100">
             <tr>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Orders</th>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider text-right">Total Spent</th>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
-              <th className="p-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Profile</th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Customer
+              </th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Contact
+              </th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                Orders
+              </th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider text-right">
+                Total Spent
+              </th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Joined
+              </th>
+              <th className="p-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Profile
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -201,13 +267,16 @@ export default function AdminCustomers() {
               <tr key={customer._id} className="hover:bg-gray-50 transition-colors">
                 <td className="p-4">
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 ${hashColor(customer.name)} rounded-xl flex items-center justify-center font-bold text-lg font-heading shrink-0`}>
+                    <div
+                      className={`w-10 h-10 ${hashColor(customer.name)} rounded-xl flex items-center justify-center font-bold text-lg font-heading shrink-0`}
+                    >
                       {customer.name?.charAt(0).toUpperCase()}
                     </div>
                     <div>
                       <p className="font-semibold text-slate-800">{customer.name}</p>
                       <p className="text-xs text-gray-400">
-                        {customer.addresses?.length || 0} address{(customer.addresses?.length || 0) !== 1 ? 'es' : ''}
+                        {customer.addresses?.length || 0} address
+                        {(customer.addresses?.length || 0) !== 1 ? 'es' : ''}
                       </p>
                     </div>
                   </div>
@@ -230,12 +299,20 @@ export default function AdminCustomers() {
                   </span>
                 </td>
                 <td className="p-4 text-right">
-                  <span className="font-bold text-slate-800">{formatPrice(customer.totalSpent || 0)}</span>
+                  <span className="font-bold text-slate-800">
+                    {formatPrice(customer.totalSpent || 0)}
+                  </span>
                 </td>
                 <td className="p-4">
                   <div className="flex items-center gap-1.5 text-sm text-gray-500">
                     <Calendar size={13} className="text-gray-400 shrink-0" />
-                    <span>{new Date(customer.createdAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                    <span>
+                      {new Date(customer.createdAt).toLocaleDateString('en-IN', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      })}
+                    </span>
                   </div>
                 </td>
                 <td className="p-4 text-right">
@@ -331,22 +408,37 @@ export default function AdminCustomers() {
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
               <div className="flex items-center gap-4">
-                <div className={`w-14 h-14 ${hashColor(selectedCustomer.name)} rounded-xl flex items-center justify-center font-bold text-2xl font-heading`}>
+                <div
+                  className={`w-14 h-14 ${hashColor(selectedCustomer.name)} rounded-xl flex items-center justify-center font-bold text-2xl font-heading`}
+                >
                   {selectedCustomer.name?.charAt(0).toUpperCase()}
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-slate-800">{selectedCustomer.name}</h2>
                   <p className="text-xs text-gray-400 flex items-center gap-2 mt-0.5">
-                    ID: <span className="font-mono">{selectedCustomer._id.slice(-8).toUpperCase()}</span>
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                      selectedCustomer.role === 'admin' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500'
-                    }`}>
+                    ID:{' '}
+                    <span className="font-mono">
+                      {selectedCustomer._id.slice(-8).toUpperCase()}
+                    </span>
+                    <span
+                      className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                        selectedCustomer.role === 'admin'
+                          ? 'bg-amber-100 text-amber-700'
+                          : 'bg-gray-100 text-gray-500'
+                      }`}
+                    >
                       {selectedCustomer.role}
                     </span>
                   </p>
                 </div>
               </div>
-              <button onClick={() => { setSelectedCustomer(null); setCustomerOrders([]); }} className="p-2 hover:bg-gray-100 rounded text-gray-500 transition-colors">
+              <button
+                onClick={() => {
+                  setSelectedCustomer(null);
+                  setCustomerOrders([]);
+                }}
+                className="p-2 hover:bg-gray-100 rounded text-gray-500 transition-colors"
+              >
                 <X size={20} />
               </button>
             </div>
@@ -356,34 +448,54 @@ export default function AdminCustomers() {
               <div className="grid grid-cols-3 gap-4">
                 <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-100">
                   <Mail size={16} className="text-blue-500 mb-1" />
-                  <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest mb-0.5">Email</p>
-                  <p className="text-sm font-medium text-slate-800 truncate">{selectedCustomer.email}</p>
+                  <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest mb-0.5">
+                    Email
+                  </p>
+                  <p className="text-sm font-medium text-slate-800 truncate">
+                    {selectedCustomer.email}
+                  </p>
                 </div>
                 <div className="bg-gradient-to-br from-purple-50 to-purple-100/50 rounded-xl p-4 border border-purple-100">
                   <Phone size={16} className="text-purple-500 mb-1" />
-                  <p className="text-[10px] font-bold text-purple-600 uppercase tracking-widest mb-0.5">Phone</p>
-                  <p className="text-sm font-medium text-slate-800 font-mono">{selectedCustomer.phone || '—'}</p>
+                  <p className="text-[10px] font-bold text-purple-600 uppercase tracking-widest mb-0.5">
+                    Phone
+                  </p>
+                  <p className="text-sm font-medium text-slate-800 font-mono">
+                    {selectedCustomer.phone || '—'}
+                  </p>
                 </div>
                 <div className="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-xl p-4 border border-amber-100">
                   <ShoppingBag size={16} className="text-amber-500 mb-1" />
-                  <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest mb-0.5">Orders</p>
-                  <p className="text-sm font-bold text-slate-800">{selectedCustomer.orderCount || 0}</p>
+                  <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest mb-0.5">
+                    Orders
+                  </p>
+                  <p className="text-sm font-bold text-slate-800">
+                    {selectedCustomer.orderCount || 0}
+                  </p>
                 </div>
               </div>
 
               {/* Spent + Joined */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-slate-900 rounded-xl p-4 text-white">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Spent</p>
-                  <p className="text-2xl font-black">{formatPrice(selectedCustomer.totalSpent || 0)}</p>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
+                    Total Spent
+                  </p>
+                  <p className="text-2xl font-black">
+                    {formatPrice(selectedCustomer.totalSpent || 0)}
+                  </p>
                 </div>
                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Member Since</p>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+                    Member Since
+                  </p>
                   <div className="flex items-center gap-2 mt-1">
                     <Calendar size={16} className="text-gray-400" />
                     <p className="text-sm font-bold text-slate-800">
                       {new Date(selectedCustomer.createdAt).toLocaleDateString('en-IN', {
-                        month: 'long', day: 'numeric', year: 'numeric'
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric',
                       })}
                     </p>
                   </div>
@@ -401,12 +513,19 @@ export default function AdminCustomers() {
                 {selectedCustomer.addresses?.length > 0 ? (
                   <div className="grid md:grid-cols-2 gap-3">
                     {selectedCustomer.addresses.map((addr, idx) => (
-                      <div key={idx} className="border border-gray-200 rounded-xl p-4 bg-white shadow-sm relative">
+                      <div
+                        key={idx}
+                        className="border border-gray-200 rounded-xl p-4 bg-white shadow-sm relative"
+                      >
                         {addr.isDefault && (
-                          <span className="absolute top-3 right-3 bg-green-100 text-green-700 text-[9px] font-bold px-2 py-0.5 rounded-full">DEFAULT</span>
+                          <span className="absolute top-3 right-3 bg-green-100 text-green-700 text-[9px] font-bold px-2 py-0.5 rounded-full">
+                            DEFAULT
+                          </span>
                         )}
                         <p className="font-medium text-slate-800 text-sm">{addr.street}</p>
-                        <p className="text-xs text-gray-500 mt-0.5">{addr.city}, {addr.state} — {addr.pincode}</p>
+                        <p className="text-xs text-gray-500 mt-0.5">
+                          {addr.city}, {addr.state} — {addr.pincode}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -430,8 +549,11 @@ export default function AdminCustomers() {
                   </div>
                 ) : customerOrders.length > 0 ? (
                   <div className="space-y-2">
-                    {customerOrders.slice(0, 5).map((order) => (
-                      <div key={order._id} className="flex items-center justify-between border border-gray-200 rounded-xl p-4 bg-white shadow-sm hover:shadow-md transition-shadow">
+                    {customerOrders.slice(0, 5).map(order => (
+                      <div
+                        key={order._id}
+                        className="flex items-center justify-between border border-gray-200 rounded-xl p-4 bg-white shadow-sm hover:shadow-md transition-shadow"
+                      >
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 flex items-center justify-center">
                             <ShoppingBag size={16} className="text-slate-500" />
@@ -440,14 +562,22 @@ export default function AdminCustomers() {
                             <p className="text-sm font-bold text-slate-800">{order.orderNumber}</p>
                             <p className="text-[10px] text-gray-400">
                               {new Date(order.createdAt).toLocaleDateString('en-IN', {
-                                month: 'short', day: 'numeric', year: 'numeric'
-                              })} · {order.items?.length || 0} item{(order.items?.length || 0) !== 1 ? 's' : ''}
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric',
+                              })}{' '}
+                              · {order.items?.length || 0} item
+                              {(order.items?.length || 0) !== 1 ? 's' : ''}
                             </p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-sm font-black text-slate-800">{formatPrice(order.total)}</p>
-                          <span className={`inline-block px-2 py-0.5 rounded-full text-[9px] font-bold uppercase ${statusColors[order.status] || 'bg-gray-100 text-gray-500'}`}>
+                          <p className="text-sm font-black text-slate-800">
+                            {formatPrice(order.total)}
+                          </p>
+                          <span
+                            className={`inline-block px-2 py-0.5 rounded-full text-[9px] font-bold uppercase ${statusColors[order.status] || 'bg-gray-100 text-gray-500'}`}
+                          >
                             {order.status}
                           </span>
                         </div>

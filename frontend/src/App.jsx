@@ -58,41 +58,41 @@ function App() {
             {!isAdminRoute && <Navbar />}
             <main className={isAdminRoute ? 'admin-main-wrapper' : 'flex-1'}>
               <ErrorBoundary>
-              <Suspense fallback={<PageLoader />}>
-              <Routes>
-                {/* Public Buyer Routes */}
-                <Route path="/" element={<Home />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/product/:slug" element={<ProductDetail />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/auth/callback" element={<AuthCallback />} />
-                
-                {/* Protected Buyer Routes */}
-                <Route element={<ProtectedRoute />}>
-                  <Route path="/cart" element={<Cart />} />
-                  <Route path="/checkout" element={<Checkout />} />
-                  <Route path="/orders" element={<Orders />} />
-                  <Route path="/wishlist" element={<WishlistPage />} />
-                  <Route path="/order-success/:orderId" element={<OrderSuccess />} />
-                </Route>
+                <Suspense fallback={<PageLoader />}>
+                  <Routes>
+                    {/* Public Buyer Routes */}
+                    <Route path="/" element={<Home />} />
+                    <Route path="/products" element={<Products />} />
+                    <Route path="/product/:slug" element={<ProductDetail />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/auth/callback" element={<AuthCallback />} />
 
-                {/* Admin Routes */}
-                <Route element={<ProtectedRoute adminOnly />}>
-                  <Route path="/admin" element={<AdminLayout />}>
-                    <Route index element={<AdminDashboard />} />
-                    <Route path="categories" element={<AdminCategories />} />
-                    <Route path="products" element={<AdminProducts />} />
-                    <Route path="inventory" element={<AdminInventory />} />
-                    <Route path="orders" element={<AdminOrders />} />
-                    <Route path="customers" element={<AdminCustomers />} />
-                    <Route path="coupons" element={<AdminCoupons />} />
-                    <Route path="shipment" element={<AdminShipment />} />
-                    <Route path="settings" element={<AdminSettings />} />
-                  </Route>
-                </Route>
-              </Routes>
-              </Suspense>
+                    {/* Protected Buyer Routes */}
+                    <Route element={<ProtectedRoute />}>
+                      <Route path="/cart" element={<Cart />} />
+                      <Route path="/checkout" element={<Checkout />} />
+                      <Route path="/orders" element={<Orders />} />
+                      <Route path="/wishlist" element={<WishlistPage />} />
+                      <Route path="/order-success/:orderId" element={<OrderSuccess />} />
+                    </Route>
+
+                    {/* Admin Routes */}
+                    <Route element={<ProtectedRoute adminOnly />}>
+                      <Route path="/admin" element={<AdminLayout />}>
+                        <Route index element={<AdminDashboard />} />
+                        <Route path="categories" element={<AdminCategories />} />
+                        <Route path="products" element={<AdminProducts />} />
+                        <Route path="inventory" element={<AdminInventory />} />
+                        <Route path="orders" element={<AdminOrders />} />
+                        <Route path="customers" element={<AdminCustomers />} />
+                        <Route path="coupons" element={<AdminCoupons />} />
+                        <Route path="shipment" element={<AdminShipment />} />
+                        <Route path="settings" element={<AdminSettings />} />
+                      </Route>
+                    </Route>
+                  </Routes>
+                </Suspense>
               </ErrorBoundary>
             </main>
             {!isAdminRoute && <Footer />}

@@ -8,20 +8,20 @@ import {
   deleteProduct,
   uploadProductImages,
   getInventoryStats,
-  bulkUpdateStock
+  bulkUpdateStock,
 } from '../controllers/product.controller.js';
 import {
   getAdminBrands,
   createBrand,
   updateBrand,
-  deleteBrand
+  deleteBrand,
 } from '../controllers/brand.controller.js';
 import {
   getAdminOrders,
   updateOrderStatus,
   getAdminOrder,
   getDashboardStats,
-  addTrackingUpdate
+  addTrackingUpdate,
 } from '../controllers/order.controller.js';
 import { getCustomers, getCustomerStats } from '../controllers/auth.controller.js';
 import {
@@ -30,28 +30,22 @@ import {
   createCoupon,
   updateCoupon,
   deleteCoupon,
-  toggleCouponStatus
+  toggleCouponStatus,
 } from '../controllers/coupon.controller.js';
 import {
   getAdminCategories,
   getCategoryStats,
   createCategory,
   updateCategory,
-  deleteCategory
+  deleteCategory,
 } from '../controllers/category.controller.js';
-import {
-  getShipmentConfig,
-  updateShipmentConfig
-} from '../controllers/shipment.controller.js';
-import {
-  getPaymentConfig,
-  updatePaymentConfig
-} from '../controllers/payment.controller.js';
+import { getShipmentConfig, updateShipmentConfig } from '../controllers/shipment.controller.js';
+import { getPaymentConfig, updatePaymentConfig } from '../controllers/payment.controller.js';
 import {
   getNotifications,
   getUnreadCount,
   markAsRead,
-  markAllAsRead
+  markAllAsRead,
 } from '../controllers/notification.controller.js';
 
 const router = Router();

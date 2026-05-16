@@ -21,7 +21,7 @@ export default function Products() {
     size: '',
     search: searchParams.get('search') || '',
     sort: searchParams.get('sort') || '-createdAt',
-    page: 1
+    page: 1,
   });
 
   const categories = [
@@ -56,7 +56,7 @@ export default function Products() {
       if (filters.maxPrice) params.maxPrice = filters.maxPrice;
       if (filters.size) params.size = filters.size;
       if (filters.search) params.search = filters.search;
-      
+
       // Handle sort
       if (filters.sort === 'price_asc') params.sort = 'price';
       else if (filters.sort === 'price_desc') params.sort = '-price';
@@ -94,11 +94,17 @@ export default function Products() {
       size: '',
       search: '',
       sort: '-createdAt',
-      page: 1
+      page: 1,
     });
   };
 
-  const hasActiveFilters = filters.category || filters.brand || filters.minPrice || filters.maxPrice || filters.size || filters.search;
+  const hasActiveFilters =
+    filters.category ||
+    filters.brand ||
+    filters.minPrice ||
+    filters.maxPrice ||
+    filters.size ||
+    filters.search;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -110,9 +116,7 @@ export default function Products() {
               {categories.find(c => c.slug === filters.category)?.name || 'All Products'}
             </h1>
             {filters.search && (
-              <p className="text-gray-500 text-sm mt-1">
-                Search results for "{filters.search}"
-              </p>
+              <p className="text-gray-500 text-sm mt-1">Search results for "{filters.search}"</p>
             )}
           </div>
 
@@ -129,7 +133,7 @@ export default function Products() {
             {/* Sort */}
             <select
               value={filters.sort}
-              onChange={(e) => updateFilter('sort', e.target.value)}
+              onChange={e => updateFilter('sort', e.target.value)}
               className="border border-gray-300 rounded-lg px-3 sm:px-4 py-2 text-sm"
             >
               {sortOptions.map(option => (
@@ -143,23 +147,40 @@ export default function Products() {
 
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Filters Sidebar */}
-          <aside className={showFilters ? "fixed inset-0 z-50 flex justify-start" : "hidden lg:block w-64 flex-shrink-0"}>
+          <aside
+            className={
+              showFilters
+                ? 'fixed inset-0 z-50 flex justify-start'
+                : 'hidden lg:block w-64 flex-shrink-0'
+            }
+          >
             {/* Backdrop */}
             {showFilters && (
-              <div className="absolute inset-0 bg-black opacity-50" onClick={() => setShowFilters(false)}></div>
+              <div
+                className="absolute inset-0 bg-black opacity-50"
+                onClick={() => setShowFilters(false)}
+              ></div>
             )}
-            
-            <div className={`relative bg-white h-full max-h-screen overflow-y-auto lg:h-auto lg:overflow-visible transition-transform ${showFilters ? 'w-4/5 max-w-sm rounded-r-2xl p-5 shadow-2xl' : 'w-full rounded-xl border border-gray-200 p-6 sticky top-24'}`}>
+
+            <div
+              className={`relative bg-white h-full max-h-screen overflow-y-auto lg:h-auto lg:overflow-visible transition-transform ${showFilters ? 'w-4/5 max-w-sm rounded-r-2xl p-5 shadow-2xl' : 'w-full rounded-xl border border-gray-200 p-6 sticky top-24'}`}
+            >
               <div className="flex items-center justify-between mb-4 lg:mb-6">
                 <h3 className="font-semibold text-lg text-gray-900">Filters</h3>
                 <div className="flex items-center gap-3">
                   {hasActiveFilters && (
-                    <button onClick={clearFilters} className="text-sm text-red-500 font-medium hover:text-red-400 transition">
+                    <button
+                      onClick={clearFilters}
+                      className="text-sm text-red-500 font-medium hover:text-red-400 transition"
+                    >
                       Clear All
                     </button>
                   )}
                   {showFilters && (
-                    <button onClick={() => setShowFilters(false)} className="lg:hidden text-gray-500 hover:text-white transition bg-gray-800 p-1 rounded-full">
+                    <button
+                      onClick={() => setShowFilters(false)}
+                      className="lg:hidden text-gray-500 hover:text-white transition bg-gray-800 p-1 rounded-full"
+                    >
                       <X size={20} />
                     </button>
                   )}
@@ -173,7 +194,7 @@ export default function Products() {
                   type="text"
                   placeholder="Search products..."
                   value={filters.search}
-                  onChange={(e) => updateFilter('search', e.target.value)}
+                  onChange={e => updateFilter('search', e.target.value)}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                 />
               </div>
@@ -206,7 +227,7 @@ export default function Products() {
                     type="number"
                     placeholder="Min"
                     value={filters.minPrice}
-                    onChange={(e) => updateFilter('minPrice', e.target.value)}
+                    onChange={e => updateFilter('minPrice', e.target.value)}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                   />
                   <span className="text-gray-400">-</span>
@@ -214,7 +235,7 @@ export default function Products() {
                     type="number"
                     placeholder="Max"
                     value={filters.maxPrice}
-                    onChange={(e) => updateFilter('maxPrice', e.target.value)}
+                    onChange={e => updateFilter('maxPrice', e.target.value)}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                   />
                 </div>
@@ -250,7 +271,9 @@ export default function Products() {
                         <input
                           type="checkbox"
                           checked={filters.brand === brand._id}
-                          onChange={() => updateFilter('brand', filters.brand === brand._id ? '' : brand._id)}
+                          onChange={() =>
+                            updateFilter('brand', filters.brand === brand._id ? '' : brand._id)
+                          }
                           className="rounded text-red-600"
                         />
                         <span className="text-sm">{brand.name}</span>

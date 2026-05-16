@@ -14,7 +14,7 @@ export const getNotifications = async (req, res, next) => {
     const [notifications, total, unreadCount] = await Promise.all([
       Notification.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
       Notification.countDocuments(filter),
-      Notification.countDocuments({ read: false })
+      Notification.countDocuments({ read: false }),
     ]);
 
     res.json({
@@ -26,9 +26,9 @@ export const getNotifications = async (req, res, next) => {
           page,
           limit,
           total,
-          pages: Math.ceil(total / limit)
-        }
-      }
+          pages: Math.ceil(total / limit),
+        },
+      },
     });
   } catch (error) {
     next(error);
@@ -51,7 +51,7 @@ export const markAsRead = async (req, res, next) => {
     const notification = await Notification.findByIdAndUpdate(
       req.params.id,
       { read: true },
-      { new: true }
+      { new: true },
     );
     if (!notification) {
       return res.status(404).json({ success: false, message: 'Notification not found' });
@@ -65,13 +65,10 @@ export const markAsRead = async (req, res, next) => {
 // Admin: Mark all notifications as read
 export const markAllAsRead = async (req, res, next) => {
   try {
-    const result = await Notification.updateMany(
-      { read: false },
-      { read: true }
-    );
+    const result = await Notification.updateMany({ read: false }, { read: true });
     res.json({
       success: true,
-      data: { modifiedCount: result.modifiedCount }
+      data: { modifiedCount: result.modifiedCount },
     });
   } catch (error) {
     next(error);
@@ -90,8 +87,8 @@ export const createNewOrderNotification = async (order, user) => {
         orderId: order._id,
         orderNumber: order.orderNumber,
         customerName: user.name,
-        amount: order.total
-      }
+        amount: order.total,
+      },
     });
   } catch (error) {
     console.error('Failed to create order notification:', error.message);
@@ -107,8 +104,8 @@ export const createOrderStatusNotification = async (order, previousStatus) => {
       data: {
         orderId: order._id,
         orderNumber: order.orderNumber,
-        amount: order.total
-      }
+        amount: order.total,
+      },
     });
   } catch (error) {
     console.error('Failed to create status notification:', error.message);
@@ -124,15 +121,15 @@ export const createLowStockNotification = async (product, sizeInfo) => {
       message: `${product.name}${sizeDetail} is running low — only ${sizeInfo?.stock || product.stock} left`,
       data: {
         productId: product._id,
-        productName: product.name
-      }
+        productName: product.name,
+      },
     });
   } catch (error) {
     console.error('Failed to create stock notification:', error.message);
   }
 };
 
-export const createNewCustomerNotification = async (user) => {
+export const createNewCustomerNotification = async user => {
   try {
     await Notification.create({
       type: 'new_customer',
@@ -140,8 +137,8 @@ export const createNewCustomerNotification = async (user) => {
       message: `${user.name} (${user.email}) just created an account`,
       data: {
         customerId: user._id,
-        customerName: user.name
-      }
+        customerName: user.name,
+      },
     });
   } catch (error) {
     console.error('Failed to create customer notification:', error.message);

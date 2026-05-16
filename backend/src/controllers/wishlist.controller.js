@@ -8,8 +8,10 @@ export const getWishlist = async (req, res, next) => {
       return res.status(401).json({ success: false, message: 'Please login' });
     }
 
-    let wishlist = await Wishlist.findOne({ userId: req.user._id })
-      .populate('products', 'name slug images salePrice price brand');
+    let wishlist = await Wishlist.findOne({ userId: req.user._id }).populate(
+      'products',
+      'name slug images salePrice price brand',
+    );
 
     if (!wishlist) {
       wishlist = { products: [] };
@@ -82,13 +84,13 @@ export const toggleWishlist = async (req, res, next) => {
       // For guests, use session-based wishlist
       const sessionWishlist = req.session?.wishlist || [];
       const index = sessionWishlist.indexOf(productId);
-      
+
       if (index > -1) {
         sessionWishlist.splice(index, 1);
       } else {
         sessionWishlist.push(productId);
       }
-      
+
       if (req.session) {
         req.session.wishlist = sessionWishlist;
       }

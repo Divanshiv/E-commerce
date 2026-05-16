@@ -13,12 +13,12 @@ export default function OrderSuccess() {
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="text-green-600" size={40} />
           </div>
-          
+
           <h1 className="text-2xl font-bold mb-2">Order Placed Successfully!</h1>
           <p className="text-gray-500 mb-6">
             Thank you for your purchase. Your order has been confirmed.
           </p>
-          
+
           <div className="bg-gray-50 rounded-lg p-4 mb-6 space-y-2">
             {orderNumber && (
               <>

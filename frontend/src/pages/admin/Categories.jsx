@@ -1,13 +1,16 @@
 import { useState, useEffect, useMemo } from 'react';
-import {
-  Plus, Edit2, Trash2, X, Search, Tag, Hash, Package, EyeOff
-} from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Search, Tag, Hash, Package, EyeOff } from 'lucide-react';
 import api from '../../lib/api';
 import toast from 'react-hot-toast';
 
 export default function AdminCategories() {
   const [categories, setCategories] = useState([]);
-  const [stats, setStats] = useState({ total: 0, active: 0, inactive: 0, totalProductsInCategories: 0 });
+  const [stats, setStats] = useState({
+    total: 0,
+    active: 0,
+    inactive: 0,
+    totalProductsInCategories: 0,
+  });
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -18,7 +21,7 @@ export default function AdminCategories() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    isActive: true
+    isActive: true,
   });
 
   useEffect(() => {
@@ -48,14 +51,15 @@ export default function AdminCategories() {
   const filteredCategories = useMemo(() => {
     return categories.filter(cat => {
       const searchMatch = cat.name.toLowerCase().includes(searchTerm.toLowerCase());
-      const statusMatch = statusFilter === 'all'
-        || (statusFilter === 'active' && cat.isActive)
-        || (statusFilter === 'inactive' && !cat.isActive);
+      const statusMatch =
+        statusFilter === 'all' ||
+        (statusFilter === 'active' && cat.isActive) ||
+        (statusFilter === 'inactive' && !cat.isActive);
       return searchMatch && statusMatch;
     });
   }, [categories, searchTerm, statusFilter]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     if (!formData.name.trim()) {
       toast.error('Category name is required');
@@ -81,7 +85,7 @@ export default function AdminCategories() {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async id => {
     try {
       await api.delete(`/admin/categories/${id}`);
       toast.success('Category deleted');
@@ -92,13 +96,13 @@ export default function AdminCategories() {
     }
   };
 
-  const toggleActive = async (category) => {
+  const toggleActive = async category => {
     try {
       const { data } = await api.put(`/admin/categories/${category._id}`, {
         ...category,
-        isActive: !category.isActive
+        isActive: !category.isActive,
       });
-      setCategories(prev => prev.map(c => c._id === category._id ? { ...c, ...data.data } : c));
+      setCategories(prev => prev.map(c => (c._id === category._id ? { ...c, ...data.data } : c)));
       fetchStats();
       toast.success(category.isActive ? 'Category deactivated' : 'Category activated');
     } catch (error) {
@@ -106,12 +110,12 @@ export default function AdminCategories() {
     }
   };
 
-  const openEdit = (category) => {
+  const openEdit = category => {
     setEditingCategory(category);
     setFormData({
       name: category.name,
       description: category.description || '',
-      isActive: category.isActive
+      isActive: category.isActive,
     });
     setShowModal(true);
   };
@@ -123,10 +127,34 @@ export default function AdminCategories() {
   };
 
   const statCards = [
-    { label: 'Total Categories', value: stats.total, icon: Tag, color: 'text-blue-600', bg: 'bg-blue-100' },
-    { label: 'Active', value: stats.active, icon: Hash, color: 'text-green-600', bg: 'bg-green-100' },
-    { label: 'Inactive', value: stats.inactive, icon: EyeOff, color: 'text-gray-500', bg: 'bg-gray-100' },
-    { label: 'Products in Categories', value: stats.totalProductsInCategories, icon: Package, color: 'text-purple-600', bg: 'bg-purple-100' },
+    {
+      label: 'Total Categories',
+      value: stats.total,
+      icon: Tag,
+      color: 'text-blue-600',
+      bg: 'bg-blue-100',
+    },
+    {
+      label: 'Active',
+      value: stats.active,
+      icon: Hash,
+      color: 'text-green-600',
+      bg: 'bg-green-100',
+    },
+    {
+      label: 'Inactive',
+      value: stats.inactive,
+      icon: EyeOff,
+      color: 'text-gray-500',
+      bg: 'bg-gray-100',
+    },
+    {
+      label: 'Products in Categories',
+      value: stats.totalProductsInCategories,
+      icon: Package,
+      color: 'text-purple-600',
+      bg: 'bg-purple-100',
+    },
   ];
 
   if (loading) {
@@ -142,7 +170,10 @@ export default function AdminCategories() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="admin-page-title mb-0">Categories</h1>
-        <button onClick={openCreate} className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors">
+        <button
+          onClick={openCreate}
+          className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors"
+        >
           <Plus size={18} /> Add Category
         </button>
       </div>
@@ -152,12 +183,19 @@ export default function AdminCategories() {
         {statCards.map((card, i) => {
           const Icon = card.icon;
           return (
-            <div key={i} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
-              <div className={`w-12 h-12 ${card.bg} rounded-xl flex items-center justify-center shrink-0`}>
+            <div
+              key={i}
+              className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex items-center gap-4"
+            >
+              <div
+                className={`w-12 h-12 ${card.bg} rounded-xl flex items-center justify-center shrink-0`}
+              >
                 <Icon size={22} className={card.color} />
               </div>
               <div>
-                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{card.label}</p>
+                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  {card.label}
+                </p>
                 <p className="text-2xl font-black text-gray-900 mt-0.5">{card.value}</p>
               </div>
             </div>
@@ -173,13 +211,13 @@ export default function AdminCategories() {
             type="text"
             placeholder="Search categories..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={e => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:border-red-500"
           />
         </div>
         <select
           value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
+          onChange={e => setStatusFilter(e.target.value)}
           className="w-48 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:border-red-500 bg-white font-medium text-sm"
         >
           <option value="all">All Status</option>
@@ -193,11 +231,21 @@ export default function AdminCategories() {
         <table className="w-full text-left">
           <thead className="bg-gray-50 border-b border-gray-100">
             <tr>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Slug</th>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Products</th>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="p-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Category
+              </th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Slug
+              </th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                Products
+              </th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Status
+              </th>
+              <th className="p-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -211,7 +259,9 @@ export default function AdminCategories() {
                     <div>
                       <p className="font-semibold text-gray-900">{category.name}</p>
                       {category.description && (
-                        <p className="text-xs text-gray-400 mt-0.5 line-clamp-1 max-w-[240px]">{category.description}</p>
+                        <p className="text-xs text-gray-400 mt-0.5 line-clamp-1 max-w-[240px]">
+                          {category.description}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -235,7 +285,9 @@ export default function AdminCategories() {
                         : 'bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100'
                     }`}
                   >
-                    <span className={`w-1.5 h-1.5 rounded-full ${category.isActive ? 'bg-green-500' : 'bg-gray-400'}`} />
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full ${category.isActive ? 'bg-green-500' : 'bg-gray-400'}`}
+                    />
                     {category.isActive ? 'Active' : 'Inactive'}
                   </button>
                 </td>
@@ -288,34 +340,47 @@ export default function AdminCategories() {
                   </p>
                 </div>
               </div>
-              <button onClick={() => setShowModal(false)} className="p-2 hover:bg-gray-100 rounded text-gray-500 transition-colors">
+              <button
+                onClick={() => setShowModal(false)}
+                className="p-2 hover:bg-gray-100 rounded text-gray-500 transition-colors"
+              >
                 <X size={20} />
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-5">
               <div>
-                <label className="text-sm font-medium text-slate-700 block mb-1.5">Category Name</label>
+                <label className="text-sm font-medium text-slate-700 block mb-1.5">
+                  Category Name
+                </label>
                 <input
                   type="text"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={e => setFormData({ ...formData, name: e.target.value })}
                   required
                   placeholder="e.g. Winter Jackets"
                   className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none text-sm"
                 />
                 {formData.name && (
                   <p className="text-xs text-gray-400 mt-1">
-                    Slug: <span className="font-mono">{formData.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}</span>
+                    Slug:{' '}
+                    <span className="font-mono">
+                      {formData.name
+                        .toLowerCase()
+                        .replace(/\s+/g, '-')
+                        .replace(/[^a-z0-9-]/g, '')}
+                    </span>
                   </p>
                 )}
               </div>
 
               <div>
-                <label className="text-sm font-medium text-slate-700 block mb-1.5">Description</label>
+                <label className="text-sm font-medium text-slate-700 block mb-1.5">
+                  Description
+                </label>
                 <textarea
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={e => setFormData({ ...formData, description: e.target.value })}
                   rows={3}
                   placeholder="Brief description of this category..."
                   className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-red-500 outline-none text-sm resize-none"
@@ -330,9 +395,11 @@ export default function AdminCategories() {
                     formData.isActive ? 'bg-green-500' : 'bg-gray-300'
                   }`}
                 >
-                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform ${
-                    formData.isActive ? 'translate-x-6' : 'translate-x-1'
-                  }`} />
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform ${
+                      formData.isActive ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
                 </button>
                 <div>
                   <p className="text-sm font-medium text-slate-700">Active</p>
@@ -369,12 +436,15 @@ export default function AdminCategories() {
             </div>
 
             <p className="text-sm text-gray-600 mb-2">
-              Are you sure you want to delete <strong className="text-slate-800">{deleteConfirm.name}</strong>?
+              Are you sure you want to delete{' '}
+              <strong className="text-slate-800">{deleteConfirm.name}</strong>?
             </p>
             {deleteConfirm.productCount > 0 && (
               <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg mb-4">
                 <p className="text-xs text-amber-700 font-medium">
-                  ⚠️ {deleteConfirm.productCount} product{deleteConfirm.productCount > 1 ? 's are' : ' is'} linked to this category. Delete may affect product display.
+                  ⚠️ {deleteConfirm.productCount} product
+                  {deleteConfirm.productCount > 1 ? 's are' : ' is'} linked to this category. Delete
+                  may affect product display.
                 </p>
               </div>
             )}

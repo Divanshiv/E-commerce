@@ -6,14 +6,14 @@ import { useWishlist } from '../context/WishlistContext';
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
-  
+
   const isWishlisted = isInWishlist(product._id);
-  const discount = product.salePrice 
+  const discount = product.salePrice
     ? Math.round((1 - product.salePrice / product.price) * 100)
     : 0;
   const inStock = product.sizes?.some(s => s.stock > 0);
 
-  const handleAddToCart = (e) => {
+  const handleAddToCart = e => {
     e.preventDefault();
     e.stopPropagation();
     if (inStock) {
@@ -21,7 +21,7 @@ export default function ProductCard({ product }) {
     }
   };
 
-  const handleWishlist = (e) => {
+  const handleWishlist = e => {
     e.preventDefault();
     e.stopPropagation();
     toggleWishlist(product);
@@ -37,7 +37,7 @@ export default function ProductCard({ product }) {
             alt={product.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
-          
+
           {/* Discount Badge */}
           {discount > 0 && (
             <div className="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
@@ -49,8 +49,8 @@ export default function ProductCard({ product }) {
           <button
             onClick={handleWishlist}
             className={`absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all ${
-              isWishlisted 
-                ? 'bg-red-600 text-white' 
+              isWishlisted
+                ? 'bg-red-600 text-white'
                 : 'bg-white/90 text-gray-600 hover:bg-red-600 hover:text-white'
             }`}
           >
@@ -87,9 +87,7 @@ export default function ProductCard({ product }) {
               ₹{product.salePrice || product.price}
             </span>
             {product.salePrice && (
-              <span className="text-xs text-gray-400 line-through">
-                ₹{product.price}
-              </span>
+              <span className="text-xs text-gray-400 line-through">₹{product.price}</span>
             )}
           </div>
 
@@ -99,21 +97,22 @@ export default function ProductCard({ product }) {
                 <Star
                   key={i}
                   size={10}
-                  className={i < Math.round(product.rating?.average || 0) 
-                    ? 'text-yellow-400 fill-yellow-400' 
-                    : 'text-gray-300'
+                  className={
+                    i < Math.round(product.rating?.average || 0)
+                      ? 'text-yellow-400 fill-yellow-400'
+                      : 'text-gray-300'
                   }
                 />
               ))}
             </div>
-            <span className="text-[10px] text-gray-500">
-              ({product.rating?.count || 0})
-            </span>
+            <span className="text-[10px] text-gray-500">({product.rating?.count || 0})</span>
           </div>
 
           {/* Stock Status */}
           <div className="flex items-center gap-1 mb-1">
-            <div className={`w-1.5 h-1.5 rounded-full ${inStock ? 'bg-green-500' : 'bg-red-500'}`} />
+            <div
+              className={`w-1.5 h-1.5 rounded-full ${inStock ? 'bg-green-500' : 'bg-red-500'}`}
+            />
             <span className="text-[10px] text-gray-500">
               {inStock ? 'In Stock' : 'Out of Stock'}
             </span>

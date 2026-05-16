@@ -6,7 +6,7 @@ export const errorHandler = (err, req, res, next) => {
     const errors = Object.values(err.errors).map(e => e.message);
     return res.status(400).json({
       success: false,
-      message: errors.join(', ')
+      message: errors.join(', '),
     });
   }
 
@@ -15,7 +15,7 @@ export const errorHandler = (err, req, res, next) => {
     const field = Object.keys(err.keyValue)[0];
     return res.status(400).json({
       success: false,
-      message: `${field} already exists`
+      message: `${field} already exists`,
     });
   }
 
@@ -23,7 +23,7 @@ export const errorHandler = (err, req, res, next) => {
   if (err.name === 'CastError') {
     return res.status(400).json({
       success: false,
-      message: 'Invalid ID format'
+      message: 'Invalid ID format',
     });
   }
 
@@ -31,21 +31,21 @@ export const errorHandler = (err, req, res, next) => {
   if (err.name === 'JsonWebTokenError') {
     return res.status(401).json({
       success: false,
-      message: 'Invalid token'
+      message: 'Invalid token',
     });
   }
 
   if (err.name === 'TokenExpiredError') {
     return res.status(401).json({
       success: false,
-      message: 'Token expired'
+      message: 'Token expired',
     });
   }
 
   // Default error
   res.status(err.statusCode || 500).json({
     success: false,
-    message: err.message || 'Internal server error'
+    message: err.message || 'Internal server error',
   });
 };
 

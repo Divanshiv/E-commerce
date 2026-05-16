@@ -1,6 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingBag, Users, Ticket, Truck, LogOut, Tags, ClipboardList, Menu, X, Settings } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingBag,
+  Users,
+  Ticket,
+  Truck,
+  LogOut,
+  Tags,
+  ClipboardList,
+  Menu,
+  X,
+  Settings,
+} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import NotificationDropdown from '../../components/NotificationDropdown';
 import LiveSystemIndicator from '../../components/LiveSystemIndicator';
@@ -30,7 +43,6 @@ export default function AdminLayout() {
 
   return (
     <div className="sk-admin-layout">
-      
       {/* Sidebar Component */}
       <aside className={`sk-admin-sidebar ${isSidebarOpen ? 'is-open' : ''}`}>
         <div className="sk-admin-sidebar-header">
@@ -42,10 +54,10 @@ export default function AdminLayout() {
 
         <nav className="sk-admin-nav">
           {navItems.map(item => {
-            const isActive = item.exact 
+            const isActive = item.exact
               ? location.pathname === item.path
               : location.pathname.startsWith(item.path);
-            
+
             return (
               <Link
                 key={item.path}
@@ -61,15 +73,15 @@ export default function AdminLayout() {
 
         <div className="sk-admin-sidebar-footer">
           {/* Admin Status Debug Indicator */}
-          <div className={`sk-admin-status-badge ${user?.role === 'admin' ? 'is-verified' : 'is-warning'}`}>
+          <div
+            className={`sk-admin-status-badge ${user?.role === 'admin' ? 'is-verified' : 'is-warning'}`}
+          >
             <div className="sk-admin-pulse-dot"></div>
             <span>{user?.role === 'admin' ? 'Admin Access Verified' : 'Check Access Role'}</span>
           </div>
 
           <div className="sk-admin-profile-pill">
-            <div className="sk-admin-avatar">
-              {user?.name?.charAt(0).toUpperCase()}
-            </div>
+            <div className="sk-admin-avatar">{user?.name?.charAt(0).toUpperCase()}</div>
             <div className="sk-admin-user-meta">
               <span className="sk-admin-user-name">{user?.name}</span>
               <span className="sk-admin-user-role">{user?.role || 'Admin'}</span>
@@ -83,7 +95,6 @@ export default function AdminLayout() {
 
       {/* Main Panel Content */}
       <div className="sk-admin-main">
-        
         {/* Top Header Bar */}
         <header className="sk-admin-header">
           <div className="sk-admin-header-start">
@@ -92,7 +103,9 @@ export default function AdminLayout() {
             </button>
             <div className="sk-admin-breadcrumb">
               <span className="sk-admin-current-page">
-                {location.pathname === '/admin' ? 'Dashboard' : location.pathname.split('/').pop().replace('-', ' ')}
+                {location.pathname === '/admin'
+                  ? 'Dashboard'
+                  : location.pathname.split('/').pop().replace('-', ' ')}
               </span>
             </div>
           </div>
@@ -108,7 +121,6 @@ export default function AdminLayout() {
           <Outlet />
         </main>
       </div>
-
     </div>
   );
 }

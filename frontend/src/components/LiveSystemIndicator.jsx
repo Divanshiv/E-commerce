@@ -27,7 +27,7 @@ export default function LiveSystemIndicator() {
     status: 'checking',
     latency: null,
     data: null,
-    error: null
+    error: null,
   });
   const [showTooltip, setShowTooltip] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -44,7 +44,7 @@ export default function LiveSystemIndicator() {
         status: data.database === 'connected' ? 'healthy' : 'degraded',
         latency: Math.round(performance.now() - start),
         data,
-        error: null
+        error: null,
       });
     } catch {
       if (!mountedRef.current) return;
@@ -53,7 +53,7 @@ export default function LiveSystemIndicator() {
         status: 'down',
         latency: Math.round(performance.now() - start),
         error: 'Backend unreachable',
-        data: null
+        data: null,
       }));
     } finally {
       if (mountedRef.current) setChecking(false);
@@ -73,7 +73,7 @@ export default function LiveSystemIndicator() {
 
   // Close tooltip on outside click
   useEffect(() => {
-    const handler = (e) => {
+    const handler = e => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
         setShowTooltip(false);
       }
@@ -88,7 +88,7 @@ export default function LiveSystemIndicator() {
     healthy: { dotClass: 'live-dot-green', label: 'Live', pulse: true },
     degraded: { dotClass: 'live-dot-yellow', label: 'Degraded', pulse: true },
     down: { dotClass: 'live-dot-red', label: 'Down', pulse: false },
-    checking: { dotClass: 'live-dot-gray', label: 'Checking...', pulse: true }
+    checking: { dotClass: 'live-dot-gray', label: 'Checking...', pulse: true },
   };
 
   const current = statusConfig[state.status] || statusConfig.checking;
@@ -110,22 +110,36 @@ export default function LiveSystemIndicator() {
     <div className="live-system-wrapper" ref={wrapperRef}>
       <button
         className="live-system-pill"
-        onClick={() => { setShowTooltip(!showTooltip); if (state.status !== 'checking') checkHealth(); }}
+        onClick={() => {
+          setShowTooltip(!showTooltip);
+          if (state.status !== 'checking') checkHealth();
+        }}
         onMouseEnter={() => setShowTooltip(true)}
-        onMouseLeave={() => { if (!tooltipRef.current?.matches(':hover')) setShowTooltip(false); }}
+        onMouseLeave={() => {
+          if (!tooltipRef.current?.matches(':hover')) setShowTooltip(false);
+        }}
         disabled={checking}
       >
-        <span className={`live-system-dot ${current.dotClass} ${current.pulse ? 'live-pulse' : ''}`} />
+        <span
+          className={`live-system-dot ${current.dotClass} ${current.pulse ? 'live-pulse' : ''}`}
+        />
         <span className="live-system-label">{current.label}</span>
         {state.latency !== null && state.status !== 'checking' && (
-          <span className={`live-system-latency ${state.status === 'down' ? 'live-latency-down' : ''}`}>
+          <span
+            className={`live-system-latency ${state.status === 'down' ? 'live-latency-down' : ''}`}
+          >
             {state.latency}ms
           </span>
         )}
       </button>
 
       {showTooltip && (
-        <div className="live-system-tooltip" ref={tooltipRef} onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
+        <div
+          className="live-system-tooltip"
+          ref={tooltipRef}
+          onMouseEnter={() => setShowTooltip(true)}
+          onMouseLeave={() => setShowTooltip(false)}
+        >
           <div className="live-tooltip-header">
             <span className={`live-tooltip-dot ${current.dotClass}`} />
             <span className="live-tooltip-title">System Status</span>

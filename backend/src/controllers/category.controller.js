@@ -26,14 +26,16 @@ export const getAdminCategories = async (req, res, next) => {
 
     // Get product counts per category
     const productCounts = await Product.aggregate([
-      { $group: { _id: '$category', count: { $sum: 1 } } }
+      { $group: { _id: '$category', count: { $sum: 1 } } },
     ]);
     const countMap = {};
-    productCounts.forEach(({ _id, count }) => { countMap[_id] = count; });
+    productCounts.forEach(({ _id, count }) => {
+      countMap[_id] = count;
+    });
 
     const enriched = categories.map(cat => ({
       ...cat.toObject(),
-      productCount: countMap[cat.name] || 0
+      productCount: countMap[cat.name] || 0,
     }));
 
     res.json({ success: true, data: enriched });
@@ -48,17 +50,17 @@ export const getCategoryStats = async (req, res, next) => {
     const [total, active, inactive] = await Promise.all([
       Category.countDocuments(),
       Category.countDocuments({ isActive: true }),
-      Category.countDocuments({ isActive: false })
+      Category.countDocuments({ isActive: false }),
     ]);
 
     const productCounts = await Product.aggregate([
-      { $group: { _id: '$category', count: { $sum: 1 } } }
+      { $group: { _id: '$category', count: { $sum: 1 } } },
     ]);
     const totalProductsInCategories = productCounts.reduce((sum, c) => sum + c.count, 0);
 
     res.json({
       success: true,
-      data: { total, active, inactive, totalProductsInCategories }
+      data: { total, active, inactive, totalProductsInCategories },
     });
   } catch (error) {
     next(error);
@@ -79,11 +81,10 @@ export const createCategory = async (req, res, next) => {
 
 export const updateCategory = async (req, res, next) => {
   try {
-    const category = await Category.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
     if (!category) return res.status(404).json({ success: false, message: 'Category not found' });
     res.json({ success: true, data: category });
   } catch (error) {

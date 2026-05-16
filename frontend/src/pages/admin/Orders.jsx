@@ -1,7 +1,16 @@
 import { useState, useEffect, useMemo } from 'react';
 import {
-  Eye, Search, Filter, X, Users, Mail, Phone, MapPin, Package,
-  Truck, ExternalLink
+  Eye,
+  Search,
+  Filter,
+  X,
+  Users,
+  Mail,
+  Phone,
+  MapPin,
+  Package,
+  Truck,
+  ExternalLink,
 } from 'lucide-react';
 import api from '../../lib/api';
 import toast from 'react-hot-toast';
@@ -89,27 +98,36 @@ export default function AdminOrders() {
     }
   };
 
-  const formatPrice = (price) => {
+  const formatPrice = price => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
-      minimumFractionDigits: 0
+      minimumFractionDigits: 0,
     }).format(price);
   };
 
-  const statusOptions = ['pending', 'confirmed', 'processing', 'shipped', 'out_for_delivery', 'delivered', 'cancelled'];
+  const statusOptions = [
+    'pending',
+    'confirmed',
+    'processing',
+    'shipped',
+    'out_for_delivery',
+    'delivered',
+    'cancelled',
+  ];
   const statusColors = {
-    pending:          'bg-yellow-100 text-yellow-700',
-    confirmed:        'bg-blue-100 text-blue-700',
-    processing:       'bg-purple-100 text-purple-700',
-    shipped:          'bg-indigo-100 text-indigo-700',
+    pending: 'bg-yellow-100 text-yellow-700',
+    confirmed: 'bg-blue-100 text-blue-700',
+    processing: 'bg-purple-100 text-purple-700',
+    shipped: 'bg-indigo-100 text-indigo-700',
     out_for_delivery: 'bg-orange-100 text-orange-700',
-    delivered:        'bg-green-100 text-green-700',
-    cancelled:        'bg-red-100 text-red-700'
+    delivered: 'bg-green-100 text-green-700',
+    cancelled: 'bg-red-100 text-red-700',
   };
 
-  const hasTracking = (order) =>
-    order.trackingUpdates?.length > 0 || ['shipped', 'out_for_delivery', 'delivered'].includes(order.status);
+  const hasTracking = order =>
+    order.trackingUpdates?.length > 0 ||
+    ['shipped', 'out_for_delivery', 'delivered'].includes(order.status);
 
   const [newEvent, setNewEvent] = useState({ status: '', location: '', note: '' });
 
@@ -129,7 +147,7 @@ export default function AdminOrders() {
             type="text"
             placeholder="Search by Order ID, Name, or Email..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={e => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:border-red-500"
           />
         </div>
@@ -137,12 +155,14 @@ export default function AdminOrders() {
           <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={e => setStatusFilter(e.target.value)}
             className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:border-red-500 appearance-none bg-white font-medium"
           >
             <option value="all">All Statuses</option>
             {statusOptions.map(s => (
-              <option key={s} value={s}>{s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</option>
+              <option key={s} value={s}>
+                {s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+              </option>
             ))}
           </select>
         </div>
@@ -152,12 +172,24 @@ export default function AdminOrders() {
         <table className="w-full text-left">
           <thead className="bg-gray-50 border-b border-gray-100">
             <tr>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="p-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Order
+              </th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Customer
+              </th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Date
+              </th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Total
+              </th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Status
+              </th>
+              <th className="p-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -172,17 +204,23 @@ export default function AdminOrders() {
                   <p className="text-xs text-gray-500">{order.user?.email}</p>
                 </td>
                 <td className="p-4 text-sm text-gray-600">
-                  {new Date(order.createdAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  {new Date(order.createdAt).toLocaleDateString('en-IN', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
                 </td>
                 <td className="p-4 font-bold text-slate-800">{formatPrice(order.total)}</td>
                 <td className="p-4">
                   <select
                     value={order.status}
-                    onChange={(e) => updateStatus(order._id, e.target.value)}
+                    onChange={e => updateStatus(order._id, e.target.value)}
                     className={`px-3 py-1 rounded-full text-xs font-medium border border-transparent outline-none cursor-pointer ${statusColors[order.status]}`}
                   >
                     {statusOptions.map(s => (
-                      <option key={s} value={s}>{s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</option>
+                      <option key={s} value={s}>
+                        {s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+                      </option>
                     ))}
                   </select>
                 </td>
@@ -210,7 +248,9 @@ export default function AdminOrders() {
             ))}
             {filteredOrders.length === 0 && (
               <tr>
-                <td colSpan="6" className="admin-empty-state">No orders found matching filters.</td>
+                <td colSpan="6" className="admin-empty-state">
+                  No orders found matching filters.
+                </td>
               </tr>
             )}
           </tbody>
@@ -231,7 +271,10 @@ export default function AdminOrders() {
                   {new Date(trackingOrder.createdAt).toLocaleString('en-IN')}
                 </p>
               </div>
-              <button onClick={() => setTrackingOrder(null)} className="p-2 hover:bg-gray-100 rounded text-gray-500">
+              <button
+                onClick={() => setTrackingOrder(null)}
+                className="p-2 hover:bg-gray-100 rounded text-gray-500"
+              >
                 <X size={20} />
               </button>
             </div>
@@ -239,13 +282,17 @@ export default function AdminOrders() {
             <div className="p-6 space-y-6">
               {/* Current status badge + tracking number */}
               <div className="flex items-center gap-4 flex-wrap">
-                <span className={`px-4 py-1.5 rounded-full text-sm font-medium ${statusColors[trackingOrder.status]}`}>
+                <span
+                  className={`px-4 py-1.5 rounded-full text-sm font-medium ${statusColors[trackingOrder.status]}`}
+                >
                   {trackingOrder.status.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
                 </span>
                 {trackingOrder.trackingNumber && (
                   <span className="text-sm text-gray-500 flex items-center gap-1">
                     <Package size={14} /> Tracking #:
-                    <span className="font-mono font-bold text-slate-700">{trackingOrder.trackingNumber}</span>
+                    <span className="font-mono font-bold text-slate-700">
+                      {trackingOrder.trackingNumber}
+                    </span>
                   </span>
                 )}
               </div>
@@ -271,26 +318,28 @@ export default function AdminOrders() {
                 <div className="grid sm:grid-cols-3 gap-3 mb-3">
                   <select
                     value={newEvent.status}
-                    onChange={(e) => setNewEvent(prev => ({ ...prev, status: e.target.value }))}
+                    onChange={e => setNewEvent(prev => ({ ...prev, status: e.target.value }))}
                     className="px-3 py-2 rounded-lg border border-gray-200 outline-none focus:border-red-500 text-sm"
                   >
                     <option value="">Same status</option>
                     {statusOptions.map(s => (
-                      <option key={s} value={s}>{s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</option>
+                      <option key={s} value={s}>
+                        {s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+                      </option>
                     ))}
                   </select>
                   <input
                     type="text"
                     placeholder="Location (optional)"
                     value={newEvent.location}
-                    onChange={(e) => setNewEvent(prev => ({ ...prev, location: e.target.value }))}
+                    onChange={e => setNewEvent(prev => ({ ...prev, location: e.target.value }))}
                     className="px-3 py-2 rounded-lg border border-gray-200 outline-none focus:border-red-500 text-sm"
                   />
                   <input
                     type="text"
                     placeholder="Note (optional)"
                     value={newEvent.note}
-                    onChange={(e) => setNewEvent(prev => ({ ...prev, note: e.target.value }))}
+                    onChange={e => setNewEvent(prev => ({ ...prev, note: e.target.value }))}
                     className="px-3 py-2 rounded-lg border border-gray-200 outline-none focus:border-red-500 text-sm"
                   />
                 </div>
@@ -324,7 +373,10 @@ export default function AdminOrders() {
                   {new Date(selectedOrder.createdAt).toLocaleString('en-IN')}
                 </p>
               </div>
-              <button onClick={() => setSelectedOrder(null)} className="p-2 hover:bg-gray-100 rounded text-gray-500">
+              <button
+                onClick={() => setSelectedOrder(null)}
+                className="p-2 hover:bg-gray-100 rounded text-gray-500"
+              >
                 <X size={20} />
               </button>
             </div>
@@ -336,22 +388,26 @@ export default function AdminOrders() {
                 <div className="flex flex-col sm:flex-row gap-3">
                   <select
                     value={selectedOrder.status}
-                    onChange={(e) => {
+                    onChange={e => {
                       updateStatus(selectedOrder._id, e.target.value);
                     }}
                     className={`flex-1 px-4 py-2 rounded-lg border font-medium outline-none ${statusColors[selectedOrder.status]} border-transparent ring-1 ring-black/5`}
                   >
                     {statusOptions.map(s => (
-                      <option key={s} value={s}>{s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</option>
+                      <option key={s} value={s}>
+                        {s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+                      </option>
                     ))}
                   </select>
 
-                  {(selectedOrder.status === 'shipped' || selectedOrder.status === 'out_for_delivery' || selectedOrder.status === 'processing') ? (
+                  {selectedOrder.status === 'shipped' ||
+                  selectedOrder.status === 'out_for_delivery' ||
+                  selectedOrder.status === 'processing' ? (
                     <div className="flex-1 flex flex-col gap-2">
                       <div className="flex gap-2">
                         <input
                           type="text"
-                          placeholder={selectedOrder.trackingNumber || "Tracking #..."}
+                          placeholder={selectedOrder.trackingNumber || 'Tracking #...'}
                           value={trackingNumber}
                           onChange={e => setTrackingNumber(e.target.value)}
                           className="flex-1 px-4 py-2 border rounded-lg outline-none focus:border-red-500 text-sm"
@@ -381,7 +437,7 @@ export default function AdminOrders() {
               </div>
 
               {/* Tracking Timeline Summary */}
-              {(selectedOrder.trackingUpdates?.length > 0) && (
+              {selectedOrder.trackingUpdates?.length > 0 && (
                 <div>
                   <h3 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
                     <Truck size={16} className="text-gray-400" /> Tracking History
@@ -403,8 +459,12 @@ export default function AdminOrders() {
                 </h3>
                 <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-100">
                   <p className="font-bold text-gray-900">{selectedOrder.user?.name}</p>
-                  <p className="flex items-center gap-1"><Mail size={12} /> {selectedOrder.user?.email}</p>
-                  <p className="flex items-center gap-1 mt-1"><Phone size={12} /> {selectedOrder.user?.phone || 'N/A'}</p>
+                  <p className="flex items-center gap-1">
+                    <Mail size={12} /> {selectedOrder.user?.email}
+                  </p>
+                  <p className="flex items-center gap-1 mt-1">
+                    <Phone size={12} /> {selectedOrder.user?.phone || 'N/A'}
+                  </p>
                 </div>
               </div>
 
@@ -419,20 +479,24 @@ export default function AdminOrders() {
               {/* Items */}
               <div>
                 <h3 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-                  <Package size={16} className="text-gray-400" /> Items ({selectedOrder.items.length})
+                  <Package size={16} className="text-gray-400" /> Items (
+                  {selectedOrder.items.length})
                 </h3>
                 <div className="space-y-2">
                   {selectedOrder.items.map((item, i) => (
-                    <div key={i} className="flex items-center gap-4 bg-white border border-gray-100 rounded-xl p-3 shadow-sm hover:shadow-md transition-shadow">
+                    <div
+                      key={i}
+                      className="flex items-center gap-4 bg-white border border-gray-100 rounded-xl p-3 shadow-sm hover:shadow-md transition-shadow"
+                    >
                       <div className="w-16 h-16 rounded-lg overflow-hidden bg-slate-50 border border-slate-100">
                         <img src={item.image} alt="" className="w-full h-full object-cover" />
                       </div>
                       <div className="flex-1">
                         <p className="font-bold text-slate-800 text-sm">{item.name}</p>
                         <p className="text-[11px] text-gray-400 mt-0.5">
-                          SIZE: <span className="font-bold text-slate-600">{item.size}</span> |
-                          QTY: <span className="font-bold text-slate-600">{item.quantity}</span> |
-                          UNIT: <span className="font-bold text-slate-600">₹{item.price}</span>
+                          SIZE: <span className="font-bold text-slate-600">{item.size}</span> | QTY:{' '}
+                          <span className="font-bold text-slate-600">{item.quantity}</span> | UNIT:{' '}
+                          <span className="font-bold text-slate-600">₹{item.price}</span>
                         </p>
                       </div>
                       <div className="text-right">
@@ -448,7 +512,9 @@ export default function AdminOrders() {
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between text-sm text-slate-400">
                     <span>Subtotal</span>
-                    <span className="font-bold text-white">{formatPrice(selectedOrder.subtotal)}</span>
+                    <span className="font-bold text-white">
+                      {formatPrice(selectedOrder.subtotal)}
+                    </span>
                   </div>
                   {selectedOrder.discount > 0 && (
                     <div className="flex justify-between text-sm text-red-400">
@@ -458,27 +524,43 @@ export default function AdminOrders() {
                   )}
                   <div className="flex justify-between text-sm text-slate-400">
                     <span>Shipping</span>
-                    <span className="font-bold text-white">{selectedOrder.shippingCharges === 0 ? 'FREE' : formatPrice(selectedOrder.shippingCharges)}</span>
+                    <span className="font-bold text-white">
+                      {selectedOrder.shippingCharges === 0
+                        ? 'FREE'
+                        : formatPrice(selectedOrder.shippingCharges)}
+                    </span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center pt-4 border-t border-white/10">
-                  <span className="text-sm font-bold uppercase tracking-widest text-slate-400">Total</span>
-                  <span className="text-3xl font-black text-white">{formatPrice(selectedOrder.total)}</span>
+                  <span className="text-sm font-bold uppercase tracking-widest text-slate-400">
+                    Total
+                  </span>
+                  <span className="text-3xl font-black text-white">
+                    {formatPrice(selectedOrder.total)}
+                  </span>
                 </div>
               </div>
 
               {/* Payment */}
               <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 flex items-center justify-between">
                 <div>
-                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Payment</h3>
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
+                    Payment
+                  </h3>
                   <p className="font-bold text-slate-800 flex items-center gap-2">
-                    <span className="px-2 py-0.5 bg-white border border-gray-200 rounded text-[10px] uppercase">{selectedOrder.payment?.method}</span>
+                    <span className="px-2 py-0.5 bg-white border border-gray-200 rounded text-[10px] uppercase">
+                      {selectedOrder.payment?.method}
+                    </span>
                     {selectedOrder.payment?.status?.toUpperCase()}
                   </p>
                 </div>
                 <div className="text-right">
-                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Transaction ID</h3>
-                  <p className="font-mono text-xs text-slate-600">{selectedOrder.payment?.transactionId || 'OFFLINE_ORDER'}</p>
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
+                    Transaction ID
+                  </h3>
+                  <p className="font-mono text-xs text-slate-600">
+                    {selectedOrder.payment?.transactionId || 'OFFLINE_ORDER'}
+                  </p>
                 </div>
               </div>
 

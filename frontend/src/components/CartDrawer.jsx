@@ -3,35 +3,31 @@ import { X, Plus, Minus, Trash2 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 export default function CartDrawer() {
-  const { cart, drawerOpen, setDrawerOpen, updateQuantity, removeItem, subtotal, discount } = useCart();
+  const { cart, drawerOpen, setDrawerOpen, updateQuantity, removeItem, subtotal, discount } =
+    useCart();
   const navigate = useNavigate();
 
   if (!drawerOpen) return null;
 
-  const formatPrice = (price) => {
+  const formatPrice = price => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
-      minimumFractionDigits: 0
+      minimumFractionDigits: 0,
     }).format(price);
   };
 
   return (
     <>
       {/* Overlay */}
-      <div 
-        className="fixed inset-0 bg-black/50 z-50"
-        onClick={() => setDrawerOpen(false)}
-      />
+      <div className="fixed inset-0 bg-black/50 z-50" onClick={() => setDrawerOpen(false)} />
 
       {/* Drawer */}
       <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white z-50 shadow-2xl flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-lg font-semibold">
-            Your Cart ({cart.items?.length || 0})
-          </h2>
-          <button 
+          <h2 className="text-lg font-semibold">Your Cart ({cart.items?.length || 0})</h2>
+          <button
             onClick={() => setDrawerOpen(false)}
             className="p-2 hover:bg-gray-100 rounded-full"
           >
@@ -44,12 +40,22 @@ export default function CartDrawer() {
           {cart.items?.length === 0 ? (
             <div className="text-center py-12">
               <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                <svg
+                  className="w-10 h-10 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                  />
                 </svg>
               </div>
               <p className="text-gray-500 mb-4">Your cart is empty</p>
-              <Link 
+              <Link
                 to="/products"
                 onClick={() => setDrawerOpen(false)}
                 className="text-red-600 font-medium hover:underline"
@@ -59,8 +65,11 @@ export default function CartDrawer() {
             </div>
           ) : (
             <div className="space-y-4">
-              {cart.items.map((item) => (
-                <div key={item.product?._id || item.product} className="flex gap-4 bg-gray-50 rounded-lg p-3">
+              {cart.items.map(item => (
+                <div
+                  key={item.product?._id || item.product}
+                  className="flex gap-4 bg-gray-50 rounded-lg p-3"
+                >
                   <img
                     src={item.product?.images?.[0]?.url || 'https://via.placeholder.com/80'}
                     alt={item.product?.name}
@@ -70,7 +79,7 @@ export default function CartDrawer() {
                     <h4 className="text-sm font-medium line-clamp-1">{item.product?.name}</h4>
                     <p className="text-xs text-gray-500 mt-1">Size: {item.size}</p>
                     <p className="text-sm font-semibold mt-1">{formatPrice(item.price)}</p>
-                    
+
                     <div className="flex items-center justify-between mt-2">
                       <div className="flex items-center border border-gray-200 rounded">
                         <button
@@ -88,7 +97,7 @@ export default function CartDrawer() {
                           <Plus size={14} />
                         </button>
                       </div>
-                      
+
                       <button
                         onClick={() => removeItem(item.product._id)}
                         className="p-1 text-red-500 hover:bg-red-50 rounded"

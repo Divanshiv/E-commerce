@@ -7,7 +7,7 @@ import {
   applyCoupon,
   removeCoupon,
   clearCart,
-  guestCart
+  guestCart,
 } from '../controllers/cart.controller.js';
 import { verifyToken } from '../middleware/auth.js';
 

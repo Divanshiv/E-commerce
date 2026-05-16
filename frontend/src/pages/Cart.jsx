@@ -9,17 +9,17 @@ export default function Cart() {
   const [couponError, setCouponError] = useState('');
   const [applying, setApplying] = useState(false);
 
-  const formatPrice = (price) => {
+  const formatPrice = price => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
-      minimumFractionDigits: 0
+      minimumFractionDigits: 0,
     }).format(price);
   };
 
   const handleApplyCoupon = async () => {
     if (!couponCode.trim()) return;
-    
+
     try {
       setApplying(true);
       setCouponError('');
@@ -40,13 +40,28 @@ export default function Cart() {
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 py-16 text-center">
           <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            <svg
+              className="w-12 h-12 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+              />
             </svg>
           </div>
           <h2 className="text-2xl font-bold mb-4">Your cart is empty</h2>
-          <p className="text-gray-500 mb-8">Looks like you haven't added anything to your cart yet.</p>
-          <Link to="/products" className="inline-block bg-red-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-red-700 transition">
+          <p className="text-gray-500 mb-8">
+            Looks like you haven't added anything to your cart yet.
+          </p>
+          <Link
+            to="/products"
+            className="inline-block bg-red-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-red-700 transition"
+          >
             Start Shopping
           </Link>
         </div>
@@ -62,7 +77,7 @@ export default function Cart() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
-            {cart.items.map((item) => (
+            {cart.items.map(item => (
               <div key={item.product?._id} className="bg-white rounded-xl p-4 flex gap-4">
                 <img
                   src={item.product?.images?.[0]?.url || 'https://via.placeholder.com/120'}
@@ -70,12 +85,15 @@ export default function Cart() {
                   className="w-24 h-24 object-cover rounded-lg"
                 />
                 <div className="flex-1">
-                  <Link to={`/product/${item.product?.slug}`} className="font-medium hover:text-red-600">
+                  <Link
+                    to={`/product/${item.product?.slug}`}
+                    className="font-medium hover:text-red-600"
+                  >
                     {item.product?.name}
                   </Link>
                   <p className="text-sm text-gray-500 mt-1">Size: {item.size}</p>
                   <p className="font-bold mt-2">{formatPrice(item.price)}</p>
-                  
+
                   <div className="flex items-center justify-between mt-3">
                     <div className="flex items-center border border-gray-200 rounded">
                       <button
@@ -93,7 +111,7 @@ export default function Cart() {
                         <Plus size={14} />
                       </button>
                     </div>
-                    
+
                     <button
                       onClick={() => removeItem(item.product._id)}
                       className="text-red-500 hover:bg-red-50 p-2 rounded"
@@ -104,8 +122,11 @@ export default function Cart() {
                 </div>
               </div>
             ))}
-            
-            <Link to="/products" className="inline-flex items-center gap-2 text-gray-600 hover:text-red-600 mt-4">
+
+            <Link
+              to="/products"
+              className="inline-flex items-center gap-2 text-gray-600 hover:text-red-600 mt-4"
+            >
               <ArrowLeft size={18} />
               Continue Shopping
             </Link>
@@ -121,12 +142,15 @@ export default function Cart() {
                 <label className="text-sm font-medium mb-2 block">Apply Coupon</label>
                 <div className="flex gap-2">
                   <div className="relative flex-1">
-                    <Tag className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                    <Tag
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                      size={16}
+                    />
                     <input
                       type="text"
                       placeholder="Enter code"
                       value={couponCode}
-                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                      onChange={e => setCouponCode(e.target.value.toUpperCase())}
                       className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
                     />
                   </div>

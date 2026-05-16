@@ -8,11 +8,14 @@ export const signup = async (req, res, next) => {
     const { email, password, name } = req.body;
 
     // Create user in Supabase
-    const { data: { user }, error } = await supabaseAdmin.auth.admin.createUser({
+    const {
+      data: { user },
+      error,
+    } = await supabaseAdmin.auth.admin.createUser({
       email,
       password,
       email_confirm: true,
-      user_metadata: { full_name: name }
+      user_metadata: { full_name: name },
     });
 
     if (error) {
@@ -24,20 +27,23 @@ export const signup = async (req, res, next) => {
       supabaseId: user.id,
       email: user.email,
       name,
-      role: 'user'
+      role: 'user',
     });
 
     // Sign in to get a proper session token
-    const { data: { session }, error: sessionError } = await supabaseAdmin.auth.signInWithPassword({
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabaseAdmin.auth.signInWithPassword({
       email,
-      password
+      password,
     });
 
     if (sessionError) {
       // User created but session generation failed — still return user
       return res.status(201).json({
         success: true,
-        data: { user: mongoUser }
+        data: { user: mongoUser },
       });
     }
 
@@ -45,8 +51,8 @@ export const signup = async (req, res, next) => {
       success: true,
       data: {
         user: mongoUser,
-        session
-      }
+        session,
+      },
     });
   } catch (error) {
     next(error);
@@ -61,7 +67,7 @@ export const login = async (req, res, next) => {
     // Sign in with Supabase
     const { data, error } = await supabaseAdmin.auth.signInWithPassword({
       email,
-      password
+      password,
     });
 
     if (error) {
@@ -76,7 +82,7 @@ export const login = async (req, res, next) => {
         supabaseId: data.user.id,
         email: data.user.email,
         name: data.user.user_metadata?.full_name || email.split('@')[0],
-        role: 'user'
+        role: 'user',
       });
     }
 
@@ -84,8 +90,8 @@ export const login = async (req, res, next) => {
       success: true,
       data: {
         user: mongoUser,
-        session: data.session
-      }
+        session: data.session,
+      },
     });
   } catch (error) {
     next(error);
@@ -120,7 +126,10 @@ export const googleCallback = async (req, res, next) => {
     const { supabase_token } = req.body;
 
     // Verify the token with Supabase
-    const { data: { user }, error } = await supabaseAdmin.auth.getUser(supabase_token);
+    const {
+      data: { user },
+      error,
+    } = await supabaseAdmin.auth.getUser(supabase_token);
 
     if (error || !user) {
       return res.status(401).json({ success: false, message: 'Invalid token' });
@@ -134,15 +143,15 @@ export const googleCallback = async (req, res, next) => {
         supabaseId: user.id,
         email: user.email,
         name: user.user_metadata?.full_name || user.user_metadata?.name || user.email.split('@')[0],
-        role: 'user'
+        role: 'user',
       });
     }
 
     res.json({
       success: true,
       data: {
-        user: mongoUser
-      }
+        user: mongoUser,
+      },
     });
   } catch (error) {
     next(error);
@@ -154,18 +163,17 @@ export const updateProfile = async (req, res, next) => {
   try {
     const updates = {};
     const allowedUpdates = ['name', 'phone', 'avatar'];
-    
+
     allowedUpdates.forEach(field => {
       if (req.body[field] !== undefined) {
         updates[field] = req.body[field];
       }
     });
 
-    const user = await User.findByIdAndUpdate(
-      req.user._id,
-      updates,
-      { new: true, runValidators: true }
-    );
+    const user = await User.findByIdAndUpdate(req.user._id, updates, {
+      new: true,
+      runValidators: true,
+    });
 
     res.json({ success: true, data: { user } });
   } catch (error) {
@@ -181,7 +189,7 @@ export const addAddress = async (req, res, next) => {
     const user = await User.findById(req.user._id);
 
     if (isDefault) {
-      user.addresses.forEach(addr => addr.isDefault = false);
+      user.addresses.forEach(addr => (addr.isDefault = false));
     }
 
     user.addresses.push({ street, city, state, pincode, isDefault: isDefault || false });
@@ -217,20 +225,16 @@ export const getCustomers = async (req, res, next) => {
       filter.$or = [
         { name: { $regex: search, $options: 'i' } },
         { email: { $regex: search, $options: 'i' } },
-        { phone: { $regex: search, $options: 'i' } }
+        { phone: { $regex: search, $options: 'i' } },
       ];
     }
 
     const [customers, total, orderStats] = await Promise.all([
-      User.find(filter)
-        .select('-__v')
-        .sort('-createdAt')
-        .skip(skip)
-        .limit(Number(limit)),
+      User.find(filter).select('-__v').sort('-createdAt').skip(skip).limit(Number(limit)),
       User.countDocuments(filter),
       Order.aggregate([
-        { $group: { _id: '$user', orderCount: { $sum: 1 }, totalSpent: { $sum: '$total' } } }
-      ])
+        { $group: { _id: '$user', orderCount: { $sum: 1 }, totalSpent: { $sum: '$total' } } },
+      ]),
     ]);
 
     const statsMap = {};
@@ -241,15 +245,20 @@ export const getCustomers = async (req, res, next) => {
     const enriched = customers.map(c => ({
       ...c.toObject(),
       orderCount: statsMap[c._id.toString()]?.orderCount || 0,
-      totalSpent: statsMap[c._id.toString()]?.totalSpent || 0
+      totalSpent: statsMap[c._id.toString()]?.totalSpent || 0,
     }));
 
     res.json({
       success: true,
       data: {
         customers: enriched,
-        pagination: { page: Number(page), limit: Number(limit), total, pages: Math.ceil(total / Number(limit)) }
-      }
+        pagination: {
+          page: Number(page),
+          limit: Number(limit),
+          total,
+          pages: Math.ceil(total / Number(limit)),
+        },
+      },
     });
   } catch (error) {
     next(error);
@@ -267,12 +276,12 @@ export const getCustomerStats = async (_req, res, _next) => {
       User.countDocuments({ role: 'user' }),
       User.countDocuments({ role: 'user', createdAt: { $gte: firstOfMonth } }),
       User.countDocuments({ role: 'user', createdAt: { $gte: startOfToday } }),
-      Order.countDocuments()
+      Order.countDocuments(),
     ]);
 
     res.json({
       success: true,
-      data: { total, newThisMonth, joinedToday, totalOrders }
+      data: { total, newThisMonth, joinedToday, totalOrders },
     });
   } catch (error) {
     _next(error);
@@ -287,7 +296,7 @@ export const updateUserRole = async (req, res, next) => {
     const user = await User.findByIdAndUpdate(
       req.params.id,
       { role },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     if (!user) {

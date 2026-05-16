@@ -7,7 +7,7 @@ export default function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Filters
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -23,7 +23,7 @@ export default function AdminProducts() {
     sizes: [{ name: 'M', stock: 0 }],
     images: [{ url: '' }],
     isFeatured: false,
-    isActive: true
+    isActive: true,
   });
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function AdminProducts() {
     try {
       const [prodRes, catRes] = await Promise.all([
         api.get('/admin/products'),
-        api.get('/categories')
+        api.get('/categories'),
       ]);
       setProducts(prodRes.data.data.products);
       setCategories(catRes.data.data);
@@ -56,7 +56,7 @@ export default function AdminProducts() {
     });
   }, [products, searchTerm, categoryFilter]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     try {
       if (editingProduct) {
@@ -74,7 +74,7 @@ export default function AdminProducts() {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async id => {
     if (!confirm('Delete this product?')) return;
     try {
       await api.delete(`/admin/products/${id}`);
@@ -85,7 +85,7 @@ export default function AdminProducts() {
     }
   };
 
-  const openEdit = (product) => {
+  const openEdit = product => {
     setEditingProduct(product);
     setFormData({
       name: product.name,
@@ -96,7 +96,7 @@ export default function AdminProducts() {
       sizes: product.sizes || [{ name: 'M', stock: 0 }],
       images: product.images || [{ url: '' }],
       isFeatured: product.isFeatured,
-      isActive: product.isActive
+      isActive: product.isActive,
     });
     setShowModal(true);
   };
@@ -104,7 +104,7 @@ export default function AdminProducts() {
   const addSize = () => {
     setFormData({
       ...formData,
-      sizes: [...formData.sizes, { name: 'L', stock: 0 }]
+      sizes: [...formData.sizes, { name: 'L', stock: 0 }],
     });
   };
 
@@ -130,9 +130,15 @@ export default function AdminProducts() {
           onClick={() => {
             setEditingProduct(null);
             setFormData({
-              name: '', description: '', price: '', salePrice: '',
-              category: categories[0]?.slug || '', sizes: [{ name: 'M', stock: 0 }],
-              images: [{ url: '' }], isFeatured: false, isActive: true
+              name: '',
+              description: '',
+              price: '',
+              salePrice: '',
+              category: categories[0]?.slug || '',
+              sizes: [{ name: 'M', stock: 0 }],
+              images: [{ url: '' }],
+              isFeatured: false,
+              isActive: true,
             });
             setShowModal(true);
           }}
@@ -146,11 +152,11 @@ export default function AdminProducts() {
       <div className="bg-white rounded-xl p-4 mb-6 shadow-sm border border-gray-100 flex gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-          <input 
+          <input
             type="text"
             placeholder="Search products by name..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={e => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:border-red-500"
           />
         </div>
@@ -158,12 +164,14 @@ export default function AdminProducts() {
           <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
           <select
             value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
+            onChange={e => setCategoryFilter(e.target.value)}
             className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:border-red-500 appearance-none bg-white"
           >
             <option value="all">All Categories</option>
             {categories.map(cat => (
-              <option key={cat._id} value={cat.slug}>{cat.name}</option>
+              <option key={cat._id} value={cat.slug}>
+                {cat.name}
+              </option>
             ))}
           </select>
         </div>
@@ -173,12 +181,24 @@ export default function AdminProducts() {
         <table className="w-full text-left">
           <thead className="bg-gray-50 border-b border-gray-100">
             <tr>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="p-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Product
+              </th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Category
+              </th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Price
+              </th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Stock
+              </th>
+              <th className="p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Status
+              </th>
+              <th className="p-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -198,27 +218,40 @@ export default function AdminProducts() {
                   </div>
                 </td>
                 <td className="p-4 text-sm text-gray-600 capitalize">
-                  {categories.find(c => c.slug === product.category)?.name || product.category?.replace('-', ' ')}
+                  {categories.find(c => c.slug === product.category)?.name ||
+                    product.category?.replace('-', ' ')}
                 </td>
                 <td className="p-4">
-                  <p className="font-semibold text-gray-900">₹{product.salePrice || product.price}</p>
-                  {product.salePrice && <p className="text-xs text-red-500 line-through">₹{product.price}</p>}
+                  <p className="font-semibold text-gray-900">
+                    ₹{product.salePrice || product.price}
+                  </p>
+                  {product.salePrice && (
+                    <p className="text-xs text-red-500 line-through">₹{product.price}</p>
+                  )}
                 </td>
                 <td className="p-4 text-sm text-gray-600">
                   {product.sizes?.reduce((sum, s) => sum + s.stock, 0) || 0} units
                 </td>
                 <td className="p-4">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    product.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                  }`}>
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      product.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                    }`}
+                  >
                     {product.isActive ? 'Active' : 'Inactive'}
                   </span>
                 </td>
                 <td className="p-4 text-right">
-                  <button onClick={() => openEdit(product)} className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded">
+                  <button
+                    onClick={() => openEdit(product)}
+                    className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded"
+                  >
                     <Edit2 size={16} />
                   </button>
-                  <button onClick={() => handleDelete(product._id)} className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded ml-2">
+                  <button
+                    onClick={() => handleDelete(product._id)}
+                    className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded ml-2"
+                  >
                     <Trash2 size={16} />
                   </button>
                 </td>
@@ -226,7 +259,9 @@ export default function AdminProducts() {
             ))}
             {filteredProducts.length === 0 && (
               <tr>
-                <td colSpan="6" className="admin-empty-state">No products found matching your filters.</td>
+                <td colSpan="6" className="admin-empty-state">
+                  No products found matching your filters.
+                </td>
               </tr>
             )}
           </tbody>
@@ -238,7 +273,9 @@ export default function AdminProducts() {
         <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl">
             <div className="flex items-center justify-between p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
-              <h2 className="text-xl font-bold font-heading text-slate-800">{editingProduct ? 'Edit' : 'Add'} Product</h2>
+              <h2 className="text-xl font-bold font-heading text-slate-800">
+                {editingProduct ? 'Edit' : 'Add'} Product
+              </h2>
               <button onClick={() => setShowModal(false)} className="p-2 hover:bg-gray-100 rounded">
                 <X size={20} />
               </button>
@@ -249,7 +286,7 @@ export default function AdminProducts() {
                 <input
                   type="text"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={e => setFormData({ ...formData, name: e.target.value })}
                   required
                   className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-red-500 outline-none"
                 />
@@ -258,7 +295,7 @@ export default function AdminProducts() {
                 <label className="text-sm font-medium block mb-1">Description</label>
                 <textarea
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={e => setFormData({ ...formData, description: e.target.value })}
                   rows={3}
                   className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-red-500 outline-none"
                 />
@@ -269,7 +306,7 @@ export default function AdminProducts() {
                   <input
                     type="number"
                     value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                    onChange={e => setFormData({ ...formData, price: e.target.value })}
                     required
                     className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-red-500 outline-none"
                   />
@@ -279,7 +316,7 @@ export default function AdminProducts() {
                   <input
                     type="number"
                     value={formData.salePrice}
-                    onChange={(e) => setFormData({ ...formData, salePrice: e.target.value })}
+                    onChange={e => setFormData({ ...formData, salePrice: e.target.value })}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-red-500 outline-none"
                   />
                 </div>
@@ -288,11 +325,13 @@ export default function AdminProducts() {
                 <label className="text-sm font-medium block mb-1">Category</label>
                 <select
                   value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  onChange={e => setFormData({ ...formData, category: e.target.value })}
                   className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-red-500 outline-none"
                 >
                   {categories.map(cat => (
-                    <option key={cat._id} value={cat.slug}>{cat.name}</option>
+                    <option key={cat._id} value={cat.slug}>
+                      {cat.name}
+                    </option>
                   ))}
                   {categories.length === 0 && <option value="">Loading categories...</option>}
                 </select>
@@ -302,7 +341,7 @@ export default function AdminProducts() {
                 <input
                   type="url"
                   value={formData.images[0]?.url}
-                  onChange={(e) => setFormData({ ...formData, images: [{ url: e.target.value }] })}
+                  onChange={e => setFormData({ ...formData, images: [{ url: e.target.value }] })}
                   placeholder="https://..."
                   className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-red-500 outline-none"
                 />
@@ -314,27 +353,31 @@ export default function AdminProducts() {
                     <div key={i} className="flex gap-2">
                       <select
                         value={size.name}
-                        onChange={(e) => updateSize(i, 'name', e.target.value)}
+                        onChange={e => updateSize(i, 'name', e.target.value)}
                         className="border border-gray-300 rounded-lg px-3 py-2 outline-none"
                       >
                         {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map(s => (
-                          <option key={s} value={s}>{s}</option>
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
                         ))}
                       </select>
                       <input
                         type="number"
                         value={size.stock}
-                        onChange={(e) => updateSize(i, 'stock', parseInt(e.target.value) || 0)}
+                        onChange={e => updateSize(i, 'stock', parseInt(e.target.value) || 0)}
                         placeholder="Stock"
                         className="w-24 border border-gray-300 rounded-lg px-3 py-2 outline-none"
                       />
                       {formData.sizes.length > 1 && (
                         <button
                           type="button"
-                          onClick={() => setFormData({
-                            ...formData,
-                            sizes: formData.sizes.filter((_, idx) => idx !== i)
-                          })}
+                          onClick={() =>
+                            setFormData({
+                              ...formData,
+                              sizes: formData.sizes.filter((_, idx) => idx !== i),
+                            })
+                          }
                           className="text-red-500 px-2"
                         >
                           <X size={18} />
@@ -342,7 +385,11 @@ export default function AdminProducts() {
                       )}
                     </div>
                   ))}
-                  <button type="button" onClick={addSize} className="text-sm text-red-600 font-medium">
+                  <button
+                    type="button"
+                    onClick={addSize}
+                    className="text-sm text-red-600 font-medium"
+                  >
                     + Add Size Variant
                   </button>
                 </div>
@@ -352,7 +399,7 @@ export default function AdminProducts() {
                   <input
                     type="checkbox"
                     checked={formData.isFeatured}
-                    onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
+                    onChange={e => setFormData({ ...formData, isFeatured: e.target.checked })}
                     className="w-4 h-4 text-red-600 rounded"
                   />
                   <span className="text-sm font-medium text-slate-700">Featured</span>
@@ -361,14 +408,17 @@ export default function AdminProducts() {
                   <input
                     type="checkbox"
                     checked={formData.isActive}
-                    onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+                    onChange={e => setFormData({ ...formData, isActive: e.target.checked })}
                     className="w-4 h-4 text-red-600 rounded"
                   />
                   <span className="text-sm font-medium text-slate-700">Active</span>
                 </label>
               </div>
               <div className="pt-4 pb-2">
-                <button type="submit" className="w-full bg-red-600 text-white py-3 rounded-lg font-bold hover:bg-red-700 transition">
+                <button
+                  type="submit"
+                  className="w-full bg-red-600 text-white py-3 rounded-lg font-bold hover:bg-red-700 transition"
+                >
                   {editingProduct ? 'Save Changes' : 'Create Product'}
                 </button>
               </div>

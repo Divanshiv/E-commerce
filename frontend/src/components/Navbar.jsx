@@ -61,11 +61,15 @@ export default function Navbar() {
                     <p className="text-xs text-gray-500">{user.email}</p>
                   </div>
                   <div className="py-2">
-                    <Link to="/orders" className="block px-4 py-2 text-sm hover:bg-gray-50">My Orders</Link>
+                    <Link to="/orders" className="block px-4 py-2 text-sm hover:bg-gray-50">
+                      My Orders
+                    </Link>
                     {isAdmin && (
-                      <Link to="/admin" className="block px-4 py-2 text-sm hover:bg-gray-50">Admin Panel</Link>
+                      <Link to="/admin" className="block px-4 py-2 text-sm hover:bg-gray-50">
+                        Admin Panel
+                      </Link>
                     )}
-                    <button 
+                    <button
                       onClick={logout}
                       className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50"
                     >
@@ -75,7 +79,7 @@ export default function Navbar() {
                 </div>
               </div>
             ) : (
-              <Link 
+              <Link
                 to="/login"
                 className="hidden md:block bg-red-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-red-700 transition"
               >
@@ -84,10 +88,7 @@ export default function Navbar() {
             )}
 
             {/* Mobile Menu Button */}
-            <button 
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2"
-            >
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2">
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
@@ -103,20 +104,40 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-200 py-4 px-4">
           <div className="flex flex-col gap-2">
-            <Link to="/products" className="py-2 text-sm font-medium">All Products</Link>
-            <Link to="/products?category=men-tshirts" className="py-2 text-sm">Men's Tees</Link>
-            <Link to="/products?category=women-tshirts" className="py-2 text-sm">Women's Tees</Link>
-            <Link to="/products?category=hoodies" className="py-2 text-sm">Hoodies</Link>
-            <Link to="/products?category=joggers" className="py-2 text-sm">Joggers</Link>
+            <Link to="/products" className="py-2 text-sm font-medium">
+              All Products
+            </Link>
+            <Link to="/products?category=men-tshirts" className="py-2 text-sm">
+              Men's Tees
+            </Link>
+            <Link to="/products?category=women-tshirts" className="py-2 text-sm">
+              Women's Tees
+            </Link>
+            <Link to="/products?category=hoodies" className="py-2 text-sm">
+              Hoodies
+            </Link>
+            <Link to="/products?category=joggers" className="py-2 text-sm">
+              Joggers
+            </Link>
             <div className="border-t border-gray-200 pt-2 mt-2">
               {user ? (
                 <>
-                  <Link to="/orders" className="block py-2 text-sm">My Orders</Link>
-                  {isAdmin && <Link to="/admin" className="block py-2 text-sm">Admin Panel</Link>}
-                  <button onClick={logout} className="py-2 text-sm text-red-600">Logout</button>
+                  <Link to="/orders" className="block py-2 text-sm">
+                    My Orders
+                  </Link>
+                  {isAdmin && (
+                    <Link to="/admin" className="block py-2 text-sm">
+                      Admin Panel
+                    </Link>
+                  )}
+                  <button onClick={logout} className="py-2 text-sm text-red-600">
+                    Logout
+                  </button>
                 </>
               ) : (
-                <Link to="/login" className="block py-2 text-sm font-medium text-red-600">Login / Sign Up</Link>
+                <Link to="/login" className="block py-2 text-sm font-medium text-red-600">
+                  Login / Sign Up
+                </Link>
               )}
             </div>
           </div>

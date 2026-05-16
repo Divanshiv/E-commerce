@@ -3,7 +3,7 @@ import {
   getWishlist,
   addToWishlist,
   removeFromWishlist,
-  toggleWishlist
+  toggleWishlist,
 } from '../controllers/wishlist.controller.js';
 import { verifyToken, requireAuth } from '../middleware/auth.js';
 
