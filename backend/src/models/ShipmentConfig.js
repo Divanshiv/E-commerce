@@ -20,6 +20,16 @@ const shipmentConfigSchema = new mongoose.Schema({
     type: Number,
     default: 30,
     min: 0
+  },
+  standardDeliveryDays: {
+    type: Number,
+    default: 5,
+    min: 1
+  },
+  expressDeliveryDays: {
+    type: Number,
+    default: 2,
+    min: 1
   }
 }, {
   timestamps: true

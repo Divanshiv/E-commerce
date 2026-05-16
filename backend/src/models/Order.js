@@ -38,7 +38,7 @@ const orderSchema = new mongoose.Schema({
   payment: {
     method: {
       type: String,
-      enum: ['razorpay', 'cod'],
+      enum: ['razorpay', 'google_pay', 'cod'],
       default: 'razorpay'
     },
     paymentMethod: {
@@ -65,7 +65,21 @@ const orderSchema = new mongoose.Schema({
     enum: ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'],
     default: 'pending'
   },
-  trackingNumber: String
+  trackingNumber: String,
+  trackingUpdates: [{
+    status: {
+      type: String,
+      enum: ['pending', 'confirmed', 'processing', 'shipped', 'out_for_delivery', 'delivered', 'cancelled'],
+      required: true
+    },
+    location: { type: String, default: '' },
+    note: { type: String, default: '' },
+    timestamp: { type: Date, default: Date.now }
+  }],
+  deliveryCoordinates: {
+    lat: { type: Number },
+    lng: { type: Number }
+  }
 }, {
   timestamps: true
 });
