@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingBag, Users, Ticket, Truck, LogOut, Tags, ClipboardList, Menu, X, Bell, Settings } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingBag, Users, Ticket, Truck, LogOut, Tags, ClipboardList, Menu, X, Settings } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import NotificationDropdown from '../../components/NotificationDropdown';
+import LiveSystemIndicator from '../../components/LiveSystemIndicator';
 
 const navItems = [
   { path: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
@@ -96,14 +98,8 @@ export default function AdminLayout() {
           </div>
 
           <div className="sk-admin-header-end">
-            <div className="sk-admin-stat-dot">
-              <div className="sk-admin-pulse-dot"></div>
-              <span>Live System</span>
-            </div>
-            <button className="sk-admin-notif-bell">
-              <Bell size={20} />
-              <span className="sk-admin-notif-indicator"></span>
-            </button>
+            <LiveSystemIndicator />
+            <NotificationDropdown />
           </div>
         </header>
 
